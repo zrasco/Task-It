@@ -1,0 +1,7 @@
+﻿Administration
+	AccountCreate(username, passwordHash)
+	AccountDelete(username)
+	AccountChange(username) - POST
+Friends list
+	RequestFriend(from_user, to_user)
+	RemoveFriend(from_user, to_user)
