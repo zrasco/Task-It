@@ -16,8 +16,10 @@ namespace TodoWebAPI.Models
     {
         public user()
         {
-            this.Items = new HashSet<todo_item>();
+            this.Tasks = new HashSet<task>();
             this.Achivements = new HashSet<achivement>();
+            this.Friends = new HashSet<user>();
+            this.Reminders = new HashSet<reminder>();
         }
     
         public int id { get; set; }
@@ -26,8 +28,11 @@ namespace TodoWebAPI.Models
         public string email { get; set; }
         public string status { get; set; }
         public AccessLevel access_level { get; set; }
+        public string phone_number { get; set; }
     
-        public virtual ICollection<todo_item> Items { get; set; }
+        public virtual ICollection<task> Tasks { get; set; }
         public virtual ICollection<achivement> Achivements { get; set; }
+        public virtual ICollection<user> Friends { get; set; }
+        public virtual ICollection<reminder> Reminders { get; set; }
     }
 }

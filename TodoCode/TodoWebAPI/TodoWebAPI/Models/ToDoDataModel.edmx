@@ -7,15 +7,24 @@
     <Schema Namespace="ToDoDataModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityContainer Name="ToDoDataModelStoreContainer">
     <EntitySet Name="users" EntityType="ToDoDataModel.Store.users" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="todo_item" EntityType="ToDoDataModel.Store.todo_item" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="tasks" EntityType="ToDoDataModel.Store.tasks" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="achivements" EntityType="ToDoDataModel.Store.achivements" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="reminders" EntityType="ToDoDataModel.Store.reminders" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="userstodo_items" Association="ToDoDataModel.Store.userstodo_items">
       <End Role="users" EntitySet="users" />
-      <End Role="todo_items" EntitySet="todo_item" />
+      <End Role="todo_items" EntitySet="tasks" />
     </AssociationSet>
     <AssociationSet Name="usersachivements" Association="ToDoDataModel.Store.usersachivements">
       <End Role="users" EntitySet="users" />
       <End Role="achivements" EntitySet="achivements" />
+    </AssociationSet>
+    <AssociationSet Name="useruser" Association="ToDoDataModel.Store.useruser">
+      <End Role="user" EntitySet="users" />
+      <End Role="user1" EntitySet="users" />
+    </AssociationSet>
+    <AssociationSet Name="userreminder" Association="ToDoDataModel.Store.userreminder">
+      <End Role="user" EntitySet="users" />
+      <End Role="reminder" EntitySet="reminders" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="users">
@@ -28,14 +37,19 @@
     <Property Name="email" Type="nvarchar(max)" Nullable="false" />
     <Property Name="status" Type="nvarchar(max)" Nullable="false" />
     <Property Name="access_level" Type="int" Nullable="false" />
+    <Property Name="phone_number" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="useruser_user1_id" Type="int" Nullable="false" />
   </EntityType>
-  <EntityType Name="todo_item">
+  <EntityType Name="tasks">
     <Key>
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="created_date" Type="datetime" Nullable="false" />
     <Property Name="due_date" Type="datetime" Nullable="false" />
+    <Property Name="summary" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="is_pin" Type="nvarchar(max)" Nullable="false" />
     <Property Name="userstodo_items_todo_items_id" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="achivements">
@@ -46,9 +60,22 @@
     <Property Name="description" Type="nvarchar(max)" Nullable="false" />
     <Property Name="usersachivements_achivements_id" Type="int" Nullable="false" />
   </EntityType>
+  <EntityType Name="reminders">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="start_datetime" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="end_datetime" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="threshold_minutes" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="is_event" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="summary" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="userreminder_reminder_id" Type="int" Nullable="false" />
+  </EntityType>
   <Association Name="userstodo_items">
     <End Role="users" Type="ToDoDataModel.Store.users" Multiplicity="1" />
-    <End Role="todo_items" Type="ToDoDataModel.Store.todo_item" Multiplicity="*" />
+    <End Role="todo_items" Type="ToDoDataModel.Store.tasks" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="users">
         <PropertyRef Name="id" />
@@ -70,21 +97,54 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="useruser">
+    <End Role="user" Type="ToDoDataModel.Store.users" Multiplicity="1" />
+    <End Role="user1" Type="ToDoDataModel.Store.users" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="user1">
+        <PropertyRef Name="useruser_user1_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="userreminder">
+    <End Role="user" Type="ToDoDataModel.Store.users" Multiplicity="1" />
+    <End Role="reminder" Type="ToDoDataModel.Store.reminders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="reminder">
+        <PropertyRef Name="userreminder_reminder_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="ToDoDataModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
         <EntityContainer Name="ToDoDataModelContainer" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="users" EntityType="ToDoDataModel.user" />
-          <EntitySet Name="todo_item" EntityType="ToDoDataModel.todo_item" />
+          <EntitySet Name="tasks" EntityType="ToDoDataModel.task" />
           <EntitySet Name="achivements" EntityType="ToDoDataModel.achivement" />
           <AssociationSet Name="userstodo_items" Association="ToDoDataModel.userstodo_items">
-            <End Role="users" EntitySet="users" />
-            <End Role="todo_items" EntitySet="todo_item" />
+            <End EntitySet="users" Role="users" />
+            <End EntitySet="tasks" Role="todo_items" />
           </AssociationSet>
           <AssociationSet Name="usersachivements" Association="ToDoDataModel.usersachivements">
             <End Role="users" EntitySet="users" />
             <End Role="achivements" EntitySet="achivements" />
+          </AssociationSet>
+          <AssociationSet Name="useruser" Association="ToDoDataModel.useruser">
+            <End Role="user" EntitySet="users" />
+            <End Role="user1" EntitySet="users" />
+          </AssociationSet>
+          <EntitySet Name="reminders" EntityType="ToDoDataModel.reminder" />
+          <AssociationSet Name="userreminder" Association="ToDoDataModel.userreminder">
+            <End Role="user" EntitySet="users" />
+            <End Role="reminder" EntitySet="reminders" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="user">
@@ -97,16 +157,23 @@
           <Property Name="email" Type="String" Nullable="false" />
           <Property Name="status" Type="String" Nullable="false" />
           <Property Name="access_level" Type="ToDoDataModel.AccessLevel" Nullable="false" />
-          <NavigationProperty Name="Items" Relationship="ToDoDataModel.userstodo_items" FromRole="users" ToRole="todo_items" />
+          <NavigationProperty Name="Tasks" Relationship="ToDoDataModel.userstodo_items" FromRole="users" ToRole="todo_items" />
           <NavigationProperty Name="Achivements" Relationship="ToDoDataModel.usersachivements" FromRole="users" ToRole="achivements" />
+          <NavigationProperty Name="Friends" Relationship="ToDoDataModel.useruser" FromRole="user" ToRole="user1" />
+          <NavigationProperty Name="Reminders" Relationship="ToDoDataModel.userreminder" FromRole="user" ToRole="reminder" />
+          <Property Name="phone_number" Type="String" Nullable="false" />
         </EntityType>
-        <EntityType Name="todo_item">
+        <EntityType Name="task">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="created_date" Type="DateTime" Nullable="false" />
-          <Property Name="due_date" Type="DateTime" Nullable="false" />
+          <Property Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int32" />
+          <Property Name="created_date" Nullable="false" Type="DateTime" />
+          <Property Name="due_date" Nullable="false" Type="DateTime" />
+          <Property Name="summary" Type="String" Nullable="false" />
+          <Property Name="description" Type="String" Nullable="false" />
+          <Property Name="is_pin" Type="String" Nullable="false" />
+          <Property Name="owner_userid" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="achivement">
           <Key>
@@ -120,12 +187,33 @@
           <Member Name="User" />
         </EnumType>
         <Association Name="userstodo_items">
-          <End Type="ToDoDataModel.user" Role="users" Multiplicity="1" />
-          <End Type="ToDoDataModel.todo_item" Role="todo_items" Multiplicity="*" />
+          <End Type="ToDoDataModel.user" Multiplicity="*" Role="users" />
+          <End Type="ToDoDataModel.task" Multiplicity="*" Role="todo_items" />
         </Association>
         <Association Name="usersachivements">
           <End Type="ToDoDataModel.user" Role="users" Multiplicity="1" />
           <End Type="ToDoDataModel.achivement" Role="achivements" Multiplicity="*" />
+        </Association>
+        <Association Name="useruser">
+          <End Type="ToDoDataModel.user" Role="user" Multiplicity="1" />
+          <End Type="ToDoDataModel.user" Role="user1" Multiplicity="*" />
+        </Association>
+        <EntityType Name="reminder">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="description" Type="String" Nullable="false" />
+          <Property Name="start_datetime" Type="String" Nullable="false" />
+          <Property Name="end_datetime" Type="String" Nullable="false" />
+          <Property Name="threshold_minutes" Type="String" Nullable="false" />
+          <Property Name="is_event" Type="String" Nullable="false" />
+          <Property Name="summary" Type="String" Nullable="false" />
+          <Property Name="owner_userid" Type="String" Nullable="false" />
+        </EntityType>
+        <Association Name="userreminder">
+          <End Type="ToDoDataModel.user" Role="user" Multiplicity="*" />
+          <End Type="ToDoDataModel.reminder" Role="reminder" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -142,15 +230,19 @@
           <ScalarProperty Name="email" ColumnName="email" />
           <ScalarProperty Name="status" ColumnName="status" />
           <ScalarProperty Name="access_level" ColumnName="access_level" />
+          <ScalarProperty Name="phone_number" ColumnName="phone_number" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="todo_item">
-      <EntityTypeMapping TypeName="IsTypeOf(ToDoDataModel.todo_item)">
-        <MappingFragment StoreEntitySet="todo_item">
+    <EntitySetMapping Name="tasks">
+      <EntityTypeMapping TypeName="IsTypeOf(ToDoDataModel.task)">
+        <MappingFragment StoreEntitySet="tasks">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="created_date" ColumnName="created_date" />
           <ScalarProperty Name="due_date" ColumnName="due_date" />
+          <ScalarProperty Name="summary" ColumnName="summary" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="is_pin" ColumnName="is_pin" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -162,7 +254,20 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <AssociationSetMapping Name="userstodo_items" TypeName="ToDoDataModel.userstodo_items" StoreEntitySet="todo_item">
+    <EntitySetMapping Name="reminders">
+      <EntityTypeMapping TypeName="IsTypeOf(ToDoDataModel.reminder)">
+        <MappingFragment StoreEntitySet="reminders">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="start_datetime" ColumnName="start_datetime" />
+          <ScalarProperty Name="end_datetime" ColumnName="end_datetime" />
+          <ScalarProperty Name="threshold_minutes" ColumnName="threshold_minutes" />
+          <ScalarProperty Name="is_event" ColumnName="is_event" />
+          <ScalarProperty Name="summary" ColumnName="summary" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="userstodo_items" TypeName="ToDoDataModel.userstodo_items" StoreEntitySet="tasks">
       <EndProperty Name="users">
         <ScalarProperty Name="id" ColumnName="userstodo_items_todo_items_id" />
       </EndProperty>
@@ -175,6 +280,22 @@
         <ScalarProperty Name="id" ColumnName="usersachivements_achivements_id" />
       </EndProperty>
       <EndProperty Name="achivements">
+        <ScalarProperty Name="id" ColumnName="id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="useruser" TypeName="ToDoDataModel.useruser" StoreEntitySet="users">
+      <EndProperty Name="user">
+        <ScalarProperty Name="id" ColumnName="useruser_user1_id" />
+      </EndProperty>
+      <EndProperty Name="user1">
+        <ScalarProperty Name="id" ColumnName="id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="userreminder" TypeName="ToDoDataModel.userreminder" StoreEntitySet="reminders">
+      <EndProperty Name="user">
+        <ScalarProperty Name="id" ColumnName="userreminder_reminder_id" />
+      </EndProperty>
+      <EndProperty Name="reminder">
         <ScalarProperty Name="id" ColumnName="id" />
       </EndProperty>
     </AssociationSetMapping>

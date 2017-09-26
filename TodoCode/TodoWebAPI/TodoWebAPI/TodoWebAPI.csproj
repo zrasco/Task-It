@@ -251,7 +251,10 @@
       <DependentUpon>ToDoDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\todo_item.cs">
+    <Compile Include="Models\reminder.cs">
+      <DependentUpon>ToDoDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\task.cs">
       <DependentUpon>ToDoDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\user.cs">

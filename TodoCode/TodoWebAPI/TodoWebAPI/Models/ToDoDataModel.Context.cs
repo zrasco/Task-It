@@ -26,7 +26,8 @@ namespace TodoWebAPI.Models
         }
     
         public DbSet<user> users { get; set; }
-        public DbSet<todo_item> todo_item { get; set; }
+        public DbSet<task> tasks { get; set; }
         public DbSet<achivement> achivements { get; set; }
+        public DbSet<reminder> reminders { get; set; }
     }
 }

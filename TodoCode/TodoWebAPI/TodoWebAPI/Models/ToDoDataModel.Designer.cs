@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\zebr\Documents\Visual Studio 2015\Projects\TodoWebAPI\TodoWebAPI\Models\ToDoDataModel.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\Zeb\Documents\Visual Studio 2015\Projects\TodoProject\fall2017-todolist\TodoCode\TodoWebAPI\TodoWebAPI\Models\ToDoDataModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.
