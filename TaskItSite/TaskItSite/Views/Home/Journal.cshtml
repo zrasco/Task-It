@@ -1,0 +1,43 @@
+﻿<style>
+    table, th, td, tr {
+        border: 1px solid black;
+    }
+</style>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>  
+
+
+<h2 align="center">Journal</h2>
+<table style="width:100%;">
+    <tr>
+        <td colspan="3" align="center" valign="middle" style="width:50%">
+            <input id="btnNewTask" type="button" value="New task" />
+        </td>
+        <td colspan="4" align="center" valign="middle" style="width:50%">
+
+            <!-- Invisible table here to align left sides of radio controls. Probably a better way to do this but oh well! -->
+            <table style="border:0px">
+                <tr style="border:0px">
+                    <td style="border:0px">
+                        <input id="Daily view" type="radio" name="viewtype" value="daily" />Daily view<br />
+                        <input id="Weekly view" type="radio" name="viewtype" value="weekly" checked />Weekly view<br />
+                    </td>
+                </tr>
+            </table>
+                
+        </td>
+    </tr>
+    <tr>
+        <!--
+        <td colspan="2" align="center" valign="middle">
+            <img src="~/images/journal-example.png" /> 
+        </td> -->
+        <td><script>
+
+            $(document).ready(function () {
+                $("#EnterDate").datepicker();
+            });
+</script>  </td>
+    </tr>
+</table>
