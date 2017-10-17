@@ -5,11 +5,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TaskItSite.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace TaskItSite.Controllers
 {
     public class HomeController : Controller
     {
+        #region Dependency injection
+        private readonly UserManager<ApplicationUser> _userManager = null;
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
+        public HomeController(UserManager<ApplicationUser> userManager)
+        {
+            _userManager = userManager;
+        }
+        #endregion
+
+
+
         public IActionResult Index()
         {
             return View();
@@ -32,6 +46,15 @@ namespace TaskItSite.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Feed()
+        {
+            // Feed for the current user
+            var currentUser = await GetCurrentUserAsync();
+
+            return View(currentUser);
         }
 
         public IActionResult Journal()

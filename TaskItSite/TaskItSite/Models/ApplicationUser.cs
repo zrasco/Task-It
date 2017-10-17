@@ -10,6 +10,8 @@ namespace TaskItSite.Models
     public class ApplicationUser : IdentityUser
     {
         public string Status { get; set; }
+        public string FullName { get; set; }
+
         public AccessLevel AccessLevel { get; set; }
 
         public ICollection<ApplicationUser> IAmFollowing { get; set; }

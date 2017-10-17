@@ -13127,11 +13127,11 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "C:\\Users\\zebr\\Documents\\Visual Studio 2017\\Projects\\TaskItSite\\TaskItSite\\TaskItSite.csproj",
+      "projectUniqueName": "C:\\Users\\zebr\\Documents\\Visual Studio 2017\\Projects\\fall2017-todolist\\TaskItSite\\TaskItSite\\TaskItSite.csproj",
       "projectName": "TaskItSite",
-      "projectPath": "C:\\Users\\zebr\\Documents\\Visual Studio 2017\\Projects\\TaskItSite\\TaskItSite\\TaskItSite.csproj",
+      "projectPath": "C:\\Users\\zebr\\Documents\\Visual Studio 2017\\Projects\\fall2017-todolist\\TaskItSite\\TaskItSite\\TaskItSite.csproj",
       "packagesPath": "C:\\Users\\zebr\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\zebr\\Documents\\Visual Studio 2017\\Projects\\TaskItSite\\TaskItSite\\obj\\",
+      "outputPath": "C:\\Users\\zebr\\Documents\\Visual Studio 2017\\Projects\\fall2017-todolist\\TaskItSite\\TaskItSite\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

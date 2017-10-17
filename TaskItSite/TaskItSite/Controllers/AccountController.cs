@@ -310,7 +310,7 @@ namespace TaskItSite.Controllers
                 {
                     throw new ApplicationException("Error loading external login information during confirmation.");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = info.Principal.Identity.Name };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
