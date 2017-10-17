@@ -1,45 +1,103 @@
-﻿
+﻿@using System.Collections.Generic
+@using System.Linq
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Authentication
+@model LoginViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Log in";
 }
-<head>
-    <meta name="google-signin-client_id" content="102863069774-6p2dtscloroulicdul32sg374qnm3hiq.apps.googleusercontent.com">
-</head>
 
-<h2>Sample Google login page!</h2>
+<h2>@ViewData["Title"]</h2>
+<div class="row">
+    <div class="col-md-4">
+        <section>
+            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                <h4>Use a local account to log in.</h4>
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label asp-for="RememberMe">
+                            <input asp-for="RememberMe" />
+                            @Html.DisplayNameFor(m => m.RememberMe)
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default">Log in</button>
+                </div>
+                <div class="form-group">
+                    <p>
+                        <a asp-action="ForgotPassword">Forgot your password?</a>
+                    </p>
+                    <p>
+                        <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Register as a new user?</a>
+                    </p>
+                </div>
+            </form>
+        </section>
+    </div>
+    <div class="col-md-6 col-md-offset-2">
+        <section>
+            <h4>Use another service to log in.</h4>
+            <hr />
+            @{
+                var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                if (loginProviders.Count == 0)
+                {
+                    <div>
+                        <p>
+                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
+                            for details on setting up this ASP.NET application to support logging in via external services.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <form asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                        <div>
+                            <p>
+                                @foreach (var provider in loginProviders)
+                                {
+                                    // zrasco - Tried doing this with a generic but the URI has relative pathname issues with using ~ in a variable. Putting if/else if just to get it done.
+                                    if (provider.Name == "Google")
+                                    {
+                                        <button type="submit" class="btn btn-default" style="padding:0; border: none; background: none" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><img src="~/images/btn_signin_google.png" /></button>
+                                    }
+                                    else if (provider.Name == "Facebook")
+                                    {
+                                        <button type="submit" class="btn btn-default" style="padding:0; border: none; background: none" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><img src="~/images/btn_signin_facebook.png" /></button>
+                                    }
+                                    else if (provider.Name == "Twitter")
+                                    {
+                                        <button type="submit" class="btn btn-default" style="padding:0; border: none; background: none" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><img src="~/images/btn_signin_twitter.png" /></button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" class="btn btn-default" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
+                                    }
+                                }
+                            </p>
+                        </div>
+                    </form>
+                }
+            }
+        </section>
+    </div>
+</div>
 
-<script src="https://apis.google.com/js/platform.js" async defer></script>
-<div class="g-signin2" data-onsuccess="onSignIn"></div>
-
-<script>
-    function onSignIn(googleUser) {
-        var profile = googleUser.getBasicProfile();
-        console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-        console.log('Name: ' + profile.getName());
-        console.log('Image URL: ' + profile.getImageUrl());
-        console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-
-        var id_token = googleUser.getAuthResponse().id_token;
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/Account/Login');
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onload = function () {
-            console.log('Signed in as: ' + xhr.responseText);
-        };
-        console.log('Sending id token: ' + id_token);
-        xhr.send('idtoken=' + id_token);
-    }
-    function signOut() {
-        console.log('In signOut()');
-        var auth2 = gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
-            console.log('User signed out.');
-        });
-    }
-</script>
-
-
-<a href="#" onclick="signOut();">Sign out</a>
-
-
-
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

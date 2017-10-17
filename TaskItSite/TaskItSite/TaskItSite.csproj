@@ -2,24 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <UserSecretsId>aspnet-TaskItSiteAuth-5C551C62-202D-4F57-ABF9-80267C64AC95</UserSecretsId>
   </PropertyGroup>
 
+
   <ItemGroup>
-    <PackageReference Include="Google.Apis" Version="1.29.2" />
-    <PackageReference Include="jQuery.UI.Combined" Version="1.12.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
+    <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\images\logoattempt.png" />
   </ItemGroup>
 
 </Project>

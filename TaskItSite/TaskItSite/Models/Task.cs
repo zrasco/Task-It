@@ -7,6 +7,8 @@ namespace TaskItSite.Models
 {
     public class Task
     {
+        public Task() { }
+
         public int id { get; set; }
         public System.DateTime created_date { get; set; }
         public System.DateTime due_date { get; set; }

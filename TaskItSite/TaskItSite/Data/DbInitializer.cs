@@ -7,7 +7,7 @@ namespace TaskItSite.Data
 {
     public class DbInitializer
     {
-        public static void Initialize(TaskItContext context)
+        public static void Initialize(ApplicationDbContext context)
         {
             context.Database.EnsureCreated();
 

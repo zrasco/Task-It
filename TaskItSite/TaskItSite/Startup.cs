@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TaskItSite.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Identity;
 using TaskItSite.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using TaskItSite.Services;
 
 namespace TaskItSite
 {
@@ -28,36 +26,36 @@ namespace TaskItSite
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<TaskItContext>(options =>
+            services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddMvc();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<TaskItContext>();
-
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                        .AddCookie(o => { o.LoginPath = new PathString("/Account/Login");
-                            /*o.Events.OnRedirectToLogin = (context) => {
-                                context.Response.StatusCode = 401;
-                                return System.Threading.Tasks.Task.CompletedTask;
-                            }; */
-                        })
-                        .AddGoogle(o =>
-                        {
-                            o.ClientId = "102863069774-6p2dtscloroulicdul32sg374qnm3hiq.apps.googleusercontent.com";
-                            o.ClientSecret = "MY6Ta5Gdm331MVtLLGY-T-fQ";
-                        });
-
-            /*
-            services.AddAuthentication("CookieAuthenticationScheme")
-                .AddCookie(options => {
-                options.Events.OnRedirectToLogin = (context) =>
-                {
-                    context.Response.StatusCode = 401;
-                    return System.Threading.Tasks.Task.CompletedTask;
-                };
+            services.AddAuthentication().AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = "102863069774-6p2dtscloroulicdul32sg374qnm3hiq.apps.googleusercontent.com";
+                googleOptions.ClientSecret = "MY6Ta5Gdm331MVtLLGY-T-fQ";
             });
-            */
+
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = "511517489202644";
+                facebookOptions.AppSecret = "c06100662e20a40f054fd63aa5cec806";
+            });
+
+            services.AddAuthentication().AddTwitter(twitterOptions =>
+            {
+                twitterOptions.ConsumerKey = Configuration["KEoFgPoKMF4t4VTbkXPGHQOHO"];
+                twitterOptions.ConsumerSecret = Configuration["E6Wy3qvMGwLiNdNK6peYHAZOi5Z26uSaRFpvL3jhi5UokRR9i4"];
+            });
+            
+
+            // Add application services.
+            services.AddTransient<IEmailSender, EmailSender>();
+
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,14 +65,16 @@ namespace TaskItSite
             {
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
+                app.UseDatabaseErrorPage();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseAuthentication();
             app.UseStaticFiles();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

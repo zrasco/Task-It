@@ -5,13 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TaskItSite.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace TaskItSite.Controllers
 {
     public class HomeController : Controller
     {
-        [Authorize]
         public IActionResult Index()
         {
             return View();
@@ -34,15 +32,6 @@ namespace TaskItSite.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        public IActionResult Login()
-        {
-            ViewData["Message"] = "Your login page.";
-
-            //return Challenge("Google");
-
-            return View();
         }
 
         public IActionResult Journal()
@@ -72,6 +61,5 @@ namespace TaskItSite.Controllers
 
             return View();
         }
-   
     }
 }

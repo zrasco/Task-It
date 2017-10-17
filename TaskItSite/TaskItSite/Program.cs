@@ -25,7 +25,7 @@ namespace TaskItSite
                 try
                 {
                     // zrasco - This code execites if the database hasn't been created yet
-                    var context = services.GetRequiredService<TaskItContext>();
+                    var context = services.GetRequiredService<ApplicationDbContext>();
                     DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)

@@ -7,6 +7,8 @@ namespace TaskItSite.Models
 {
     public class Reminder
     {
+        public Reminder() { }
+
         public int id { get; set; }
         public string description { get; set; }
         public string start_datetime { get; set; }

@@ -1,0 +1,12 @@
+c:\users\zebr\documents\visual studio 2017\Projects\TaskItSiteAuth\TaskItSiteAuth\bin\Debug\netcoreapp2.0\TaskItSiteAuth.deps.json
+c:\users\zebr\documents\visual studio 2017\Projects\TaskItSiteAuth\TaskItSiteAuth\bin\Debug\netcoreapp2.0\TaskItSiteAuth.runtimeconfig.json
+c:\users\zebr\documents\visual studio 2017\Projects\TaskItSiteAuth\TaskItSiteAuth\bin\Debug\netcoreapp2.0\TaskItSiteAuth.runtimeconfig.dev.json
+c:\users\zebr\documents\visual studio 2017\Projects\TaskItSiteAuth\TaskItSiteAuth\bin\Debug\netcoreapp2.0\TaskItSiteAuth.dll
+c:\users\zebr\documents\visual studio 2017\Projects\TaskItSiteAuth\TaskItSiteAuth\bin\Debug\netcoreapp2.0\TaskItSiteAuth.pdb
+c:\users\zebr\documents\visual studio 2017\Projects\TaskItSiteAuth\TaskItSiteAuth\obj\Debug\netcoreapp2.0\TaskItSiteAuth.csprojResolveAssemblyReference.cache
+c:\users\zebr\documents\visual studio 2017\Projects\TaskItSiteAuth\TaskItSiteAuth\obj\Debug\netcoreapp2.0\TaskItSiteAuth.csproj.CoreCompileInputs.cache
+c:\users\zebr\documents\visual studio 2017\Projects\TaskItSiteAuth\TaskItSiteAuth\obj\Debug\netcoreapp2.0\TaskItSiteAuth.AssemblyInfoInputs.cache
+c:\users\zebr\documents\visual studio 2017\Projects\TaskItSiteAuth\TaskItSiteAuth\obj\Debug\netcoreapp2.0\TaskItSiteAuth.AssemblyInfo.cs
+c:\users\zebr\documents\visual studio 2017\Projects\TaskItSiteAuth\TaskItSiteAuth\obj\Debug\netcoreapp2.0\TaskItSiteAuth.dll
+c:\users\zebr\documents\visual studio 2017\Projects\TaskItSiteAuth\TaskItSiteAuth\obj\Debug\netcoreapp2.0\TaskItSiteAuth.pdb
+c:\users\zebr\documents\visual studio 2017\Projects\TaskItSiteAuth\TaskItSiteAuth\obj\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs
