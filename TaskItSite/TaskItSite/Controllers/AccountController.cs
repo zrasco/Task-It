@@ -49,6 +49,7 @@ namespace TaskItSite.Controllers
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             ViewData["ReturnUrl"] = returnUrl;
+            HttpContext.Session.Remove("sentToHomePage");
             return View();
         }
 
@@ -58,6 +59,8 @@ namespace TaskItSite.Controllers
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+            HttpContext.Session.Remove("sentToHomePage");
+
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -221,7 +224,7 @@ namespace TaskItSite.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = model.FullName };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -248,8 +251,10 @@ namespace TaskItSite.Controllers
         {
             await _signInManager.SignOutAsync();
 
-            // Clear profile picture on logout
+            // Clear session-specific data on logout
             HttpContext.Session.Remove("cachedImage");
+            HttpContext.Session.Remove("sentToHomePage");
+
 
             _logger.LogInformation("User logged out.");
             return RedirectToAction(nameof(HomeController.Index), "Home");
@@ -298,7 +303,7 @@ namespace TaskItSite.Controllers
                 ViewData["ReturnUrl"] = returnUrl;
                 ViewData["LoginProvider"] = info.LoginProvider;
                 var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-                return View("ExternalLogin", new ExternalLoginViewModel { Email = email });
+                return View("ExternalLogin", new ExternalLoginViewModel { Email = email, ReturnURL = returnUrl, ProviderName = info.LoginProvider });
             }
         }
 

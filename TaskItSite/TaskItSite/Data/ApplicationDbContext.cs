@@ -15,6 +15,7 @@ namespace TaskItSite.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+
         }
 
         // User accounts already created with ASP.NET so I've extended it (ApplicationUser)
@@ -33,6 +34,6 @@ namespace TaskItSite.Data
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<TaskItSite.Models.ApplicationUser> ApplicationUser { get; set; }
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
     }
 }

@@ -9,13 +9,13 @@ namespace TaskItSite.Models
     {
         public Reminder() { }
 
-        public int id { get; set; }
-        public string description { get; set; }
-        public string start_datetime { get; set; }
-        public string end_datetime { get; set; }
-        public string threshold_minutes { get; set; }
-        public string is_event { get; set; }
-        public string summary { get; set; }
+        public int ID { get; set; }
+        public string Description { get; set; }
+        public string StartDatetime { get; set; }
+        public string EndDatetime { get; set; }
+        public string ThresholdMinutes { get; set; }
+        public bool IsEvent { get; set; }
+        public string Summary { get; set; }
         public int UserID { get; set; }
     }
 }

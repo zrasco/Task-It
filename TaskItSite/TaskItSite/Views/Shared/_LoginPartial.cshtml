@@ -8,7 +8,9 @@
 @{
     ApplicationUser currentUser = UserManager.GetUserAsync(User).Result;
 
-    if (currentUser != null && SignInManager.Context.Session.GetString("cachedImage") == null)
+    if (currentUser != null &&
+        currentUser.ProfileImageURL != null &&
+        SignInManager.Context.Session.GetString("cachedImage") == null)
     // Facebook is slow with image rendering so cache the image on the server
     {
         var webClient = new WebClient();

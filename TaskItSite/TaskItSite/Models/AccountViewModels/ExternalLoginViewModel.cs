@@ -11,5 +11,8 @@ namespace TaskItSite.Models.AccountViewModels
         [Required]
         [EmailAddress]
         public string Email { get; set; }
+
+        public string ProviderName { get; set; }
+        public string ReturnURL { get; set; }
     }
 }

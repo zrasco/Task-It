@@ -9,12 +9,12 @@ namespace TaskItSite.Models
     {
         public Task() { }
 
-        public int id { get; set; }
-        public System.DateTime created_date { get; set; }
-        public System.DateTime due_date { get; set; }
-        public string summary { get; set; }
-        public string description { get; set; }
-        public string is_pin { get; set; }
+        public int ID { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+        public System.DateTime DueDate { get; set; }
+        public string Summary { get; set; }
+        public string Description { get; set; }
+        public bool IsPin { get; set; }
         public int UserId { get; set; }
     }
 }

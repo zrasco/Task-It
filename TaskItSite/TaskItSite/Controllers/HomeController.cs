@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using TaskItSite.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 
 namespace TaskItSite.Controllers
 {
@@ -24,9 +25,24 @@ namespace TaskItSite.Controllers
 
 
 
-        public IActionResult Index()
-        {
-            return View();
+        public async Task<IActionResult> Index()
+        { 
+            if (HttpContext.Session.Get("sentToHomePage") == null)
+            {
+                var currentUser = await GetCurrentUserAsync();
+
+                if (currentUser != null)
+                {
+                    // Send user to their chosen homepage upon login
+                    HttpContext.Session.SetString("sentToHomePage", "sent");
+                    return LocalRedirect(currentUser.GetHomeScreenURL());
+                }
+                else
+                    return View();
+
+            }
+            else
+                return View();
         }
 
         public IActionResult About()
@@ -74,13 +90,6 @@ namespace TaskItSite.Controllers
         public IActionResult Achievements()
         {
             ViewData["Message"] = "Your achievements.";
-
-            return View();
-        }
-
-        public IActionResult Options()
-        {
-            ViewData["Message"] = "Your options.";
 
             return View();
         }

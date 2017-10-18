@@ -10,7 +10,7 @@ namespace TaskItSite.Models
         public AchievementCategory() { }
 
         public int ID { get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

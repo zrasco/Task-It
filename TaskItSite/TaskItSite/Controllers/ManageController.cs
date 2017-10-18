@@ -56,6 +56,7 @@ namespace TaskItSite.Controllers
 
             var model = new IndexViewModel
             {
+                FullName = user.FullName,
                 Username = user.UserName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
@@ -81,6 +82,19 @@ namespace TaskItSite.Controllers
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
+            var fullname = user.FullName;
+            if (model.FullName != fullname)
+            {
+                // zrasco - We don't have a SetFullNameAsync, but we can basically do the same thing here anyway
+                user.FullName = model.FullName;
+                var setFullNameResult = await _userManager.UpdateAsync(user);
+
+                if (!setFullNameResult.Succeeded)
+                {
+                    throw new ApplicationException($"Unexpected error occurred setting full name for user with ID '{user.Id}'.");
+                }
+            }
+
             var email = user.Email;
             if (model.Email != email)
             {
@@ -104,6 +118,109 @@ namespace TaskItSite.Controllers
             StatusMessage = "Your profile has been updated";
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> NotificationsAndLayout()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            var model = new NotificationsAndLayoutViewModel
+            {
+                EmailOnFeedUpdate = user.EmailOnFeedUpdate,
+                EmailOnMessage = user.EmailOnMessage,
+                TextOnFeedUpdate = user.TextOnFeedUpdate,
+                TextOnMessage = user.TextOnMessage,
+                HomeScreen = user.HomeScreen,
+                StatusMessage = StatusMessage
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> NotificationsAndLayout(NotificationsAndLayoutViewModel model)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            var emailOnFeedUpdate = user.EmailOnFeedUpdate;
+            if (model.EmailOnFeedUpdate != emailOnFeedUpdate)
+            {
+                user.EmailOnFeedUpdate = model.EmailOnFeedUpdate;
+                var setResult = await _userManager.UpdateAsync(user);
+
+                if (!setResult.Succeeded)
+                {
+                    throw new ApplicationException($"Unexpected error occurred setting email on feed update for user with ID '{user.Id}'.");
+                }
+            }
+
+            var emailOnMessage = user.EmailOnMessage;
+            if (model.EmailOnMessage != emailOnMessage)
+            {
+                user.EmailOnMessage = model.EmailOnMessage;
+                var setResult = await _userManager.UpdateAsync(user);
+
+                if (!setResult.Succeeded)
+                {
+                    throw new ApplicationException($"Unexpected error occurred setting email on message for user with ID '{user.Id}'.");
+                }
+            }
+
+            var textOnFeedUpdate = user.TextOnFeedUpdate;
+            if (model.TextOnFeedUpdate != textOnFeedUpdate)
+            {
+                user.TextOnFeedUpdate = model.TextOnFeedUpdate;
+                var setResult = await _userManager.UpdateAsync(user);
+
+                if (!setResult.Succeeded)
+                {
+                    throw new ApplicationException($"Unexpected error occurred setting text on feed update for user with ID '{user.Id}'.");
+                }
+            }
+
+            var textOnMessage = user.TextOnMessage;
+            if (model.TextOnMessage != textOnMessage)
+            {
+                user.TextOnMessage = model.TextOnMessage;
+                var setResult = await _userManager.UpdateAsync(user);
+
+                if (!setResult.Succeeded)
+                {
+                    throw new ApplicationException($"Unexpected error occurred setting text on message for user with ID '{user.Id}'.");
+                }
+            }
+
+            var homeScreen = user.HomeScreen;
+            if (model.HomeScreen != homeScreen)
+            {
+                user.HomeScreen = model.HomeScreen;
+                var setResult = await _userManager.UpdateAsync(user);
+
+                if (!setResult.Succeeded)
+                {
+                    throw new ApplicationException($"Unexpected error occurred setting home screen for user with ID '{user.Id}'.");
+                }
+            }
+            
+            StatusMessage = "Your settings have been updated";
+            return RedirectToAction(nameof(NotificationsAndLayout));
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -250,6 +367,9 @@ namespace TaskItSite.Controllers
         {
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+            // Clear this here too
+            HttpContext.Session.Remove("sentToHomePage");
 
             // Request a redirect to the external login provider to link a login for the current user
             var redirectUrl = Url.Action(nameof(LinkLoginCallback));
