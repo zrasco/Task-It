@@ -13112,13 +13112,14 @@
       "Microsoft.AspNetCore.All >= 2.0.0",
       "Microsoft.AspNetCore.Authentication.Facebook >= 2.0.0",
       "Microsoft.AspNetCore.Authentication.Google >= 2.0.0",
+      "Microsoft.AspNetCore.Authentication.Twitter >= 2.0.0",
       "Microsoft.EntityFrameworkCore.Tools >= 2.0.0",
       "Microsoft.NETCore.App >= 2.0.0",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.0.0"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\zebr\\.nuget\\packages\\": {},
+    "C:\\Users\\Zeb\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
@@ -13127,17 +13128,17 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "C:\\Users\\zebr\\Documents\\Visual Studio 2017\\Projects\\fall2017-todolist\\TaskItSite\\TaskItSite\\TaskItSite.csproj",
+      "projectUniqueName": "C:\\Users\\Zeb\\Documents\\Visual Studio 2017\\Projects\\fall2017-todolist\\TaskItSite\\TaskItSite\\TaskItSite.csproj",
       "projectName": "TaskItSite",
-      "projectPath": "C:\\Users\\zebr\\Documents\\Visual Studio 2017\\Projects\\fall2017-todolist\\TaskItSite\\TaskItSite\\TaskItSite.csproj",
-      "packagesPath": "C:\\Users\\zebr\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\zebr\\Documents\\Visual Studio 2017\\Projects\\fall2017-todolist\\TaskItSite\\TaskItSite\\obj\\",
+      "projectPath": "C:\\Users\\Zeb\\Documents\\Visual Studio 2017\\Projects\\fall2017-todolist\\TaskItSite\\TaskItSite\\TaskItSite.csproj",
+      "packagesPath": "C:\\Users\\Zeb\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Zeb\\Documents\\Visual Studio 2017\\Projects\\fall2017-todolist\\TaskItSite\\TaskItSite\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\zebr\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Zeb\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -13172,6 +13173,10 @@
           },
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "suppressParent": "All",
+            "target": "Package",
+            "version": "2.0.0"
+          },
+          "Microsoft.AspNetCore.Authentication.Twitter": {
             "target": "Package",
             "version": "2.0.0"
           },

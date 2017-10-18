@@ -11,6 +11,7 @@ namespace TaskItSite.Models
     {
         public string Status { get; set; }
         public string FullName { get; set; }
+        public string ProfileImageURL { get; set; }
 
         public AccessLevel AccessLevel { get; set; }
 

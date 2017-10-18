@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using TaskItSite.Models;
 using TaskItSite.Models.AccountViewModels;
 using TaskItSite.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace TaskItSite.Controllers
 {
@@ -246,6 +247,10 @@ namespace TaskItSite.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
+
+            // Clear profile picture on logout
+            HttpContext.Session.Remove("cachedImage");
+
             _logger.LogInformation("User logged out.");
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
@@ -310,7 +315,28 @@ namespace TaskItSite.Controllers
                 {
                     throw new ApplicationException("Error loading external login information during confirmation.");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = info.Principal.Identity.Name };
+
+                // Shrink the image a bit, if possible
+                string imageURL = null;
+                if (info.Principal.FindFirst("image") != null)
+                {
+                    imageURL = info.Principal.FindFirst("image").Value;
+                }
+                else if (info.LoginProvider == "Facebook" &&
+                    info.Principal.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier") != null)
+                {
+                    imageURL = "http://graph.facebook.com/" + 
+                                info.Principal.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value +
+                                "/picture?type=square";
+                }
+
+                var user = new ApplicationUser {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FullName = info.Principal.Identity.Name,
+                    ProfileImageURL = imageURL
+                    
+                };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
