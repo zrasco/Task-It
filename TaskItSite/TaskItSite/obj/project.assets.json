@@ -13119,7 +13119,7 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\zebr\\.nuget\\packages\\": {},
+    "C:\\Users\\Pedro\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
@@ -13128,17 +13128,17 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "C:\\Users\\zebr\\Documents\\Visual Studio 2017\\Projects\\fall2017-todolist\\TaskItSite\\TaskItSite\\TaskItSite.csproj",
+      "projectUniqueName": "C:\\Users\\Pedro\\TaskIt\\fall2017-todolist\\TaskItSite\\TaskItSite\\TaskItSite.csproj",
       "projectName": "TaskItSite",
-      "projectPath": "C:\\Users\\zebr\\Documents\\Visual Studio 2017\\Projects\\fall2017-todolist\\TaskItSite\\TaskItSite\\TaskItSite.csproj",
-      "packagesPath": "C:\\Users\\zebr\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\zebr\\Documents\\Visual Studio 2017\\Projects\\fall2017-todolist\\TaskItSite\\TaskItSite\\obj\\",
+      "projectPath": "C:\\Users\\Pedro\\TaskIt\\fall2017-todolist\\TaskItSite\\TaskItSite\\TaskItSite.csproj",
+      "packagesPath": "C:\\Users\\Pedro\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Pedro\\TaskIt\\fall2017-todolist\\TaskItSite\\TaskItSite\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\zebr\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Pedro\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

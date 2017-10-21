@@ -3,7 +3,17 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <UserSecretsId>aspnet-TaskItSiteAuth-5C551C62-202D-4F57-ABF9-80267C64AC95</UserSecretsId>
+    <ApplicationIcon>faviconLogo.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\js\jquery-1.11.3.js" />
+    <Content Remove="wwwroot\js\locale-all.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="faviconLogo.ico" />
+  </ItemGroup>
 
 
   <ItemGroup>
