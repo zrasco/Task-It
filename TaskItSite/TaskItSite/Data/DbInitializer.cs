@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TaskItSite.Models;
 
 namespace TaskItSite.Data
 {
@@ -10,6 +11,9 @@ namespace TaskItSite.Data
         public static void Initialize(ApplicationDbContext context)
         {
             context.Database.EnsureCreated();
+
+            if (context.AchievementCategories.Any())
+                return;
 
             // Code to initalize database below
             /*
@@ -78,6 +82,39 @@ namespace TaskItSite.Data
             }
             context.SaveChanges();
             */
+
+            // Create categories here
+            var achievementCategories = new AchievementCategory[]
+            {
+                new AchievementCategory {AchievementCategoryID = 1, Name = "Category #1", Description = "Category #1 description" },
+                new AchievementCategory {AchievementCategoryID = 2, Name = "Category #2", Description = "Category #2 description" }
+                // Add as many as you want here...
+            };
+
+            foreach (AchievementCategory achievementCategory in achievementCategories)
+            {
+                context.AchievementCategories.Add(achievementCategory);
+            }
+
+            context.SaveChanges();
+
+            // Create achievements here
+            var globalAchievementList = new GlobalAchievement[]
+            {
+                new GlobalAchievement {AchievementCategoryID = 1, Name = "Achievement in Category #1", Description = "Description of achievement" },
+                new GlobalAchievement {AchievementCategoryID = 2, Name = "Achievement in Category #2", Description = "Description of achievement" },
+                new GlobalAchievement {AchievementCategoryID = 2, Name = "Another achievement in Category #2", Description = "Description of achievement" }
+            };
+
+            foreach (GlobalAchievement achievement in globalAchievementList)
+            {
+                context.GlobalAchievements.Add(achievement);
+            }
+            context.SaveChanges();
+
+            GlobalAchievement test = new GlobalAchievement { AchievementCategoryID = 3, Name = "Not allowed!", Description = "Description of achievement" };
+            context.GlobalAchievements.Add(test);
+            context.SaveChanges();
 
         }
     }

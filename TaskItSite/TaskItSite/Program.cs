@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using TaskItSite.Data;
+using System.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace TaskItSite
 {
@@ -28,10 +30,15 @@ namespace TaskItSite
                     var context = services.GetRequiredService<ApplicationDbContext>();
                     DbInitializer.Initialize(context);
                 }
+                catch (DbUpdateException ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An SQL error occurred while seeding the database.");
+                }
                 catch (Exception ex)
                 {
                     var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred while seeding the database.");
+                    logger.LogError(ex, "A general error occurred while seeding the database.");
                 }
             }
 

@@ -1,4 +1,18 @@
-﻿<style>
+﻿@* CSS And JS refrences *@
+<head>
+    <link href="~/css/fullcalendar.css" rel="stylesheet" />
+    <!-- calendar dependencies -->
+    <script type="text/javascript" src="~/js/moment.js"></script>
+    <script type="text/javascript" src="~/js/fullcalendar.js"></script>
+    <script type="text/javascript" src="~/js/gcal.js"></script>
+
+
+    <!-- Actual calendar stuff -->
+    <script type="text/javascript" src="~/js/calendar.js"></script>
+    <script type="text/javascript" src="~/js/taskItCalendar.js"></script>
+</head>
+
+<style>
     table, th, td, tr {
         border: 1px solid black;
     }
@@ -26,9 +40,22 @@
         </td>
     </tr>
     <tr>
-        
+        <td>
+
+        </td>
+
+        <!--
         <td colspan="2" align="center" valign="middle">
             <img src="~/images/journal-example.png" /> 
         </td>
+            -->
     </tr>
 </table>
+<div class="row" onload="renderCalendar('myCalendar1');">
+    <div>
+        <h2>Calendar Testing area</h2>
+        <div ng-app="calendarDemoApp" ng-controller="CalendarCtrl">
+            <div id="calendar" ui-calendar="uiConfig.calendar" ng-model="eventSources"></div>
+        </div>
+    </div>
+</div>

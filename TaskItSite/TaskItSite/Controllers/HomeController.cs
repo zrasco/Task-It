@@ -8,22 +8,28 @@ using TaskItSite.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
+using TaskItSite.Data;
+using TaskItSite.Models.MainViewModels;
 
 namespace TaskItSite.Controllers
 {
     public class HomeController : Controller
     {
         #region Dependency injection
+        private readonly ApplicationDbContext _appDbContext = null;
+
         private readonly UserManager<ApplicationUser> _userManager = null;
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-        public HomeController(UserManager<ApplicationUser> userManager)
+        public HomeController(UserManager<ApplicationUser> userManager, ApplicationDbContext appDbContext)
         {
             _userManager = userManager;
+            _appDbContext = appDbContext;
         }
         #endregion
 
-
+        [TempData]
+        public string StatusMessage { get; set; }
 
         public async Task<IActionResult> Index()
         { 
@@ -87,11 +93,91 @@ namespace TaskItSite.Controllers
             return View();
         }
 
-        public IActionResult Achievements()
+        [HttpGet]
+        public async Task<IActionResult> Achievements()
         {
             ViewData["Message"] = "Your achievements.";
 
-            return View();
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            var model = new AchievementsViewModel
+            {
+                AchievementWrapperList = new List<AchievementWrapper>(),
+                CurrentUser = user,
+                StatusMessage = null
+            };
+
+            foreach (GlobalAchievement a in _appDbContext.GlobalAchievements)
+            {
+                AchievementWrapper newW = new AchievementWrapper
+                {
+                    Achievement = a
+                };
+
+                // Find matching achievement
+                UserAchievement targetAchievement = model.CurrentUser.Achivements.Where(x => x.GlobalAchievementID == a.GlobalAchievementID).FirstOrDefault();
+
+                if (targetAchievement != null)
+                    newW.IsAchieved = true;
+                else
+                    newW.IsAchieved = false;
+
+                model.AchievementWrapperList.Add(newW);
+            }
+                
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Achievements(AchievementsViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            for (int i = 0; i < model.AchievementWrapperList.Count; i++)
+            {
+                // Find matching achievement. Don't use foreach here since it gets messed up by the .Where() below
+                AchievementWrapper aw = model.AchievementWrapperList[i];
+                UserAchievement targetAchievement = user.Achivements.Where(x => x.GlobalAchievementID == aw.Achievement.GlobalAchievementID).FirstOrDefault();
+
+                // Only update if there's a change
+                if (targetAchievement == null && aw.IsAchieved == true)
+                {
+                    UserAchievement toAdd = new UserAchievement
+                    {
+                        GlobalAchievementID = aw.Achievement.GlobalAchievementID,
+                        AchievedTime = DateTime.Now
+                    };
+
+                    user.Achivements.Add(toAdd);
+                }
+                else if (targetAchievement != null && aw.IsAchieved == false)
+                    user.Achivements.Remove(targetAchievement);
+            }
+
+            var setResult = await _userManager.UpdateAsync(user);
+
+            if (!setResult.Succeeded)
+            {
+                throw new ApplicationException($"Unexpected error occurred setting achievements for user with ID '{user.Id}'.");
+            }            
+
+            StatusMessage = "Your settings have been updated";
+            return RedirectToAction(nameof(Achievements));
         }
     }
 }
