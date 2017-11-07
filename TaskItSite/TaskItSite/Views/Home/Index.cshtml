@@ -2,7 +2,30 @@
     ViewData["Title"] = "Home Page";
 }
 
+@* CSS And JS refrences *@
+<head>
+    <link href="~/css/fullcalendar.css" rel="stylesheet"/>
+    <!-- JS Frameworks -->
+    
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="~/js/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" src="~/js/angular.js"></script>
+    <!-- Formatting/activeness via angular -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.js"></script>
 
+    <!-- dependencies -->
+    <script type="text/javascript" src="~/js/moment.js"></script>
+    <script type="text/javascript" src="~/js/fullcalendar.js"></script>
+    <script type="text/javascript" src="~/js/gcal.js"></script>
+    
+    
+    <!-- Actual calendar stuff -->
+    <script type="text/javascript" src="~/js/calendar.js"></script>
+    <script type="text/javascript" src="~/js/taskItCalendar.js"></script>
+</head>
 
 <div class="jumbotron">
     <table align="center">
@@ -38,4 +61,12 @@
         <p>You can download the completed sample project from GitHub.</p>
         <p><a class="btn btn-default" href="https://github.com/aspnet/Docs/tree/master/aspnetcore/data/ef-mvc/intro/samples/cu-final">See project source code &raquo;</a></p>
     </div>
+</div>
+<div class="row" onload="renderCalendar('myCalendar1');">
+    <div>
+        <h2>Calendar Testing area</h2>
+        <div ng-app="calendarDemoApp" ng-controller="CalendarCtrl">
+            <div id="calendar" ui-calendar="uiConfig.calendar" ng-model="eventSources"></div>
+        </div>
+    </div>    
 </div>
