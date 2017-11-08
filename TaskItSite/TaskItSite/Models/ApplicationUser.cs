@@ -19,6 +19,12 @@ namespace TaskItSite.Models
             TextOnFeedUpdate = false;
             EmailOnMessage = false;
             EmailOnFeedUpdate = false;
+
+            // Initialize lists
+            IAmFollowing = new List<ApplicationUser>();
+            Tasks = new List<Task>();
+            Achivements = new List<UserAchievement>();
+            Reminders = new List<Reminder>();
         }
 
         public string GetHomeScreenURL()
@@ -45,10 +51,10 @@ namespace TaskItSite.Models
 
         public AccessLevel AccessLevel { get; set; }
 
-        public ICollection<ApplicationUser> IAmFollowing { get; set; }
-        public ICollection<Task> Tasks { get; set; }
-        public ICollection<Achievement> Achivements { get; set; }
-        public ICollection<Reminder> Reminders { get; set; }
+        public virtual ICollection<ApplicationUser> IAmFollowing { get; set; }
+        public virtual ICollection<Task> Tasks { get; set; }
+        public virtual ICollection<UserAchievement> Achivements { get; set; }
+        public virtual ICollection<Reminder> Reminders { get; set; }
 
         // zrasco - Using a single settings container would require building a respository to save the sub-objects.
         //          Since we only have a handful of settings, make them individual fields instead

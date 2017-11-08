@@ -11,11 +11,11 @@ namespace TaskItSite.Models
 
         public int ID { get; set; }
         public string Description { get; set; }
-        public string StartDatetime { get; set; }
-        public string EndDatetime { get; set; }
-        public string ThresholdMinutes { get; set; }
+        public DateTime StartDatetime { get; set; }
+        public DateTime EndDatetime { get; set; }
+        public long ThresholdMinutes { get; set; }
         public bool IsEvent { get; set; }
         public string Summary { get; set; }
-        public int UserID { get; set; }
+        public Guid UserID { get; set; }
     }
 }
