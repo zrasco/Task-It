@@ -9,6 +9,7 @@
 *.user
 *.sln.docstates
 .vs/
+project.assets.json
 
 # Build results
 [Dd]ebug/
