@@ -19,7 +19,7 @@ namespace TaskItSite.Data
         }
 
         // User accounts already created with ASP.NET so I've extended it (ApplicationUser)
-        public DbSet<UserAchievement> Achievements { get; set; }
+        public DbSet<UserAchievement> UserAchievements { get; set; }
         public DbSet<GlobalAchievement> GlobalAchievements { get; set; }
         public DbSet<AchievementCategory> AchievementCategories { get; set; }
         public DbSet<Reminder> Reminders { get; set; }
@@ -35,7 +35,5 @@ namespace TaskItSite.Data
 
             base.OnModelCreating(modelBuilder);
         }
-
-        public DbSet<ApplicationUser> ApplicationUser { get; set; }
     }
 }

@@ -13,7 +13,9 @@ namespace TaskItSite.Data
             context.Database.EnsureCreated();
 
             if (context.AchievementCategories.Any())
+            {
                 return;
+            }
 
             // Code to initalize database below
             /*
@@ -115,6 +117,9 @@ namespace TaskItSite.Data
             GlobalAchievement test = new GlobalAchievement { AchievementCategoryID = 3, Name = "Not allowed!", Description = "Description of achievement" };
             context.GlobalAchievements.Add(test);
             context.SaveChanges();
+
+
+
 
         }
     }

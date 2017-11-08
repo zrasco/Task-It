@@ -22,5 +22,7 @@ namespace TaskItSite.Models
 
         [ForeignKey("AchievementCategoryID")]
         public virtual AchievementCategory AchievementCategory { get; set; }
+
+        public virtual ICollection<UserAchievement> UserAchievements { get; set; }
     }
 }

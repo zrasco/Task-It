@@ -21,5 +21,11 @@ namespace TaskItSite.Models
         public virtual GlobalAchievement GlobalAchievement { get; set; }
 
         public DateTime? AchievedTime { get; set; }
+
+        public string ApplicationUserID;
+
+        [ForeignKey("ApplicationUserID")]
+        public virtual ApplicationUser ApplicationUser { get; set; }
+        
     }
 }

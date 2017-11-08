@@ -99,16 +99,20 @@ namespace TaskItSite.Controllers
             ViewData["Message"] = "Your achievements.";
 
             var user = await _userManager.GetUserAsync(User);
+
             if (user == null)
             {
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
+            // Achievements must be loaded explicitly due to lazy loading. Would optimize in production app
+            _appDbContext.Entry(user).Collection(x => x.Achivements).Load();
+            
             var model = new AchievementsViewModel
             {
                 AchievementWrapperList = new List<AchievementWrapper>(),
                 CurrentUser = user,
-                StatusMessage = null
+                StatusMessage = StatusMessage
             };
 
             foreach (GlobalAchievement a in _appDbContext.GlobalAchievements)
@@ -119,7 +123,7 @@ namespace TaskItSite.Controllers
                 };
 
                 // Find matching achievement
-                UserAchievement targetAchievement = model.CurrentUser.Achivements.Where(x => x.GlobalAchievementID == a.GlobalAchievementID).FirstOrDefault();
+                UserAchievement targetAchievement = model.CurrentUser.Achivements.Where(x => x.GlobalAchievementID == a.GlobalAchievementID).SingleOrDefault();
 
                 if (targetAchievement != null)
                     newW.IsAchieved = true;
@@ -143,16 +147,21 @@ namespace TaskItSite.Controllers
             }
 
             var user = await _userManager.GetUserAsync(User);
+
             if (user == null)
             {
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
+            // Achievements must be loaded explicitly due to lazy loading. Would optimize in production app
+            _appDbContext.Entry(user).Collection(x => x.Achivements).Load();
+
             for (int i = 0; i < model.AchievementWrapperList.Count; i++)
             {
+                
                 // Find matching achievement. Don't use foreach here since it gets messed up by the .Where() below
                 AchievementWrapper aw = model.AchievementWrapperList[i];
-                UserAchievement targetAchievement = user.Achivements.Where(x => x.GlobalAchievementID == aw.Achievement.GlobalAchievementID).FirstOrDefault();
+                UserAchievement targetAchievement = user.Achivements.Where(x => x.GlobalAchievementID == aw.Achievement.GlobalAchievementID).SingleOrDefault();
 
                 // Only update if there's a change
                 if (targetAchievement == null && aw.IsAchieved == true)
@@ -160,21 +169,24 @@ namespace TaskItSite.Controllers
                     UserAchievement toAdd = new UserAchievement
                     {
                         GlobalAchievementID = aw.Achievement.GlobalAchievementID,
-                        AchievedTime = DateTime.Now
+                        AchievedTime = DateTime.Now,
+                        ApplicationUserID = user.Id
                     };
 
                     user.Achivements.Add(toAdd);
                 }
                 else if (targetAchievement != null && aw.IsAchieved == false)
                     user.Achivements.Remove(targetAchievement);
+               
             }
+            
 
             var setResult = await _userManager.UpdateAsync(user);
 
             if (!setResult.Succeeded)
             {
                 throw new ApplicationException($"Unexpected error occurred setting achievements for user with ID '{user.Id}'.");
-            }            
+            }
 
             StatusMessage = "Your settings have been updated";
             return RedirectToAction(nameof(Achievements));

@@ -12,6 +12,7 @@ namespace TaskItSite.Models
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
+        
         public ApplicationUser()
         {
             HomeScreen = HomeScreen.Overview;
@@ -21,11 +22,20 @@ namespace TaskItSite.Models
             EmailOnFeedUpdate = false;
 
             // Initialize lists
-            IAmFollowing = new List<ApplicationUser>();
-            Tasks = new List<Task>();
-            Achivements = new List<UserAchievement>();
-            Reminders = new List<Reminder>();
+            if (IAmFollowing == null)
+                IAmFollowing = new List<ApplicationUser>();
+
+            if (Tasks == null)
+                Tasks = new List<Task>();
+
+            if (Achivements == null)
+                Achivements = new List<UserAchievement>();
+
+            if (Reminders == null)
+                Reminders = new List<Reminder>();
         }
+        
+        
 
         public string GetHomeScreenURL()
         {
