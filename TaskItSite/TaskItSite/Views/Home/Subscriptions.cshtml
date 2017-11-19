@@ -1,16 +1,45 @@
 ﻿
+@using TaskItSite.Models.MainViewModels
+@model SubscriptionsViewModel
 @{
     ViewData["Title"] = "Subscriptions";
-    
 }
 
 <h2 align="center">Subscriptions</h2>
 
-<table style="width:100%;">
-    <tr>
-        <td align="center">
-            <img align="middle" src="~/images/subscriptions-example.png" />
-            <p id="userName"/>
-        </td>
-    </tr>
-</table>
+<form method="post">
+    <table style="width:100%;">
+        <tr>
+            <td align="center">
+                <img align="middle" src="~/images/subscriptions-example.png" />
+                <p id="userName" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>Subscriptions for @Model.CurrentUser.FullName :</p>
+                @{
+                    for (var i = 0; i < Model.SubscriptionWrapperList.Count; i++)
+                    {
+                        <div class="form-group">
+                            @Html.CheckBoxFor(x => x.SubscriptionWrapperList[i].IsSubscribed)
+                            @Html.Label(Model.SubscriptionWrapperList[i].Subscription.Name)
+
+                            <!-- // Hidden properties stay into the HTTP POST action later.
+                                    All achievement attributes must be explicitly listed here -->
+                            @Html.HiddenFor(x => x.SubscriptionWrapperList[i].Subscription.GlobalSubscriptionID)
+                            @Html.HiddenFor(x => x.SubscriptionWrapperList[i].Subscription.Name)
+                            @Html.HiddenFor(x => x.SubscriptionWrapperList[i].Subscription.Description)
+                        </div>
+                    }
+                }
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.Partial("~/Views/Manage/_StatusMessage.cshtml", Model.StatusMessage)
+                <button type="submit" class="btn btn-default">Save</button>
+            </td>
+        </tr>
+    </table>
+</form>
