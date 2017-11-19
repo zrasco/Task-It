@@ -79,11 +79,49 @@ namespace TaskItSite.Controllers
             return View(currentUser);
         }
 
-        public IActionResult Journal()
+        [HttpGet]
+        public async Task<IActionResult> Journal()
         {
+
             ViewData["Message"] = "Your journal.";
 
-            return View();
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            //Tasks loaded explicitly 
+            _appDbContext.Entry(user).Collection(x => x.Tasks).Load();
+
+            //model used in actual page
+            var model = new TaskViewModel
+            {
+                TaskWrapperList = new List<TaskWrapper>(),
+                CurrentUser = user,
+                StatusMessage = StatusMessage
+            };
+
+            //ambiguity error - hence full path used 
+            foreach (TaskItSite.Models.Task a in _appDbContext.Tasks)
+            {
+                TaskWrapper newW = new TaskWrapper
+                {
+                    Task = a
+                };
+         
+                //Find matching task - this might be unecessary
+                TaskItSite.Models.Task targetTask = model.CurrentUser.Tasks.Where(x => x.ID == a.ID).SingleOrDefault();
+
+                if (targetTask != null)
+                   newW.isTask = true;
+                else
+                newW.isTask = false;
+                model.TaskWrapperList.Add(newW);
+            }
+
+            return View(model);
         }
 
         public IActionResult Subscriptions()
