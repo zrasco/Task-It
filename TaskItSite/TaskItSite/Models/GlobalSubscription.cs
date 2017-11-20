@@ -16,8 +16,11 @@ namespace TaskItSite.Models
         public int GlobalSubscriptionID { get; set; }
 
         public string Name { get; set; }
-        public string Description { get; set; }
 
+
+        public virtual string UserId { get; set; }
+        [ForeignKey("UserId")]
+        public virtual ApplicationUser User { get; set; }
 
         public virtual ICollection<Subscription> Subscriptions { get; set; }
     }
