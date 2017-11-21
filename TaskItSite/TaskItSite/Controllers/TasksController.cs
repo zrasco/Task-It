@@ -3,26 +3,48 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TaskItSite.Data;
 using TaskItSite.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using System.Runtime.InteropServices;
 
 namespace TaskItSite.Controllers
 {
     public class TasksController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        #region Dependency injection
+        private readonly ApplicationDbContext _context = null;
 
-        public TasksController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager = null;
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
+        public TasksController(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
+            _userManager = userManager;
             _context = context;
         }
+        #endregion
 
         // GET: Tasks
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Tasks.ToListAsync());
+            var currentUser = await GetCurrentUserAsync();
+            var tasklist = await _context.Tasks.ToListAsync();
+            var usertask = new List<Models.Task>();
+
+            foreach (var item in tasklist)
+            {
+                if(item.UserID == currentUser.Id && item.IsActive)
+                {
+                    usertask.Add(item);
+
+                }
+            }
+
+
+                return View(usertask);
         }
 
         // GET: Tasks/Details/5
@@ -44,9 +66,27 @@ namespace TaskItSite.Controllers
         }
 
         // GET: Tasks/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+           /*
+            if(id != null)
+            {
+                var task = await _context.Tasks.SingleOrDefaultAsync(m => m.ID == id);
+                int newid = _context.Tasks.Count();
+                task.ID = newid;
+                if (task == null)
+                {
+                    return NotFound();
+                }
+                return View(task);
+            }*/
+            
             return View();
+        }
+
+        public async Task<IActionResult> Create1()
+        {
+            return View(await _context.Tasks.ToListAsync());
         }
 
         // POST: Tasks/Create
@@ -54,10 +94,15 @@ namespace TaskItSite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,CreatedDate,DueDate,Summary,Description,IsPin,UserId")] Models.Task task)
+        public async Task<IActionResult> Create([Bind("ID,CreatedDate,DueDate,Summary,Description,IsPin,UserID,IsPrivate")] Models.Task task)
         {
+            var currentUser = await GetCurrentUserAsync();
+
             if (ModelState.IsValid)
             {
+                task.CreatedDate = DateTime.Now;
+                task.UserID = currentUser.Id;
+                task.IsActive = true;
                 _context.Add(task);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,17 +131,20 @@ namespace TaskItSite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,CreatedDate,DueDate,Summary,Description,IsPin,UserId")] Models.Task task)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,CreatedDate,DueDate,Summary,Description,IsPin,IsPrivate")] Models.Task task)
         {
             if (id != task.ID)
             {
                 return NotFound();
             }
+            var currentUser = await GetCurrentUserAsync();
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    task.UserID = currentUser.Id;
+                    task.CreatedDate = DateTime.Now;
                     _context.Update(task);
                     await _context.SaveChangesAsync();
                 }

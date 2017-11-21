@@ -1,0 +1,80 @@
+﻿@model IEnumerable<TaskItSite.Models.Task>
+
+@{
+    ViewData["Title"] = "Create1";
+}
+
+
+
+<head>
+    <style>
+        button.accordion {
+            background-color: #eee;
+            color: #444;
+            cursor: pointer;
+            padding: 18px;
+            width: 90%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+            transition: 0.4s;
+        }
+
+        button.accordion.active, button.accordion:hover {
+            background-color: #ccc;
+        }
+
+
+        div.panel {
+            padding: 0 18px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            position: relative;
+        }
+
+        .bottomright {
+            position: page;
+            bottom: 0;
+            right: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <p>
+
+        <h2>Create1</h2>
+        <a asp-action="Create">Create New</a>
+
+    </p>
+
+    @foreach (var item in Model)
+    {
+
+        <a classs="btn" >+</a>
+        <a classs="btn">-</a>
+        <button class="accordion">@Html.DisplayFor(modelItem => item.Summary) </button>
+        <div class="panel">
+            <p>@Html.DisplayFor(modelItem => item.Description)</p>
+        </div>
+    }
+    <script>
+            var acc = document.getElementsByClassName("accordion");
+            var i;
+
+            for (i = 0; i < acc.length; i++) {
+                acc[i].onclick = function () {
+                    this.classList.toggle("active");
+                    var panel = this.nextElementSibling;
+                    if (panel.style.maxHeight) {
+                        panel.style.maxHeight = null;
+                    } else {
+                        panel.style.maxHeight = panel.scrollHeight + "px";
+                    }
+                }
+            }
+    </script>
+    </body>
