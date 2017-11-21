@@ -79,18 +79,148 @@ namespace TaskItSite.Controllers
             return View(currentUser);
         }
 
-        public IActionResult Journal()
+        [HttpGet]
+        public async Task<IActionResult> Journal()
         {
+
             ViewData["Message"] = "Your journal.";
 
-            return View();
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            //Tasks loaded explicitly 
+            _appDbContext.Entry(user).Collection(x => x.Tasks).Load();
+
+            //model used in actual page
+            var model = new TaskViewModel
+            {
+                TaskWrapperList = new List<TaskWrapper>(),
+                CurrentUser = user,
+                StatusMessage = StatusMessage
+            };
+
+            //ambiguity error - hence full path used 
+            foreach (TaskItSite.Models.Task a in _appDbContext.Tasks)
+            {
+                TaskWrapper newW = new TaskWrapper
+                {
+                    Task = a
+                };
+         
+                //Find matching task - this might be unecessary
+                TaskItSite.Models.Task targetTask = model.CurrentUser.Tasks.Where(x => x.ID == a.ID).SingleOrDefault();
+
+                if (targetTask != null)
+                   newW.isTask = true;
+                else
+                newW.isTask = false;
+                model.TaskWrapperList.Add(newW);
+            }
+
+            return View(model);
         }
 
-        public IActionResult Subscriptions()
+        [HttpGet]
+        public async Task<IActionResult> Subscriptions()
         {
-            ViewData["Message"] = "Your subscriptions.";
+            ViewData["Message"] = "Your Subscriptions.";
 
-            return View();
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            // Subscriptions must be loaded explicitly due to lazy loading. Would optimize in production app
+            _appDbContext.Entry(user).Collection(x => x.Subs).Load();
+
+            var model = new SubscriptionsViewModel
+            {
+                SubscriptionWrapperList = new List<SubscriptionWrapper>(),
+                CurrentUser = user,
+                StatusMessage = StatusMessage
+            };
+
+            foreach (GlobalSubscription a in _appDbContext.GlobalSubscriptions)
+            {
+                SubscriptionWrapper newW = new SubscriptionWrapper
+                {
+                    Subscription = a
+                };
+
+                // Find matching Subscription
+                Subscription targetSubscription = model.CurrentUser.Subs.Where(x => x.GlobalSubscriptionID == a.GlobalSubscriptionID).SingleOrDefault();
+
+                if (targetSubscription != null)
+                    newW.IsSubscribed = true;
+                else
+                    newW.IsSubscribed = false;
+
+                model.SubscriptionWrapperList.Add(newW);
+            }
+
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Subscriptions(SubscriptionsViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            // Subscriptions must be loaded explicitly due to lazy loading. Would optimize in production app
+            _appDbContext.Entry(user).Collection(x => x.Subs).Load();
+
+            for (int i = 0; i < model.SubscriptionWrapperList.Count; i++)
+            {
+
+                // Find matching Subscription. Don't use foreach here since it gets messed up by the .Where() below
+                SubscriptionWrapper aw = model.SubscriptionWrapperList[i];
+                Subscription targetSubscription = user.Subs.Where(x => x.GlobalSubscriptionID == aw.Subscription.GlobalSubscriptionID).SingleOrDefault();
+
+                // Only update if there's a change
+                if (targetSubscription == null && aw.IsSubscribed == true)
+                {
+                    Subscription toAdd = new Subscription
+                    {
+                        GlobalSubscriptionID = aw.Subscription.GlobalSubscriptionID,
+                        SubscribedTime = DateTime.Now,
+                        ApplicationUserID = user.Id
+                    };
+
+                    user.Subs.Add(toAdd);
+                }
+                else if (targetSubscription != null && aw.IsSubscribed == false)
+                    user.Subs.Remove(targetSubscription);
+
+            }
+
+
+            var setResult = await _userManager.UpdateAsync(user);
+
+            if (!setResult.Succeeded)
+            {
+                throw new ApplicationException($"Unexpected error occurred setting Subscriptions for user with ID '{user.Id}'.");
+            }
+
+            StatusMessage = "Your settings have been updated";
+            return RedirectToAction(nameof(Subscriptions));
         }
 
         [HttpGet]

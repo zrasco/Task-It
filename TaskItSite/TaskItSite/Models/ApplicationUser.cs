@@ -33,6 +33,12 @@ namespace TaskItSite.Models
 
             if (Reminders == null)
                 Reminders = new List<Reminder>();
+
+            if (Subs == null)
+                Subs = new List<Subscription>();
+
+            if (GlobalSubscriptions == null)
+                GlobalSubscriptions = new List<GlobalSubscription>();
         }
         
         
@@ -64,8 +70,10 @@ namespace TaskItSite.Models
         public virtual ICollection<ApplicationUser> IAmFollowing { get; set; }
         public virtual ICollection<Task> Tasks { get; set; }
         public virtual ICollection<UserAchievement> Achivements { get; set; }
+        public virtual ICollection<Subscription> Subs { get; set; }
         public virtual ICollection<Reminder> Reminders { get; set; }
 
+        public virtual ICollection<GlobalSubscription> GlobalSubscriptions { get; set; }
         // zrasco - Using a single settings container would require building a respository to save the sub-objects.
         //          Since we only have a handful of settings, make them individual fields instead
         //
