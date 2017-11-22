@@ -24,13 +24,13 @@ namespace TaskItSite.Data
         public DbSet<AchievementCategory> AchievementCategories { get; set; }
         public DbSet<Reminder> Reminders { get; set; }
         public DbSet<Models.Task> Tasks { get; set; }
-        public DbSet<Subscription> Subscriptions { get; set; }
-        public DbSet<GlobalSubscription> GlobalSubscriptions { get; set; }
+        public DbSet<Models.Subscription> Subscriptions { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<GlobalSubscription>().ToTable("GlobalSubscriptions");
-            modelBuilder.Entity<Subscription>().ToTable("Subscriptions");
+
+            modelBuilder.Entity<Models.Subscription>().ToTable("Subscriptions");
             modelBuilder.Entity<UserAchievement>().ToTable("UserAchievements");
             modelBuilder.Entity<GlobalAchievement>().ToTable("GlobalAchievements");
             modelBuilder.Entity<AchievementCategory>().ToTable("AchievementCategories");
@@ -39,5 +39,8 @@ namespace TaskItSite.Data
 
             base.OnModelCreating(modelBuilder);
         }
+
+
+        public DbSet<TaskItSite.Models.ApplicationUser> ApplicationUser { get; set; }
     }
 }

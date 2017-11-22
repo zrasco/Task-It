@@ -13,19 +13,18 @@ namespace TaskItSite.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Number")]
         [Key]
-        public int UserSubscriptionID { get; set; }
+        public int SubscriptionID { get; set; }
 
-        public int GlobalSubscriptionID { get; set; }
+        public string SubscribingUserID { get; set; }
+        public string SubscribingToUserID { get; set; }
 
-        [ForeignKey("GlobalSubscriptionID")]
-        public virtual GlobalSubscription GlobalSubscription { get; set; }
+        [ForeignKey("SubscribingUserID")]
+        public virtual ApplicationUser SubscribingUser { get; set; }
 
-        public DateTime? SubscribedTime { get; set; }
+        [ForeignKey("SubscribingToUserID")]
+        public virtual ApplicationUser SubscribingTo { get; set; }
 
-        public string ApplicationUserID;
-
-        [ForeignKey("ApplicationUserID")]
-        public virtual ApplicationUser ApplicationUser { get; set; }
-        
     }
+
 }
+
