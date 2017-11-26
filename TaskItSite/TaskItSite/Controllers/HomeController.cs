@@ -17,16 +17,19 @@ namespace TaskItSite.Controllers
     {
         #region Dependency injection
         private readonly ApplicationDbContext _appDbContext = null;
-
         private readonly UserManager<ApplicationUser> _userManager = null;
+        private ApplicationDbContext _application;
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-        public HomeController(UserManager<ApplicationUser> userManager, ApplicationDbContext appDbContext)
+        public HomeController(UserManager<ApplicationUser> userManager, ApplicationDbContext appDbContext, ApplicationDbContext application)
         {
             _userManager = userManager;
             _appDbContext = appDbContext;
+            _application = application;     //added to display all users for subscriptions.
         }
         #endregion
+          
+      
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -128,7 +131,7 @@ namespace TaskItSite.Controllers
         {
             ViewData["Message"] = "Your subscriptions.";
 
-            return View();
+            return View(_application.Users.ToList()); //lets view display with @Html.DisplayNameFor(model => model.FullName)
         }
 
 
