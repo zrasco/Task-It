@@ -30,7 +30,7 @@
 <div class="row" onload="renderCalendar('myCalendar1');">
         <h2>Calendar Testing area</h2>
         <div ng-app="TaskItApp" ng-controller="CalendarCtrl">
-            @{ 
+          
             <div id="calendar" ui-calendar="uiConfig.calendar" ng-model="eventSources" ng-init="init('@Model.CurrentUser.FullName')"> </div>
 
            <!--Area for editting/viewing, theres a bootstrap thing for this but I don't know its name at the moment-->
@@ -40,37 +40,10 @@
                 {{ test }}                
                 {{ userId }}
                 
-                <!--Setting for a specific event-->
-                <!--
-                <form name="task-form" class="form-inline">
-                    <div class="row">
-                        <label for="des-input" class="sr-only"></label>
-                        <input type="text" id="des-input" class="form-control input-group-lg" autocapitalize="off" placeholder="Description" ng-model="description" />
-                    </div>
-                    <div class="row">
-                        <label for="date-start-input" class="sr-only"></label>
-                        <input type="text" id="date-input" class="form-control input-group-lg" autocapitalize="off" placeholder="Start Date" ng-model="CreatedDate" />
-                    </div>
-                    <div class="row">
-                        <label for="date-input" class="sr-only"></label>
-                        <input type="text" id="date-input" class="form-control input-group-lg" autocapitalize ="off" placeholder="Due Date"  ng-model="dueDate" />
-                    </div>
-                    <div class="row">
-                        <label for="date-input" class="sr-only"></label>
-                        <input type="text" id="date-input" class="form-control input-group-lg" autocapitalize="off" placeholder="Summary" ng-model="summary" />
-                    </div>
-                    <div class="row">
-                        <label class="sr-only"> </label>Is Private:<input type="checkbox" class="form-control checkbox" ng-model="isPin" />
-                    </div>
-                    <div class="btn-group">
-                        <button class="btn-default" ng-click="addEvent()">Add Event</button>
-                    </div>
-                </form>
-                -->
-                @Html.ActionLink("New Task", "Create", "Tasks")
+                @await Html.PartialAsync("~/Views/Tasks/Create.cshtml", new TaskItSite.Models.Task());
                 
             </div>
-                }
+               
         </div>
    
 </div>
