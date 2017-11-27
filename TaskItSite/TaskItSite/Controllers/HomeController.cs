@@ -42,6 +42,17 @@ namespace TaskItSite.Controllers
 
                 if (currentUser != null)
                 {
+                    if(currentUser.IsPublic == false)
+                    { 
+                        var newGS = new GlobalSubscription
+                        {
+                            Name = currentUser.FullName,
+                            SubscribingToUserID = currentUser.Id
+                        };
+                        currentUser.IsPublic = true;
+                        _appDbContext.GlobalSubscriptions.Add(newGS);
+                        _appDbContext.SaveChanges();
+                    }                
                     // Send user to their chosen homepage upon login
                     HttpContext.Session.SetString("sentToHomePage", "sent");
                     return LocalRedirect(currentUser.GetHomeScreenURL());
@@ -127,11 +138,95 @@ namespace TaskItSite.Controllers
             return View(model);
         }
 
-        public IActionResult Subscriptions()
+        [HttpGet]
+        public async Task<IActionResult> Subscriptions()
         {
-            ViewData["Message"] = "Your subscriptions.";
+            ViewData["Message"] = "Your Subscriptions.";
 
-            return View(_application.Users.ToList()); //lets view display with @Html.DisplayNameFor(model => model.FullName)
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+
+            _appDbContext.Entry(user).Collection(x => x.Subs).Load();
+
+            var model = new SubscriptionsViewModel
+            {
+                SubscriptionWrapperList = new List<SubscriptionWrapper>(),
+                CurrentUser = user,
+                StatusMessage = StatusMessage
+            };
+            foreach (GlobalSubscription a in _appDbContext.GlobalSubscriptions)
+            {
+                SubscriptionWrapper newW = new SubscriptionWrapper
+                {
+                    Sub = a
+                };
+
+                Subscription targetSubscription = model.CurrentUser.Subs.Where(x => x.GlobalSubscriptionID == a.GlobalSubscriptionID).SingleOrDefault();
+
+                if (targetSubscription != null)
+                    newW.IsSubscribed = true;
+                else
+                    newW.IsSubscribed = false;
+
+                model.SubscriptionWrapperList.Add(newW);
+            }
+
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Subscriptions(SubscriptionsViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            _appDbContext.Entry(user).Collection(x => x.Subs).Load();
+
+            for (int i = 0; i < model.SubscriptionWrapperList.Count; i++)
+            {
+                SubscriptionWrapper aw = model.SubscriptionWrapperList[i];
+                Subscription targetSubscription = user.Subs.Where(x => x.GlobalSubscriptionID == aw.Sub.GlobalSubscriptionID).SingleOrDefault();
+
+                // Only update if there's a change
+                if (targetSubscription == null && aw.IsSubscribed == true)
+                {
+                    Subscription toSub = new Subscription
+                    {
+                        SubscribingUserID = user.Id,
+                        GlobalSubscriptionID = aw.Sub.GlobalSubscriptionID               
+                    };
+
+                    user.Subs.Add(toSub);
+                }
+                else if (targetSubscription != null && aw.IsSubscribed == false)
+                    user.Subs.Remove(targetSubscription);
+
+            }
+            var setResult = await _userManager.UpdateAsync(user);
+
+            if (!setResult.Succeeded)
+            {
+                throw new ApplicationException($"Unexpected error occurred setting achievements for user with ID '{user.Id}'.");
+            }
+
+            StatusMessage = "Your settings have been updated";
+            return RedirectToAction(nameof(Subscriptions));
         }
 
 

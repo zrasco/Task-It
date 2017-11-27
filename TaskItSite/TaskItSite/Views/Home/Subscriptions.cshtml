@@ -1,68 +1,41 @@
-﻿@model IEnumerable<TaskItSite.Models.ApplicationUser>
-
+﻿@using TaskItSite.Models.MainViewModels
+@model SubscriptionsViewModel
 @{
     ViewData["Title"] = "Subscriptions";
 }
 
 <h2 align="center">Subscriptions</h2>
 
+
+
+<h3>UsersViewTest</h3>
+
 <form method="post">
     <table style="width:100%;">
+
         <tr>
-            <td align="center">
-                <img align="middle" src="~/images/subscriptions-example.png" />
-                <p id="userName" />
+            <td>
+                @{
+                    for (var i = 0; i < Model.SubscriptionWrapperList.Count; i++)
+                    {
+                        <div class="form-group">
+                            @Html.CheckBoxFor(x => x.SubscriptionWrapperList[i].IsSubscribed)
+                            @Html.Label(Model.SubscriptionWrapperList[i].Sub.Name)
+                            <!-- // Hidden properties stay into the HTTP POST action later.
+                                    All subscription attributes must be explicitly listed here -->
+                            @Html.Label(Model.SubscriptionWrapperList[i].Sub.Name)
+                            @Html.HiddenFor(x => x.SubscriptionWrapperList[i].Sub.GlobalSubscriptionID)
+                        </div>
+                    }
+                }
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.Partial("~/Views/Manage/_StatusMessage.cshtml", Model.StatusMessage)
+                <button type="submit" class="btn btn-default">Save</button>
             </td>
         </tr>
     </table>
 </form>
-
-<h3>UsersViewTest</h3>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                Subscribed
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FullName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.CheckBoxFor(modelItem => item.EmailConfirmed) 
-                    <!-- // EmailConfirmed is just a placeholder while I figure out what to do-->
-
-                </td>
-            </tr>
-        }
-        <tr>
-            <td>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </td>
-        </tr>
-    </tbody>
-</table>
 

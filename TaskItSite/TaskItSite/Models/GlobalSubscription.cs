@@ -7,25 +7,20 @@ using System.Threading.Tasks;
 
 namespace TaskItSite.Models
 {
-    public class Subscription
+    // This is the achievement the user will have
+    public class GlobalSubscription
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Number")]
         [Key]
-        public int SubscriptionID { get; set; }
-
-        public string SubscribingUserID { get; set; }
-
         public int GlobalSubscriptionID { get; set; }
 
-        [ForeignKey("SubscribingUserID")]
-        public virtual ApplicationUser SubscribingUser { get; set; }
+        public string Name { get; set; }
+        public string SubscribingToUserID { get; set; }
 
-        
-        [ForeignKey("GlobalSubscriptionID")]
-        public virtual GlobalSubscription GlobalSubscription { get; set; }
+        [ForeignKey("SubscribingToUserID")]
+        public virtual ApplicationUser SubscribingTo { get; set; }
 
+        public virtual ICollection<Subscription> Subscriptions { get; set; }
     }
-
 }
-
