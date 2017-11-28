@@ -136,7 +136,7 @@ namespace TaskItSite.Data
                 new GlobalAchievement {AchievementCategoryID = 6, Name = "You Showed Up", Description = "Completed 1 school task." },
                 new GlobalAchievement {AchievementCategoryID = 6, Name = "Mediocre Olympiad", Description = "Completed 5 school tasks." },
                 new GlobalAchievement {AchievementCategoryID = 6, Name = "Honor Roll", Description = "Completed 10 school tasks." },
-                new GlobalAchievement {AchievementCategoryID = 6, Name = "Teacher's Pet", Description = "Completed 20 school tasks." },
+                new GlobalAchievement {AchievementCategoryID = 6, Name = "Teacher's Pet", Description = "Completed 20 school tasks." }
             };
 
             foreach (GlobalAchievement achievement in globalAchievementList)
