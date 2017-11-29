@@ -88,8 +88,12 @@ namespace TaskItSite.Data
             // Create categories here
             var achievementCategories = new AchievementCategory[]
             {
-                new AchievementCategory {AchievementCategoryID = 1, Name = "Category #1", Description = "Category #1 description" },
-                new AchievementCategory {AchievementCategoryID = 2, Name = "Category #2", Description = "Category #2 description" }
+                new AchievementCategory {AchievementCategoryID = 1, Name = "Subscriptions", Description = "Earned when reaching a certain number of subscriptions." },
+                new AchievementCategory {AchievementCategoryID = 2, Name = "Tasks", Description = "Earned when creating or completing a certain number of tasks." },
+                new AchievementCategory {AchievementCategoryID = 3, Name = "Workout", Description = "Earned when completing a workout task." },
+                new AchievementCategory {AchievementCategoryID = 4, Name = "Chore", Description = "Earned when completing a chore task." },
+                new AchievementCategory {AchievementCategoryID = 5, Name = "Fun", Description = "Earned when completing a fun task." },
+                new AchievementCategory {AchievementCategoryID = 6, Name = "School", Description = "Earned when completing a school task." }
                 // Add as many as you want here...
             };
 
@@ -103,9 +107,36 @@ namespace TaskItSite.Data
             // Create achievements here
             var globalAchievementList = new GlobalAchievement[]
             {
-                new GlobalAchievement {AchievementCategoryID = 1, Name = "Achievement in Category #1", Description = "Description of achievement" },
-                new GlobalAchievement {AchievementCategoryID = 2, Name = "Achievement in Category #2", Description = "Description of achievement" },
-                new GlobalAchievement {AchievementCategoryID = 2, Name = "Another achievement in Category #2", Description = "Description of achievement" }
+                new GlobalAchievement {AchievementCategoryID = 1, Name = "Subscribed to 1 person!", Description = "Earned after subscribing to 1 person." },
+                new GlobalAchievement {AchievementCategoryID = 1, Name = "Subscribed to 5 people!", Description = "Earned after subscribing to 5 people." },
+                new GlobalAchievement {AchievementCategoryID = 1, Name = "Subscribed to 10 people!", Description = "Earned after subscribing to 10 people." },
+                new GlobalAchievement {AchievementCategoryID = 1, Name = "Subscribed to 20 people!", Description = "Earned after subscribing to 20 people." },
+                new GlobalAchievement {AchievementCategoryID = 2, Name = "Created 1 task!", Description = "Earned after creating 1 task." },
+                new GlobalAchievement {AchievementCategoryID = 2, Name = "Created 5 tasks!", Description = "Earned after creating 5 tasks." },
+                new GlobalAchievement {AchievementCategoryID = 2, Name = "Created 10 tasks!", Description = "Earned after creating 10 tasks." },
+                new GlobalAchievement {AchievementCategoryID = 2, Name = "Created 20 tasks!", Description = "Earned after creating 20 tasks." },
+                new GlobalAchievement {AchievementCategoryID = 2, Name = "Completed 1 task!", Description = "Earned after completing 1 task." },
+                new GlobalAchievement {AchievementCategoryID = 2, Name = "Completed 5 tasks!", Description = "Earned after completing 5 tasks." },
+                new GlobalAchievement {AchievementCategoryID = 2, Name = "Completed 10 tasks!", Description = "Earned after completing 10 tasks." },
+                new GlobalAchievement {AchievementCategoryID = 2, Name = "Completed 20 tasks!", Description = "Earned after completing 20 tasks." },
+                new GlobalAchievement {AchievementCategoryID = 3, Name = "Workout Newbie", Description = "Completed 1 workout task." },
+                new GlobalAchievement {AchievementCategoryID = 3, Name = "Workout Novice", Description = "Completed 2 workout tasks." },
+                new GlobalAchievement {AchievementCategoryID = 3, Name = "Workout Rookie", Description = "Completed 5 workout tasks." },
+                new GlobalAchievement {AchievementCategoryID = 3, Name = "Workout Begninner", Description = "Completed 10 workout tasks." },
+                new GlobalAchievement {AchievementCategoryID = 3, Name = "Workout Advanced", Description = "Completed 15 workout tasks." },
+                new GlobalAchievement {AchievementCategoryID = 3, Name = "Workout Expert", Description = "Completed 20 workout tasks." },
+                new GlobalAchievement {AchievementCategoryID = 4, Name = "Press Start for Chores", Description = "Completed 1 chore task." },
+                new GlobalAchievement {AchievementCategoryID = 4, Name = "The Choremaster", Description = "Completed 10 chore tasks." },
+                new GlobalAchievement {AchievementCategoryID = 4, Name = "You're on a Roll!", Description = "Completed 25 chore tasks." },
+                new GlobalAchievement {AchievementCategoryID = 4, Name = "Guru of Chores", Description = "Completed 20 chore tasks." },
+                new GlobalAchievement {AchievementCategoryID = 5, Name = "Lukewarm Fun", Description = "Completed 1 fun task." },
+                new GlobalAchievement {AchievementCategoryID = 5, Name = "Getting There", Description = "Completed 5 fun tasks." },
+                new GlobalAchievement {AchievementCategoryID = 5, Name = "Into the Wild Blue Fun", Description = "Completed 10 fun tasks." },
+                new GlobalAchievement {AchievementCategoryID = 5, Name = "The Final Goal: Fun", Description = "Completed 20 fun tasks." },
+                new GlobalAchievement {AchievementCategoryID = 6, Name = "You Showed Up", Description = "Completed 1 school task." },
+                new GlobalAchievement {AchievementCategoryID = 6, Name = "Mediocre Olympiad", Description = "Completed 5 school tasks." },
+                new GlobalAchievement {AchievementCategoryID = 6, Name = "Honor Roll", Description = "Completed 10 school tasks." },
+                new GlobalAchievement {AchievementCategoryID = 6, Name = "Teacher's Pet", Description = "Completed 20 school tasks." }
             };
 
             foreach (GlobalAchievement achievement in globalAchievementList)
