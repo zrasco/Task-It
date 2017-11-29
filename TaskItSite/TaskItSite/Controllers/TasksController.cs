@@ -42,9 +42,15 @@ namespace TaskItSite.Controllers
 
                 }
             }
-
-
                 return View(usertask);
+        }
+
+        //GET: Tasks as JSON objects
+        public JsonResult GetTasks()
+        {
+            //uses previously made get
+            var tasks = this.Index();
+            return new JsonResult( tasks );
         }
 
         // GET: Tasks/Details/5
@@ -66,21 +72,29 @@ namespace TaskItSite.Controllers
         }
 
         // GET: Tasks/Create
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-           /*
-            if(id != null)
+            return View();
+        }
+
+        public async Task<IActionResult> QuickAdd(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            if (id != null)
             {
                 var task = await _context.Tasks.SingleOrDefaultAsync(m => m.ID == id);
-                int newid = _context.Tasks.Count();
-                task.ID = newid;
+
                 if (task == null)
                 {
                     return NotFound();
                 }
                 return View(task);
-            }*/
-            
+            }
+
             return View();
         }
 

@@ -7,43 +7,31 @@ var calendarDemoApp = angular.module('TaskItApp', ['ui.calendar', 'ui.bootstrap'
 //controller to pull information from the database 
 calendarDemoApp.controller('CalendarCtrl', ['$scope', '$http', 'uiCalendarConfig', function ($scope, $http, uiCalendarConfig) {
 
-    $scope.init = function (id) {
-
-        $scope.userId = id
-        $scope.test = "tentative test"
-        console.log(id)
-    }
     //selected calendar
     $scope.SelectedEvent = null;
     var isFirstTime = true;
 
-    //list of displayed events
+    //list of tasks
+    $scope.tasks = [];
+    $scope.tasksSources = [$scope.tasks];
+    //list of presented tasks via calendar (events)
     $scope.events = [];
-    $scope.eventSources = [$scope.events];
 
     //Load events from server
-    /*
-    $http.post('Tasks/Details/5', {
-        cache: true,
-        params: {}
-    }).then(function (data) {
-        $scope.events.slice(0, $scope.events.length);
-        //for each event personal event, call data
-        angular.forEach(data.data, function (value) {
-            $scope.events.push({
-                ApplicationUser: value.ApplicationUser,
-                CreatedDate: value.CreatedDate,
-                Description: value.Description,
-                DueDate: value.DueDate,
-                IsPin: value.IsPin,
-                Summary: value.Summary,
-                UserId: value.UserId
+    $scope.tasks = @Html.Raw(Json.Serialize(Model));
 
-            });
-        //for each subscribed calendar, call data
+    //go through each event and set calendar location for each
+    $scope.events.slice(0, $scope.tasks.length);
+    angular.forEach(data.data, function (value) {
+        $scope.events.push({
+            title: value.title,
+            description: value.description,
+            start: value.createdDate,
+            end: value.dueDate,
+            allDay: value.isActive
         });
-        });
-    */
+    });
+
     //configure calendar
     /* config object */
     $scope.uiConfig = {
@@ -87,16 +75,6 @@ calendarDemoApp.controller('CalendarCtrl', ['$scope', '$http', 'uiCalendarConfig
             UserId: $scope.userId
         }
         
-        //push events to database
-        console.log("button clicked")
-        //ajax post call
-        $.ajax({
-            type: 'POST',
-            url: '../Controllers/TasksController/Tasks/Create',
-            data: JSON.stringify(JSONObj),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json"
-        })
     }
 
     /*Edit button (will be merged with add later on)*/
