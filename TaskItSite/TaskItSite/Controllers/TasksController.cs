@@ -42,9 +42,15 @@ namespace TaskItSite.Controllers
 
                 }
             }
-
-
                 return View(usertask);
+        }
+
+        //GET: Tasks as JSON objects
+        public JsonResult GetTasks()
+        {
+            //uses previously made get
+            var tasks = this.Index();
+            return new JsonResult( tasks );
         }
 
         // GET: Tasks/Details/5
