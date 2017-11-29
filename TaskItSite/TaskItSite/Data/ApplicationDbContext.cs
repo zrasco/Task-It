@@ -25,6 +25,7 @@ namespace TaskItSite.Data
         public DbSet<Reminder> Reminders { get; set; }
         public DbSet<Models.Task> Tasks { get; set; }
         public DbSet<Models.Subscription> Subscriptions { get; set; }
+        public DbSet<Post> Posts { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -35,6 +36,7 @@ namespace TaskItSite.Data
             modelBuilder.Entity<AchievementCategory>().ToTable("AchievementCategories");
             modelBuilder.Entity<Reminder>().ToTable("Reminders");
             modelBuilder.Entity<Models.Task>().ToTable("Tasks");
+            modelBuilder.Entity<Post>().ToTable("Posts");
 
             base.OnModelCreating(modelBuilder);
         }

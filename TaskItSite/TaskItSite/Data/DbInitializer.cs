@@ -152,14 +152,14 @@ namespace TaskItSite.Data
             context.SaveChanges();
 
             // Add users here
-            // TODO: Not working just yet, hang in there!
-            // Password: .tG,n@+'#,g8"]o
+            // All dummy users have a password of 'test'
             var userStore = new UserStore<ApplicationUser>(context);
 
+            // Don't change the order! Or you'll have milton bradley pumping iron ;)
             var dummyUserList = new ApplicationUser[]
             {
-                new ApplicationUser { Email = "milton.bradley@monopoly.com", FullName = "Milton Bradley" },
-                new ApplicationUser { Email = "abdullahnaseer999@gmail.com", FullName = "Muhammad Abdullah" }
+                new ApplicationUser { Email = "milton.bradley@monopoly.com", FullName = "Milton Bradley", ProfileImageURL = "http://www.iconninja.com/files/968/519/663/monopoly-icon.png" },
+                new ApplicationUser { Email = "arnie@gmail.com", FullName = "Arnold Schwarzenegger", ProfileImageURL = "http://news.greatblogabout.org/wp-content/uploads/2007/03/a1-small1.jpg" }
             };
 
             foreach (ApplicationUser au in dummyUserList)
@@ -174,12 +174,31 @@ namespace TaskItSite.Data
                 au.PhoneNumberConfirmed = true;
                 au.SecurityStamp = Guid.NewGuid().ToString("D");
 
-                userStore.CreateAsync(au);
+                userStore.CreateAsync(au).Wait();
             }
+
+            context.SaveChanges();
 
             // TODO: Seed subscriptions
             // TODO: Seed achievements for specific dummy users
             // TODO: Seed tasks for specific dummy users
+            // TODO: Seed posts
+
+            // NOTE: This relies on the order of users above
+            var Posts = new Post[]
+            {
+                new Post { ApplicationUserID = dummyUserList[0].Id, PostedTime = DateTime.Now.AddDays(-2), Text = "I made a new monopoly board! Check it out at https://www.monopoly.com!" },
+                new Post { ApplicationUserID = dummyUserList[1].Id, PostedTime = DateTime.Now.AddDays(-3), Text = "I'm ready to pump some iron!" },
+                new Post { ApplicationUserID = dummyUserList[1].Id, PostedTime = DateTime.Now.AddDays(-2), Text = "I lifted 500lbs! Can you, girly man?" },
+                new Post { ApplicationUserID = dummyUserList[1].Id, PostedTime = DateTime.Now.AddDays(-1), Text = "Tore a muscle. Ouch!" }
+            };
+
+            foreach (Post post in Posts)
+            {
+                context.Posts.Add(post);
+            }
+
+
 
             context.SaveChanges();
 

@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TaskItSite.Models
 {
-    public enum HomeScreen { Overview, Feed, Journal, Subscriptions, Achievements }
+    public enum HomeScreen { Feed, Journal, Subscriptions, Achievements }
 
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
@@ -15,7 +15,7 @@ namespace TaskItSite.Models
         
         public ApplicationUser()
         {
-            HomeScreen = HomeScreen.Overview;
+            HomeScreen = HomeScreen.Feed;
             TextOnMessage = false;
             TextOnFeedUpdate = false;
             EmailOnMessage = false;
@@ -34,12 +34,24 @@ namespace TaskItSite.Models
                 Reminders = new List<Reminder>();
 
             if (Subs == null)
+            {
                 Subs = new List<Subscription>();
 
-         
+                // Every user is always subscribed to themselves by default
+                Subscription subMe = new Subscription
+                {
+                    SubscribingTo = this,
+                    SubscribingToUserID = Id,
+                    SubscribingUser = this,
+                    SubscribingUserID = Id
+                };
+
+                Subs.Add(subMe);
+            }
+
+            if (Posts == null)
+                Posts = new List<Post>();
         }
-        
-        
 
         public string GetHomeScreenURL()
         {
@@ -53,9 +65,8 @@ namespace TaskItSite.Models
                     return "/Home/Subscriptions";
                 case HomeScreen.Achievements:
                     return "/Home/Achievements";
-                case HomeScreen.Overview:
                 default:
-                    return "/";
+                    return "/Home/Feed";
             }
         }
 
@@ -69,6 +80,7 @@ namespace TaskItSite.Models
         public virtual ICollection<UserAchievement> Achivements { get; set; }
         public virtual ICollection<Reminder> Reminders { get; set; }
         public virtual ICollection<Subscription> Subs { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
 
         // zrasco - Using a single settings container would require building a respository to save the sub-objects.
         //          Since we only have a handful of settings, make them individual fields instead
@@ -82,8 +94,6 @@ namespace TaskItSite.Models
         public bool EmailOnMessage { get; set; }
         public bool EmailOnFeedUpdate { get; set; }
         public bool IsPublic { get; set; }
-
-        [NotMapped]
-        private int x;
+        
     }
 }

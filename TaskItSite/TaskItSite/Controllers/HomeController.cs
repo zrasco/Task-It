@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using TaskItSite.Data;
 using TaskItSite.Models.MainViewModels;
+using TaskItSite.Services;
 
 namespace TaskItSite.Controllers
 { 
@@ -18,14 +19,16 @@ namespace TaskItSite.Controllers
         #region Dependency injection
         private readonly ApplicationDbContext _appDbContext = null;
         private readonly UserManager<ApplicationUser> _userManager = null;
-        private ApplicationDbContext _application;
+        private readonly IImageCache _imageCache = null;
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-        public HomeController(UserManager<ApplicationUser> userManager, ApplicationDbContext appDbContext, ApplicationDbContext application)
+        public HomeController(UserManager<ApplicationUser> userManager,
+                                            ApplicationDbContext appDbContext,
+                                            IImageCache imageCache)
         {
             _userManager = userManager;
             _appDbContext = appDbContext;
-            _application = application;     //added to display all users for subscriptions.
+            _imageCache = imageCache;
         }
         #endregion
           
@@ -47,7 +50,7 @@ namespace TaskItSite.Controllers
                     return LocalRedirect(currentUser.GetHomeScreenURL());
                 }
                 else
-                    return View();
+                    return LocalRedirect("/Account/Login");
 
             }
             else
@@ -74,15 +77,159 @@ namespace TaskItSite.Controllers
         }
 
         [Authorize]
+        [HttpGet]
         public async Task<IActionResult> Feed()
         {
-            // Feed for the current user
-            var currentUser = await GetCurrentUserAsync();
+            var user = await _userManager.GetUserAsync(User);
 
-            return View(currentUser);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            // Subscriptions must be explicitly loaded
+            _appDbContext.Entry(user).Collection(x => x.Subs).Load();
+
+            // Load all global achievements
+            _appDbContext.GlobalAchievements.ToList();
+
+            // Feed for the current user
+            FeedViewModel model = new FeedViewModel()
+            {
+                CurrentUser = user,
+                FeedItems = new List<FeedItem>()
+            };
+            
+            foreach (Subscription sub in user.Subs)
+            // Get each user
+            {
+                ApplicationUser nextUser = _userManager.Users.Where(x => x.Id == sub.SubscribingToUserID).SingleOrDefault();
+
+                if (nextUser != null)
+                // Only generate feed from valid users
+                {
+                    FeedItem baseFI = new FeedItem();
+
+                    baseFI.FromUser = nextUser;
+
+                    // See if their image URL is cached
+                    baseFI.ImageData = _imageCache.GetImageEmbed(nextUser.Id);
+
+                    if (baseFI.ImageData == null)
+                    // Image isn't cached yet
+                    {
+                        if (nextUser.ProfileImageURL == null)
+                        // Use Task-It logo
+                        {
+                            _imageCache.SetImage(nextUser.Id, "https://localhost:44395/images/logoattempt.png", true);
+                            baseFI.ImageData = _imageCache.GetImageEmbed(nextUser.Id);
+                        }
+                        else
+                        // Use profile image. If it fails, will fall back to task-it logo
+                        {
+                            _imageCache.SetImage(nextUser.Id, nextUser.ProfileImageURL,true);
+                            baseFI.ImageData = _imageCache.GetImageEmbed(nextUser.Id);
+                        }
+                    }
+
+                    // Create feed items for all public tasks, achievements, and posts within the last 7 days
+
+                    // Posts
+                    _appDbContext.Entry(nextUser).Collection(x => x.Posts).Load();
+                    foreach (Post post in nextUser.Posts)
+                    {
+                        FeedItem postFI = new FeedItem(baseFI);
+
+                        if (post.PostedTime > DateTime.Now.AddDays(-7))
+                        {
+                            // Add this to feed
+                            postFI.Occured = post.PostedTime;
+                            postFI.Text = "Post: " + post.Text;
+
+                            model.FeedItems.Add(postFI);
+
+                        }
+
+                    }
+
+                    _appDbContext.Entry(nextUser).Collection(x => x.Achivements).Load();
+                    foreach (UserAchievement ua in nextUser.Achivements)
+                    {
+                        FeedItem acFI = new FeedItem(baseFI);
+
+                        if (ua.AchievedTime > DateTime.Now.AddDays(-7))
+                        {
+                            // Add this to feed
+                            acFI.Occured = (DateTime)ua.AchievedTime;
+                            acFI.Text = "Achieved: " + ua.GlobalAchievement.Name;
+
+                            model.FeedItems.Add(acFI);
+                        }
+
+                    }
+
+                    _appDbContext.Entry(nextUser).Collection(x => x.Tasks).Load();
+                    foreach (Models.Task task in nextUser.Tasks)
+                    {
+                        FeedItem taskFI = new FeedItem(baseFI);
+
+                        if (task.DueDate > DateTime.Now.AddDays(-7))
+                        {
+                            // Add this to feed
+                            taskFI.Occured = (DateTime)task.DueDate;
+                            taskFI.Text = "Task became due: " + task.Summary;
+
+                            model.FeedItems.Add(taskFI);
+                        }
+
+                    }
+                }
+            }
+
+            // Sort feed items by descending date. Quick, dirty, and effective (makes an extra copy in memory)
+            model.FeedItems = model.FeedItems.OrderBy(x => x.Occured).ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Feed(FeedViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            // Add post for this user
+            Post newPost = new Post
+            {
+                Text = model.MyPostText,
+                PostedTime = DateTime.Now,
+                ApplicationUserID = user.Id
+            };
+
+
+            // Posts must be explicitly loaded
+            _appDbContext.Entry(user).Collection(x => x.Posts).Load();
+            user.Posts.Add(newPost);
+
+            var setResult = await _userManager.UpdateAsync(user);
+
+            if (!setResult.Succeeded)
+            {
+                throw new ApplicationException($"Unexpected error occurred setting achievements for user with ID '{user.Id}'.");
+            }
+
+            StatusMessage = "Your post has been submitted.";
+
+            return RedirectToAction(nameof(Feed));
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Journal()
         {
 
@@ -138,7 +285,6 @@ namespace TaskItSite.Controllers
             {
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-
 
             _appDbContext.Entry(user).Collection(x => x.Subs).Load();
 

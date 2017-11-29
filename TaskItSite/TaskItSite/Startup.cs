@@ -13,6 +13,7 @@ using TaskItSite.Models;
 using TaskItSite.Services;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace TaskItSite
 {
@@ -34,6 +35,12 @@ namespace TaskItSite
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            // Set default login page
+            services.ConfigureApplicationCookie(options => options.LoginPath = "/Account/Login");
+
+            // Set up image cache
+            services.AddSingleton<IImageCache>(new ImageCache());
 
             services.AddAuthentication().AddGoogle(googleOptions =>
             {
