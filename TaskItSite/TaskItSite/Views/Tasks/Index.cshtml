@@ -63,13 +63,10 @@
 
 @foreach (var item in Model)
 {
-    string IsItRed = "accordion";
+    string IsItRed = "accordionRed";
     int time = DateTime.Compare(item.DueDate, DateTime.Now);
-    if(time < 0)
+    if (time < 0)
     {
-        IsItRed = "accordionRed";
-
-    }
         <input type="checkbox">
         <button class="@IsItRed">@Html.DisplayFor(modelItem => item.DueDate) @Html.DisplayFor(modelItem => item.Summary) </button>
         <div class="panel">
@@ -79,7 +76,28 @@
             <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
                 </p>
         </div>
+    }
 }
+
+    @foreach (var item in Model)
+    {
+        string IsItRed = "accordion";
+        int time = DateTime.Compare(item.DueDate, DateTime.Now);
+        if (time >= 0)
+        {
+
+        <input type="checkbox">
+        <button class="@IsItRed">@Html.DisplayFor(modelItem => item.DueDate) @Html.DisplayFor(modelItem => item.Summary) </button>
+        <div class="panel">
+            <p>@Html.DisplayFor(modelItem => item.Description)</p>
+            <p class="bottomright">
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </p>
+        </div>
+        }
+    }
+
         <script>
             var acc = document.getElementsByClassName("accordion");
             var i;

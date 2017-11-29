@@ -66,21 +66,29 @@ namespace TaskItSite.Controllers
         }
 
         // GET: Tasks/Create
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-           /*
-            if(id != null)
+            return View();
+        }
+
+        public async Task<IActionResult> QuickAdd(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            if (id != null)
             {
                 var task = await _context.Tasks.SingleOrDefaultAsync(m => m.ID == id);
-                int newid = _context.Tasks.Count();
-                task.ID = newid;
+
                 if (task == null)
                 {
                     return NotFound();
                 }
                 return View(task);
-            }*/
-            
+            }
+
             return View();
         }
 
