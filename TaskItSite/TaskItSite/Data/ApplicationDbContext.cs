@@ -25,12 +25,10 @@ namespace TaskItSite.Data
         public DbSet<Reminder> Reminders { get; set; }
         public DbSet<Models.Task> Tasks { get; set; }
         public DbSet<Models.Subscription> Subscriptions { get; set; }
-        public DbSet<GlobalSubscription> GlobalSubscriptions { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<GlobalSubscription>().ToTable("GlobalSubscriptions");
             modelBuilder.Entity<Models.Subscription>().ToTable("Subscriptions");
             modelBuilder.Entity<UserAchievement>().ToTable("UserAchievements");
             modelBuilder.Entity<GlobalAchievement>().ToTable("GlobalAchievements");

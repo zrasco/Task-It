@@ -41,18 +41,7 @@ namespace TaskItSite.Controllers
                 var currentUser = await GetCurrentUserAsync();
 
                 if (currentUser != null)
-                {
-                    if(currentUser.IsPublic == false)
-                    { 
-                        var newGS = new GlobalSubscription
-                        {
-                            Name = currentUser.FullName,
-                            SubscribingToUserID = currentUser.Id
-                        };
-                        currentUser.IsPublic = true;
-                        _appDbContext.GlobalSubscriptions.Add(newGS);
-                        _appDbContext.SaveChanges();
-                    }                
+                {              
                     // Send user to their chosen homepage upon login
                     HttpContext.Session.SetString("sentToHomePage", "sent");
                     return LocalRedirect(currentUser.GetHomeScreenURL());
@@ -159,23 +148,31 @@ namespace TaskItSite.Controllers
                 CurrentUser = user,
                 StatusMessage = StatusMessage
             };
-            foreach (GlobalSubscription a in _appDbContext.GlobalSubscriptions)
+
+            // Fill in the subscription wrapper list with all users
+            foreach (ApplicationUser someUser in _appDbContext.Users)
             {
-                SubscriptionWrapper newW = new SubscriptionWrapper
+                bool isSubcribed = false;
+
+                foreach (Subscription cuSub in model.CurrentUser.Subs)
                 {
-                    Sub = a
-                };
+                    if (cuSub.SubscribingToUserID == someUser.Id)
+                    {
+                        // Current user is subscribed to this user
+                        isSubcribed = true;
+                        break;
+                    }
+                }
 
-                Subscription targetSubscription = model.CurrentUser.Subs.Where(x => x.GlobalSubscriptionID == a.GlobalSubscriptionID).SingleOrDefault();
-
-                if (targetSubscription != null)
-                    newW.IsSubscribed = true;
-                else
-                    newW.IsSubscribed = false;
-
-                model.SubscriptionWrapperList.Add(newW);
+                model.SubscriptionWrapperList.Add(
+                    new SubscriptionWrapper
+                        {
+                            SubscribedUser = someUser,
+                            SubscribedUserID = someUser.Id,
+                            IsSubscribed = isSubcribed
+                        }
+                    );
             }
-
 
             return View(model);
         }
@@ -201,7 +198,7 @@ namespace TaskItSite.Controllers
             for (int i = 0; i < model.SubscriptionWrapperList.Count; i++)
             {
                 SubscriptionWrapper aw = model.SubscriptionWrapperList[i];
-                Subscription targetSubscription = user.Subs.Where(x => x.GlobalSubscriptionID == aw.Sub.GlobalSubscriptionID).SingleOrDefault();
+                Subscription targetSubscription = user.Subs.Where(x => x.SubscribingToUserID == aw.SubscribedUserID).SingleOrDefault();
 
                 // Only update if there's a change
                 if (targetSubscription == null && aw.IsSubscribed == true)
@@ -209,13 +206,14 @@ namespace TaskItSite.Controllers
                     Subscription toSub = new Subscription
                     {
                         SubscribingUserID = user.Id,
-                        GlobalSubscriptionID = aw.Sub.GlobalSubscriptionID               
+                        SubscribingToUserID = aw.SubscribedUserID
+
                     };
 
                     user.Subs.Add(toSub);
                 }
                 else if (targetSubscription != null && aw.IsSubscribed == false)
-                    user.Subs.Remove(targetSubscription);
+                    user.Subs.Remove(user.Subs.Where(x => x.SubscribingToUserID == aw.SubscribedUserID).SingleOrDefault()); 
 
             }
             var setResult = await _userManager.UpdateAsync(user);

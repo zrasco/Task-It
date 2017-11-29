@@ -7,7 +7,8 @@ namespace TaskItSite.Models.MainViewModels
 {
     public class SubscriptionWrapper
     {
-        public virtual GlobalSubscription Sub { get; set; }
+        public ApplicationUser SubscribedUser { get; set; }
+        public string SubscribedUserID { get; set; }
         public bool IsSubscribed { get; set; }
     }
 

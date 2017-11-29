@@ -20,11 +20,12 @@
                     {
                         <div class="form-group">
                             @Html.CheckBoxFor(x => x.SubscriptionWrapperList[i].IsSubscribed)
-                            @Html.Label(Model.SubscriptionWrapperList[i].Sub.Name)
+                            @Html.Label(Model.SubscriptionWrapperList[i].SubscribedUser.FullName)
                             <!-- // Hidden properties stay into the HTTP POST action later.
-                                    All subscription attributes must be explicitly listed here -->
-                            @Html.Label(Model.SubscriptionWrapperList[i].Sub.Name)
-                            @Html.HiddenFor(x => x.SubscriptionWrapperList[i].Sub.GlobalSubscriptionID)
+                                    All subscription attributes must be explicitly listed here
+                            @Html.Label(Model.SubscriptionWrapperList[i].SubscribedUser.FullName) -->
+                            @Html.HiddenFor(x => x.SubscriptionWrapperList[i].SubscribedUser)
+                            @Html.HiddenFor(x => x.SubscriptionWrapperList[i].SubscribedUserID)
                         </div>
                     }
                 }

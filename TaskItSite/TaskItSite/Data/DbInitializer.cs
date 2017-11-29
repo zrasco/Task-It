@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -149,8 +151,37 @@ namespace TaskItSite.Data
             context.GlobalAchievements.Add(test);
             context.SaveChanges();
 
+            // Add users here
+            // TODO: Not working just yet, hang in there!
+            // Password: .tG,n@+'#,g8"]o
+            var userStore = new UserStore<ApplicationUser>(context);
 
+            var dummyUserList = new ApplicationUser[]
+            {
+                new ApplicationUser { Email = "milton.bradley@monopoly.com", FullName = "Milton Bradley" },
+                new ApplicationUser { Email = "abdullahnaseer999@gmail.com", FullName = "Muhammad Abdullah" }
+            };
 
+            foreach (ApplicationUser au in dummyUserList)
+            {
+                var password = new PasswordHasher<ApplicationUser>();
+                var hashed = password.HashPassword(au, "test");
+                au.PasswordHash = hashed;
+                au.UserName = au.Email;
+                au.NormalizedEmail = au.Email.ToUpper();
+                au.NormalizedUserName = au.UserName.ToUpper();
+                au.EmailConfirmed = true;
+                au.PhoneNumberConfirmed = true;
+                au.SecurityStamp = Guid.NewGuid().ToString("D");
+
+                userStore.CreateAsync(au);
+            }
+
+            // TODO: Seed subscriptions
+            // TODO: Seed achievements for specific dummy users
+            // TODO: Seed tasks for specific dummy users
+
+            context.SaveChanges();
 
         }
     }

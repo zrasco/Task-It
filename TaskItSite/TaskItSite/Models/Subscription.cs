@@ -15,15 +15,14 @@ namespace TaskItSite.Models
         public int SubscriptionID { get; set; }
 
         public string SubscribingUserID { get; set; }
-
-        public int GlobalSubscriptionID { get; set; }
+        public string SubscribingToUserID { get; set; }
 
         [ForeignKey("SubscribingUserID")]
         public virtual ApplicationUser SubscribingUser { get; set; }
 
-        
-        [ForeignKey("GlobalSubscriptionID")]
-        public virtual GlobalSubscription GlobalSubscription { get; set; }
+        [NotMapped]
+        [ForeignKey("SubscribingToUserID")]
+        public virtual ApplicationUser SubscribingTo { get; set; }
 
     }
 
