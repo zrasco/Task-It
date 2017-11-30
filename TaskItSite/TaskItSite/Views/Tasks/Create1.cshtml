@@ -54,7 +54,7 @@
     @foreach (var item in Model)
     {
 
-        <a classs="btn" asp-action="QuickAdd" asp-route-id="@item.ID">+</a>
+        <a classs="btn" asp-action="Edit" asp-route-id="@item.ID">+</a>
         <button class="accordion">@Html.DisplayFor(modelItem => item.Summary) </button>
         <div class="panel">
             <p>@Html.DisplayFor(modelItem => item.Description)</p>

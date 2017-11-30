@@ -36,7 +36,7 @@ namespace TaskItSite.Controllers
 
             foreach (var item in tasklist)
             {
-                if(item.UserID == currentUser.Id && item.IsActive)
+                if(item.UserID == currentUser.Id && !item.IsActive)
                 {
                     usertask.Add(item);
 
@@ -100,7 +100,19 @@ namespace TaskItSite.Controllers
 
         public async Task<IActionResult> Create1()
         {
-            return View(await _context.Tasks.ToListAsync());
+            var currentUser = await GetCurrentUserAsync();
+            var tasklist = await _context.Tasks.ToListAsync();
+            var usertask = new List<Models.Task>();
+
+            foreach (var item in tasklist)
+            {
+                if (item.UserID == currentUser.Id && item.IsActive)
+                {
+                    usertask.Add(item);
+
+                }
+            }
+            return View(usertask);
         }
 
         // POST: Tasks/Create
@@ -116,7 +128,7 @@ namespace TaskItSite.Controllers
             {
                 task.CreatedDate = DateTime.Now;
                 task.UserID = currentUser.Id;
-                task.IsActive = true;
+                task.IsActive = false;
                 _context.Add(task);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -159,6 +171,7 @@ namespace TaskItSite.Controllers
                 {
                     task.UserID = currentUser.Id;
                     task.CreatedDate = DateTime.Now;
+                    task.IsActive = false;
                     _context.Update(task);
                     await _context.SaveChangesAsync();
                 }
@@ -205,6 +218,30 @@ namespace TaskItSite.Controllers
             _context.Tasks.Remove(task);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateCustomer(bool check, int customerId)
+        {
+            var task = await _context.Tasks.SingleOrDefaultAsync(m => m.ID == customerId);
+            try
+            {
+                task.IsActive = check;
+                _context.Update(task);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TaskExists(task.ID))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return View();
         }
 
         private bool TaskExists(int id)
