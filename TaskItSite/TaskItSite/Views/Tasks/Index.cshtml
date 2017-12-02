@@ -77,64 +77,74 @@
 
         <!-- Actual calendar stuff -->
         <script type="text/javascript" src="~/js/calendar.js"></script>
-            
+
 </head>
 
 <body>
+    <h2 align="center">Task Manager</h2>
+
 <p>
 
     <a asp-action="Create1">Create New</a>
 
 </p>
     
-@foreach (var item in Model)
-{
-    string IsItRed = "accordionRed";
-    string varrr = "heyo@(item.ID)";
-    int time = DateTime.Compare(item.DueDate, DateTime.Now);
-    if (time < 0)
-    {
-
-        @Html.CheckBoxFor(m =>item.IsActive, new {
-       onclick = "UpdateCustomer(this)",
-       data_customerid = item.ID })
-
-        <button class="@IsItRed">@Html.DisplayFor(modelItem => item.DueDate) @Html.DisplayFor(modelItem => item.Summary) </button>
-        <div class="panel">
-            <p>@Html.DisplayFor(modelItem => item.Description)</p>
-            <p class="bottomright">
-            <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-            <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                </p>
-        </div>
-    }
-}
-
-    @foreach (var item in Model)
-    {
-        string IsItRed = "accordion";
-        int time = DateTime.Compare(item.DueDate, DateTime.Now);
-        if (time >= 0)
+    <div id="list-view">
+        @foreach (var item in Model)
         {
+            string IsItRed = "accordionRed";
+            string varrr = "heyo@(item.ID)";
+            int time = DateTime.Compare(item.DueDate, DateTime.Now);
+            if (time < 0)
+            {
 
-        @Html.CheckBoxFor(m =>item.IsActive, new { @onclick = "UpdateCustomer(this)",
-                                                       data_customerid = item.ID })
-            
-        <button class="@IsItRed">@Html.DisplayFor(modelItem => item.DueDate) @Html.DisplayFor(modelItem => item.Summary) </button>
-        <div class="panel">
-            <p>@Html.DisplayFor(modelItem => item.Description)</p>
-            <p class="bottomright">
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </p>
-        </div>
-       
+                @Html.CheckBoxFor(m => item.IsActive, new
+        {
+            onclick = "UpdateCustomer(this)",
+            data_customerid = item.ID
+        })
+
+                <button class="@IsItRed">@Html.DisplayFor(modelItem => item.DueDate) @Html.DisplayFor(modelItem => item.Summary) </button>
+                <div class="panel">
+                    <p>@Html.DisplayFor(modelItem => item.Description)</p>
+                    <p class="bottomright">
+                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    </p>
+                </div>
+            }
         }
-    }
+
+        @foreach (var item in Model)
+        {
+            string IsItRed = "accordion";
+            int time = DateTime.Compare(item.DueDate, DateTime.Now);
+            if (time >= 0)
+            {
+
+                @Html.CheckBoxFor(m => item.IsActive, new
+        {
+        @onclick = "UpdateCustomer(this)",
+        data_customerid = item.ID
+        })
+
+                <button class="@IsItRed">@Html.DisplayFor(modelItem => item.DueDate) @Html.DisplayFor(modelItem => item.Summary) </button>
+                <div class="panel">
+                    <p>@Html.DisplayFor(modelItem => item.Description)</p>
+                    <p class="bottomright">
+                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    </p>
+                </div>
+
+            }
+        }
+    </div>
 
     <div ng-app="TaskItApp" ng-controller="CalendarCtrl">
         <div id="calendar" ui-calendar="uiConfig.calendar" ng-model="eventSources"> </div>
     </div>
+
     <script>
         function UpdateCustomer(elem) {
 
@@ -186,122 +196,12 @@
     </script>
 
     <script>
-        /**
-        * TaskIt Calendar application
-        * Exclusively the current user's calendar
-        */
-        var calendarDemoApp = angular.module('TaskItApp', ['ui.calendar', 'ui.bootstrap']);
-
-         //controller to pull information from the database
-         calendarDemoApp.controller('CalendarCtrl', ['$scope', '$http', 'uiCalendarConfig', function ($scope, $http, uiCalendarConfig) {
-
-         //selected calendar
-         $scope.SelectedEvent = null;
-         var isFirstTime = true;
-
-         //list of tasks
-         $scope.tasks = [];
-
-         //list of presented tasks via calendar (events)
-         $scope.events = [];
-
          //Load events from server
-         $scope.tasks = @Html.Raw(Json.Serialize(Model));
-         console.log("in calendar", $scope.tasks);
-
-         //go through each event and set calendar location for each
-         $scope.events.slice(0, $scope.tasks.length);
-         //push events onto the actual calendar
-         angular.forEach($scope.tasks, function (value) {
-                 $scope.events.push({
-                     title: value.id,
-                     description: value.description,
-                     start:  new Date (value.dueDate),
-                     allDay: true
-             });
-                 console.log(new Date(value.createdDate));
-         });
-
-         //configure calendar
-         /* config object */
-         $scope.uiConfig = {
-             calendar: {
-                 height: 450,
-                 editable: true,
-                 displayEventTime: true,
-                 header: {
-                     left: 'title',
-                     center: '',
-                     right: 'today prev,next'
-                 },
-                 //scope events
-                 eventClick: function (event) {
-                     $scope.SelectedEvent = event;
-                 },
-                 eventDrop: $scope.alertOnDrop,
-                 eventResize: $scope.alertOnResize,
-                 eventRender: $scope.eventRender
-          }
-         };
-             /*push data to calendar*/
-         $scope.eventSources = [$scope.events];
-         }])
+         var personalRawData = @Html.Raw(Json.Serialize(Model));
     </script>
 
     </body>
-        @*
-            <table class="table">
-                <thead>
-                    <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.CreatedDate)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.DueDate)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Summary)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Description)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.IsPin)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.UserId)
-                            </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-            @foreach (var item in Model) {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CreatedDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DueDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Summary)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.IsPin)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.UserId)
-                        </td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                            <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                        </td>
-                    </tr>
-            }
-                </tbody>
-            </table>
-        *@
+
+  <footer>
+      <script src="~/js/taskItCalendar.js"></script>
+  </footer>
