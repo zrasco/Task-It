@@ -342,7 +342,7 @@ namespace TaskItSite.Controllers
 
             _appDbContext.Entry(user).Collection(x => x.Subs).Load();
             _appDbContext.Entry(user).Collection(x => x.Achivements).Load();
-            _appDbContext.GlobalAchievements.ToList();
+            List<GlobalAchievement> globalAchievementList = _appDbContext.GlobalAchievements.ToList();
 
             for (int i = 0; i < model.SubscriptionWrapperList.Count; i++)
             {
@@ -366,45 +366,15 @@ namespace TaskItSite.Controllers
 
             }
             if (user.Subs.Count() >= 2)
-            {
-                // Assume the achievement is there
-                string targetAchievementString = "Subscribed to 1 person!";
-                GlobalAchievement ga = _appDbContext.GlobalAchievements.Where(x => x.Name == targetAchievementString).SingleOrDefault();
-                UserAchievement ua = user.Achivements.Where(x => x.GlobalAchievementID == ga.GlobalAchievementID).SingleOrDefault();
-
-                if (ua == null)
-                {
-                    UserAchievement toAdd = new UserAchievement
-                    {
-                        GlobalAchievementID = ga.GlobalAchievementID,
-                        AchievedTime = DateTime.Now,
-                        ApplicationUserID = user.Id
-                    };
-
-                    user.Achivements.Add(toAdd);
-                }
-
-            }
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 1 person!");
             if (user.Subs.Count() >= 5)
-            {
-                // Assume the achievement is there
-                string targetAchievementString = "Subscribed to 5 people!";
-                GlobalAchievement ga = _appDbContext.GlobalAchievements.Where(x => x.Name == targetAchievementString).SingleOrDefault();
-                UserAchievement ua = user.Achivements.Where(x => x.GlobalAchievementID == ga.GlobalAchievementID).SingleOrDefault();
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 5 people!");
+            if (user.Subs.Count() >= 10)
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 10 people!");
+            if (user.Subs.Count() >= 20)
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 20 people!");
 
-                if (ua == null)
-                {
-                    UserAchievement toAdd = new UserAchievement
-                    {
-                        GlobalAchievementID = ga.GlobalAchievementID,
-                        AchievedTime = DateTime.Now,
-                        ApplicationUserID = user.Id
-                    };
 
-                    user.Achivements.Add(toAdd);
-                }
-
-            }
             var setResult = await _userManager.UpdateAsync(user);
 
             if (!setResult.Succeeded)
