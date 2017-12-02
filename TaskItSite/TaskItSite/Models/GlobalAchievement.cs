@@ -18,6 +18,8 @@ namespace TaskItSite.Models
         public string Name { get; set; }
         public string Description { get; set; }
 
+        public string EmojiString { get; set; }
+
         public int AchievementCategoryID { get; set; }
 
         [ForeignKey("AchievementCategoryID")]
