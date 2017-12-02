@@ -70,6 +70,29 @@ namespace TaskItSite.Models
             }
         }
 
+        public bool AddUserAchievement(List<GlobalAchievement> globalAchievementlList, string achievementName)
+        // Returns true if added, false if already there
+        {
+            // Assumes global achievements are added already
+            GlobalAchievement ga = globalAchievementlList.Where(x => x.Name == achievementName).SingleOrDefault();
+            UserAchievement ua = this.Achivements.Where(x => x.GlobalAchievementID == ga.GlobalAchievementID).SingleOrDefault();
+
+            if (ua == null)
+            {
+                UserAchievement toAdd = new UserAchievement
+                {
+                    GlobalAchievementID = ga.GlobalAchievementID,
+                    AchievedTime = DateTime.Now,
+                    ApplicationUserID = this.Id
+                };
+
+                this.Achivements.Add(toAdd);
+                return true;
+            }
+            else
+                return false;
+        }
+
         public string Status { get; set; }
         public string FullName { get; set; }
         public string ProfileImageURL { get; set; }

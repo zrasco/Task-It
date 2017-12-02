@@ -323,6 +323,7 @@ namespace TaskItSite.Controllers
             return View(model);
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Subscriptions(SubscriptionsViewModel model)
@@ -341,6 +342,7 @@ namespace TaskItSite.Controllers
 
             _appDbContext.Entry(user).Collection(x => x.Subs).Load();
             _appDbContext.Entry(user).Collection(x => x.Achivements).Load();
+            List<GlobalAchievement> globalAchievementList = _appDbContext.GlobalAchievements.ToList();
 
             for (int i = 0; i < model.SubscriptionWrapperList.Count; i++)
             {
@@ -363,28 +365,16 @@ namespace TaskItSite.Controllers
                     user.Subs.Remove(user.Subs.Where(x => x.SubscribingToUserID == aw.SubscribedUserID).SingleOrDefault()); 
 
             }
-            if (user.Subs.Count() >= 2 && user.Achivements.Where(x => x.GlobalAchievementID == 2).SingleOrDefault() == null)
-            {
-                UserAchievement toAdd = new UserAchievement
-                {
-                    GlobalAchievementID = 2,
-                    AchievedTime = DateTime.Now,
-                    ApplicationUserID = user.Id
-                };
+            if (user.Subs.Count() >= 2)
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 1 person!");
+            if (user.Subs.Count() >= 5)
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 5 people!");
+            if (user.Subs.Count() >= 10)
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 10 people!");
+            if (user.Subs.Count() >= 20)
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 20 people!");
 
-                user.Achivements.Add(toAdd);
-            }
-            if (user.Subs.Count() >= 5 && user.Achivements.Where(x => x.GlobalAchievementID == 5).SingleOrDefault() == null)
-            {
-                UserAchievement toAdd = new UserAchievement
-                {
-                    GlobalAchievementID = 5,
-                    AchievedTime = DateTime.Now,
-                    ApplicationUserID = user.Id
-                };
 
-                user.Achivements.Add(toAdd);
-            }
             var setResult = await _userManager.UpdateAsync(user);
 
             if (!setResult.Succeeded)
