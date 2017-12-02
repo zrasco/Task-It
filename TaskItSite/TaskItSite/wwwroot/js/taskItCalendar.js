@@ -1,11 +1,15 @@
 ﻿/**
-        * TaskIt Calendar application
-        * Exclusively the current user's calendar
-        */
+* TaskIt Calendar application
+* Exclusively the current user's calendar
+*/
 var calendarDemoApp = angular.module('TaskItApp', ['ui.calendar', 'ui.bootstrap']);
 
 //controller to pull information from the database
 calendarDemoApp.controller('CalendarCtrl', ['$scope', '$http', 'uiCalendarConfig', function ($scope, $http, uiCalendarConfig) {
+    //journal page default view
+    $scope.viewType = true;
+    //journal page delete view
+    $scope.DelView = false;
 
     //selected calendar
     $scope.SelectedEvent = null;
@@ -19,19 +23,19 @@ calendarDemoApp.controller('CalendarCtrl', ['$scope', '$http', 'uiCalendarConfig
 
     //Load events from server
     $scope.tasks = personalRawData;
-    console.log("in calendar", $scope.tasks);
 
     //go through each event and set calendar location for each
     $scope.events.slice(0, $scope.tasks.length);
-    //push events onto the actual calendar
+
+    //push personal events onto the actual calendar
     angular.forEach($scope.tasks, function (value) {
         $scope.events.push({
-            title: value.id,
+            title: value.summary,
             description: value.description,
-            start: new Date(value.dueDate),
+            start: new Date(value.createdDate),
+            end: new Date(value.dueDate),
             allDay: true
         });
-        console.log(new Date(value.createdDate));
     });
 
     //configure calendar
@@ -50,11 +54,15 @@ calendarDemoApp.controller('CalendarCtrl', ['$scope', '$http', 'uiCalendarConfig
             eventClick: function (event) {
                 $scope.SelectedEvent = event;
             },
-            eventDrop: $scope.alertOnDrop,
-            eventResize: $scope.alertOnResize,
-            eventRender: $scope.eventRender
+            eventClick: $scope.alertOnEventClick
         }
     };
+
+    /*Alert on click*/
+    $scope.alertOnEventClick = function (date, jsEvent, view) {
+        console.log(date.title + 'was clicked');
+    };
+
     /*push data to calendar*/
     $scope.eventSources = [$scope.events];
 }])
