@@ -340,6 +340,7 @@ namespace TaskItSite.Controllers
             }
 
             _appDbContext.Entry(user).Collection(x => x.Subs).Load();
+            _appDbContext.Entry(user).Collection(x => x.Achivements).Load();
 
             for (int i = 0; i < model.SubscriptionWrapperList.Count; i++)
             {
@@ -361,6 +362,28 @@ namespace TaskItSite.Controllers
                 else if (targetSubscription != null && aw.IsSubscribed == false)
                     user.Subs.Remove(user.Subs.Where(x => x.SubscribingToUserID == aw.SubscribedUserID).SingleOrDefault()); 
 
+            }
+            if (user.Subs.Count() >= 2 && user.Achivements.Where(x => x.GlobalAchievementID == 2).SingleOrDefault() == null)
+            {
+                UserAchievement toAdd = new UserAchievement
+                {
+                    GlobalAchievementID = 2,
+                    AchievedTime = DateTime.Now,
+                    ApplicationUserID = user.Id
+                };
+
+                user.Achivements.Add(toAdd);
+            }
+            if (user.Subs.Count() >= 5 && user.Achivements.Where(x => x.GlobalAchievementID == 5).SingleOrDefault() == null)
+            {
+                UserAchievement toAdd = new UserAchievement
+                {
+                    GlobalAchievementID = 5,
+                    AchievedTime = DateTime.Now,
+                    ApplicationUserID = user.Id
+                };
+
+                user.Achivements.Add(toAdd);
             }
             var setResult = await _userManager.UpdateAsync(user);
 
