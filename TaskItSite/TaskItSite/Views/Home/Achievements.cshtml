@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Achievements";
 }
-
+<head> <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet"> </head>
 <h2 align="center">Achievements</h2>
 
 <form method="post">
@@ -15,19 +15,27 @@
                     for (var i = 0; i < Model.AchievementWrapperList.Count; i++)
                     {
                         <div class="form-group">
-                            @Html.CheckBoxFor(x => x.AchievementWrapperList[i].IsAchieved)
-                            <span><b>@Model.AchievementWrapperList[i].Achievement.Name</b>
-                            @Model.AchievementWrapperList[i].Achievement.Description</span>
-                            
-                            
-                            <!-- // Hidden properties stay into the HTTP POST action later.
-                                    All achievement attributes must be explicitly listed here -->
-                            @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.GlobalAchievementID)
-                            @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.Name)
-                            @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.AchievementCategoryID)
-                            @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.Description)
-                            <i class="em @Model.AchievementWrapperList[i].Achievement.EmojiString"></i>
-                        </div>
+
+                            <div class="col-xs-12 hoverDiv" style="height: 60px">
+
+
+                                @Html.CheckBoxFor(x => x.AchievementWrapperList[i].IsAchieved)
+                                <span>
+                                    <b>@Model.AchievementWrapperList[i].Achievement.Name</b>
+                                    @Model.AchievementWrapperList[i].Achievement.Description
+                                </span>
+
+
+                                <!-- // Hidden properties stay into the HTTP POST action later.
+                All achievement attributes must be explicitly listed here -->
+                                @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.GlobalAchievementID)
+                                @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.Name)
+                                @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.AchievementCategoryID)
+                                @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.Description)
+                                <i class="em @Model.AchievementWrapperList[i].Achievement.EmojiString"></i>
+
+                                </div>
+                            </div>
                     }
                 }
             </td>
