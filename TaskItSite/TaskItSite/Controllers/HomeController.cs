@@ -144,6 +144,7 @@ namespace TaskItSite.Controllers
                         {
                             // Add this to feed
                             postFI.Occured = post.PostedTime;
+                            postFI.ItemType = FeedItemType.Post;
                             postFI.Text = "Post: " + post.Text;
 
                             model.FeedItems.Add(postFI);
@@ -161,6 +162,7 @@ namespace TaskItSite.Controllers
                         {
                             // Add this to feed
                             acFI.Occured = (DateTime)ua.AchievedTime;
+                            acFI.ItemType = FeedItemType.Achievement;
                             acFI.Text = "Achieved: " + ua.GlobalAchievement.Name;
 
                             model.FeedItems.Add(acFI);
@@ -177,6 +179,7 @@ namespace TaskItSite.Controllers
                         {
                             // Add this to feed
                             taskFI.Occured = (DateTime)task.DueDate;
+                            taskFI.ItemType = FeedItemType.Task;
                             taskFI.Text = "Task became due: " + task.Summary;
 
                             model.FeedItems.Add(taskFI);
@@ -342,6 +345,7 @@ namespace TaskItSite.Controllers
 
             _appDbContext.Entry(user).Collection(x => x.Subs).Load();
             _appDbContext.Entry(user).Collection(x => x.Achivements).Load();
+            List<GlobalAchievement> globalAchievementList = _appDbContext.GlobalAchievements.ToList();
 
             for (int i = 0; i < model.SubscriptionWrapperList.Count; i++)
             {
@@ -364,28 +368,16 @@ namespace TaskItSite.Controllers
                     user.Subs.Remove(user.Subs.Where(x => x.SubscribingToUserID == aw.SubscribedUserID).SingleOrDefault()); 
 
             }
-            if (user.Subs.Count() >= 2 && user.Achivements.Where(x => x.GlobalAchievementID == 2).SingleOrDefault() == null)
-            {
-                UserAchievement toAdd = new UserAchievement
-                {
-                    GlobalAchievementID = 2,
-                    AchievedTime = DateTime.Now,
-                    ApplicationUserID = user.Id
-                };
+            if (user.Subs.Count() >= 2)
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 1 person!");
+            if (user.Subs.Count() >= 5)
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 5 people!");
+            if (user.Subs.Count() >= 10)
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 10 people!");
+            if (user.Subs.Count() >= 20)
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 20 people!");
 
-                user.Achivements.Add(toAdd);
-            }
-            if (user.Subs.Count() >= 5 && user.Achivements.Where(x => x.GlobalAchievementID == 5).SingleOrDefault() == null)
-            {
-                UserAchievement toAdd = new UserAchievement
-                {
-                    GlobalAchievementID = 5,
-                    AchievedTime = DateTime.Now,
-                    ApplicationUserID = user.Id
-                };
 
-                user.Achivements.Add(toAdd);
-            }
             var setResult = await _userManager.UpdateAsync(user);
 
             if (!setResult.Succeeded)
@@ -437,7 +429,9 @@ namespace TaskItSite.Controllers
 
                 model.AchievementWrapperList.Add(newW);
             }
-                
+
+
+            model.AchievementWrapperList = model.AchievementWrapperList.OrderByDescending(x => x.IsAchieved).ToList();
 
             return View(model);
         }

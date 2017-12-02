@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using TaskItSite.Models;
 using TaskItSite.Models.ManageViewModels;
 using TaskItSite.Services;
+using TaskItSite.Data;
 
 namespace TaskItSite.Controllers
 {
@@ -25,21 +26,25 @@ namespace TaskItSite.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
         private readonly UrlEncoder _urlEncoder;
+        private readonly ApplicationDbContext _appDbContext = null;
 
         private const string AuthenicatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
+ 
 
         public ManageController(
           UserManager<ApplicationUser> userManager,
           SignInManager<ApplicationUser> signInManager,
           IEmailSender emailSender,
           ILogger<ManageController> logger,
-          UrlEncoder urlEncoder)
+          UrlEncoder urlEncoder,
+          ApplicationDbContext appDbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
             _urlEncoder = urlEncoder;
+            _appDbContext = appDbContext;
         }
 
         [TempData]
@@ -536,6 +541,10 @@ namespace TaskItSite.Controllers
 
             await _userManager.SetTwoFactorEnabledAsync(user, true);
             _logger.LogInformation("User with ID {UserId} has enabled 2FA with an authenticator app.", user.Id);
+
+            List<GlobalAchievement> globalAchievementList = _appDbContext.GlobalAchievements.ToList();
+            user.AddUserAchievement(globalAchievementList, "Added 2 factor authentication!");
+            var setResult = await _userManager.UpdateAsync(user);
             return RedirectToAction(nameof(GenerateRecoveryCodes));
         }
 

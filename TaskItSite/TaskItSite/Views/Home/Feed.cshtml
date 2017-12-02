@@ -1,4 +1,5 @@
-﻿@model TaskItSite.Models.MainViewModels.FeedViewModel
+﻿@using TaskItSite.Models.MainViewModels
+@model TaskItSite.Models.MainViewModels.FeedViewModel
 
 @{
     ViewData["Title"] = "Feed";
@@ -6,13 +7,41 @@
 
 <h2>Feed for @Model.CurrentUser.FullName</h2>
 @{
-    for (var i = 0; i < Model.FeedItems.Count; i++)
-    {
+        for (var i = 0; i < Model.FeedItems.Count; i++)
+        {
+            string bgcolor = "Khaki";
+            FeedItem feedItem = Model.FeedItems[i];
+
+            switch (feedItem.ItemType)
+            {
+                case FeedItemType.Achievement:
+                    {
+                        bgcolor = "Aquamarine";
+                        break;
+                    }
+                case FeedItemType.Task:
+                    {
+                        bgcolor = "AntiqueWhite";
+                        break;
+                    }
+                case FeedItemType.Post:
+                    {
+                        bgcolor = "BurlyWood";
+                        break;
+                    }
+                case FeedItemType.Default:
+                default:
+                    {
+                        bgcolor = "Khaki";
+                        break;
+                    }
+            }
+
         <p><u>Feed item #@(i+1)</u></p>
-        <p><img src="@Model.FeedItems[i].ImageData" width="20" height="20" /> @Html.Label(Model.FeedItems[i].FromUser.FullName) on @Model.FeedItems[i].Occured</p>
-        <p>@Model.FeedItems[i].Text</p>
+        <p><img src="@feedItem.ImageData" width="20" height="20" /> @Html.Label(feedItem.FromUser.FullName) on @feedItem.Occured</p>
+        <p style="background-color: @bgcolor">@feedItem.Text</p>
+        }
     }
-}
 
 <form method="post">
     <div class="form-group" style="margin-top:100px">

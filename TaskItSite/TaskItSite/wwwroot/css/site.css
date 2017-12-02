@@ -53,6 +53,18 @@
     font-weight: 100;
 }
 
+.achievementName {
+    font-family: sans-serif;
+    font-size: 20px;
+    font-weight: 100;
+}
+
+.achievementDescription {
+    font-family: sans-serif;
+    font-size: 20px;
+    font-weight: 100;
+}
+
 .checkTrying {
     background-color: #00ff21;
 }
