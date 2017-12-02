@@ -26,6 +26,7 @@
                             @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.Name)
                             @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.AchievementCategoryID)
                             @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.Description)
+                            <i class="em @Model.AchievementWrapperList[i].Achievement.EmojiString"></i>
                         </div>
                     }
                 }
