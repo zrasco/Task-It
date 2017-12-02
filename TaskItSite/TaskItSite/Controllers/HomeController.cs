@@ -323,6 +323,7 @@ namespace TaskItSite.Controllers
             return View(model);
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Subscriptions(SubscriptionsViewModel model)
