@@ -426,7 +426,9 @@ namespace TaskItSite.Controllers
 
                 model.AchievementWrapperList.Add(newW);
             }
-                
+
+            // Sort achievements by completion
+            model.AchievementWrapperList = model.AchievementWrapperList.OrderByDescending(x => x.IsAchieved).ToList();
 
             return View(model);
         }
