@@ -125,6 +125,7 @@ namespace TaskItSite.Controllers
         public async Task<IActionResult> Create([Bind("ID,CreatedDate,DueDate,Summary,Description,IsPin,UserID,IsPrivate")] Models.Task task)
         {
             var currentUser = await GetCurrentUserAsync();
+            List<GlobalAchievement> globalAchievementList = _context.GlobalAchievements.ToList();
 
             if (ModelState.IsValid)
             {
@@ -138,11 +139,22 @@ namespace TaskItSite.Controllers
 
                 if(currentUser.TasksCreatedCount == 1)
                 {
-                    var wootWoot = new UserAchievement();
-                    wootWoot.AchievedTime = DateTime.Now;
-                    wootWoot.GlobalAchievementID = 1;
-                    wootWoot.ApplicationUserID = currentUser.Id;
-                    _context.UserAchievements.Add(wootWoot);
+                    currentUser.AddUserAchievement(globalAchievementList, "Created 1 task!");
+                }
+
+                if(currentUser.TasksCreatedCount == 5)
+                {
+                    currentUser.AddUserAchievement(globalAchievementList, "Created 5 tasks!");
+                }
+
+                if (currentUser.TasksCreatedCount == 10)
+                {
+                    currentUser.AddUserAchievement(globalAchievementList, "Created 10 tasks!");
+                }
+
+                if (currentUser.TasksCreatedCount == 20)
+                {
+                    currentUser.AddUserAchievement(globalAchievementList, "Created 20 tasks!");
                 }
 
                 await _context.SaveChangesAsync();
@@ -239,10 +251,37 @@ namespace TaskItSite.Controllers
         public async Task<ActionResult> UpdateCustomer(bool check, int customerId)
         {
             var task = await _context.Tasks.SingleOrDefaultAsync(m => m.ID == customerId);
+            var currentUser = await GetCurrentUserAsync();
+            List<GlobalAchievement> globalAchievementList = _context.GlobalAchievements.ToList();
+
             try
             {
                 task.IsActive = check;
+                if (check)
+                {
+                    currentUser.TasksCompletedCount += 1;
+                    _context.Users.Update(currentUser);
+                }
                 _context.Update(task);
+
+                if(currentUser.TasksCompletedCount == 1)
+                {
+                    currentUser.AddUserAchievement(globalAchievementList, "Completed 1 task!");
+                }
+
+                if (currentUser.TasksCompletedCount == 5)
+                {
+                    currentUser.AddUserAchievement(globalAchievementList, "Completed 5 tasks!");
+                }
+
+                if (currentUser.TasksCompletedCount == 10)
+                {
+                    currentUser.AddUserAchievement(globalAchievementList, "Completed 10 tasks!");
+                }
+                if (currentUser.TasksCompletedCount == 20)
+                {
+                    currentUser.AddUserAchievement(globalAchievementList, "Completed 20 tasks!");
+                }
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
