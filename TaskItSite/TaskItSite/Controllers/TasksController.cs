@@ -131,7 +131,20 @@ namespace TaskItSite.Controllers
                 task.CreatedDate = DateTime.Now;
                 task.UserID = currentUser.Id;
                 task.IsActive = false;
+                currentUser.TasksCreatedCount += 1;
+                _context.Users.Update(currentUser);
                 _context.Add(task);
+                await _context.SaveChangesAsync();
+
+                if(currentUser.TasksCreatedCount == 1)
+                {
+                    var wootWoot = new UserAchievement();
+                    wootWoot.AchievedTime = DateTime.Now;
+                    wootWoot.GlobalAchievementID = 1;
+                    wootWoot.ApplicationUserID = currentUser.Id;
+                    _context.UserAchievements.Add(wootWoot);
+                }
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
