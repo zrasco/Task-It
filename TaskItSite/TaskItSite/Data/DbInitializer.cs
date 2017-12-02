@@ -115,7 +115,7 @@ namespace TaskItSite.Data
                 new GlobalAchievement {AchievementCategoryID = 4, Name = "Created a private task!", Description = "Earned after creating 1 private task." },
                 new GlobalAchievement {AchievementCategoryID = 5, Name = "Subscribed to 5 people!", Description = "Earned after subscribing to 5 people." },
                 new GlobalAchievement {AchievementCategoryID = 6, Name = "Added 2 factor authentication!", Description = "Earned after setting up two factor authentication." },
-                new GlobalAchievement {AchievementCategoryID = 7, Name = "Created 5 tasks!", Description = "Earned after creating 5 tasks." },
+                new GlobalAchievement {AchievementCategoryID = 1, Name = "Created 5 tasks!", Description = "Earned after creating 5 tasks." },
                 new GlobalAchievement {AchievementCategoryID = 1, Name = "Subscribed to 10 people!", Description = "Earned after subscribing to 10 people." },
                 new GlobalAchievement {AchievementCategoryID = 1, Name = "Subscribed to 20 people!", Description = "Earned after subscribing to 20 people." },
                 new GlobalAchievement {AchievementCategoryID = 2, Name = "Created 10 tasks!", Description = "Earned after creating 10 tasks." },
