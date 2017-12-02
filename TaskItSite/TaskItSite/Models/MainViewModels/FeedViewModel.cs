@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TaskItSite.Models.MainViewModels
 {
+    public enum FeedItemType { Default, Task, Achievement, Post }
     public class FeedItem
     {
         public FeedItem() { }
@@ -16,12 +17,14 @@ namespace TaskItSite.Models.MainViewModels
             ImageData = baseFI.ImageData;
             Text = baseFI.Text;
             Occured = baseFI.Occured;
+            ItemType = baseFI.ItemType;
         }
 
         public ApplicationUser FromUser { get; set; }
         public string Text { get; set; }
         public string ImageData { get; set; }
         public DateTime Occured { get; set; }
+        public FeedItemType ItemType { get; set; }
     }
     public class FeedViewModel
     {
