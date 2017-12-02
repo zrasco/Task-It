@@ -12,7 +12,7 @@ namespace TaskItSite.Models
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
-        
+
         public ApplicationUser()
         {
             HomeScreen = HomeScreen.Feed;
@@ -100,6 +100,8 @@ namespace TaskItSite.Models
         public AccessLevel AccessLevel { get; set; }
 
         public virtual ICollection<Task> Tasks { get; set; }
+        public int TasksCreatedCount {get; set;}
+        public int TasksCompletedCount { get; set; }
         public virtual ICollection<UserAchievement> Achivements { get; set; }
         public virtual ICollection<Reminder> Reminders { get; set; }
         public virtual ICollection<Subscription> Subs { get; set; }
