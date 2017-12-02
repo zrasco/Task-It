@@ -16,8 +16,10 @@
                     {
                         <div class="form-group">
                             @Html.CheckBoxFor(x => x.AchievementWrapperList[i].IsAchieved)
-                            @Html.Label(Model.AchievementWrapperList[i].Achievement.Name)
-
+                            <span><b>@Model.AchievementWrapperList[i].Achievement.Name</b>
+                            @Model.AchievementWrapperList[i].Achievement.Description</span>
+                            
+                            
                             <!-- // Hidden properties stay into the HTTP POST action later.
                                     All achievement attributes must be explicitly listed here -->
                             @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.GlobalAchievementID)
