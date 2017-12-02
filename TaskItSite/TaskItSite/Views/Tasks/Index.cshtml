@@ -80,22 +80,11 @@
                     </div>
 
                     <div id="calendar" ui-calendar="uiConfig.calendar" ng-model="eventSources" ng-show="viewType"> </div>
+                    <button>Create Task</button> 
+
                 </div>
                 <div class="col-xs">
-               @*     <div id="createPage">
-        @await Html.PartialAsync("~/Views/Tasks/Create.cshtml", new TaskItSite.Models.Task())
-    </div>*@
-                    <button id="qTest" data-url="@Url.Action("GetDetails", "../Controllers/TasksController")">QueryTest</button>
-                    <div id="partialCreate"></div>
-                    @*
-    <div id="editPage">
-        @await Html.PartialAsync("~/Views/Tasks/Edit.cshtml", Model.ElementAt(0))
-    <button ng-click="DelView = !DelView" class="btn"> Delete Event </button>
-        <div id="deletePage" ng-show="DelView">
-            @await Html.PartialAsync("~/Views/Tasks/Delete.cshtml", new TaskItSite.Models.Task())
-        </div>
-    </div>
-                    *@
+                    <div id="calPage"></div>
                     </div>
                 </div>
         </div>
@@ -154,23 +143,7 @@
 
     <script>
          //Load events from server
-         var personalRawData = @Html.Raw(Json.Serialize(Model));
-    </script>
-
-    <script>
-         $('#qTest').click(function (evt) {
-             evt.preventDefault();
-             evt.stopPropagation();
-             
-             var $detailDiv = $('#partialCreate'),
-                 url = $(this).data('url');
- 
-             $.get(url, function (data) {
-                 $detailDiv.replaceWith(data);
-             }).fail(function (error) {
-                 console.log(error)
-                 });
-         })
+            var personalRawData = @Html.Raw(Json.Serialize(Model));
     </script>
 
     </body>

@@ -47,12 +47,35 @@ namespace TaskItSite.Controllers
 
         
         [HttpGet]
-        //POST: Partial view of the task at position id
-        public ActionResult GetDetails(  )
+        //Get: Partial view of the task at position id
+        public ActionResult GetDetails( int id  )
         {
             //uses previously made get
             var tasklist = _context.Tasks.ToList();
-            return PartialView("~/Views/Tasks/Details.cshtml", tasklist[0]);
+            return PartialView("~/Views/Tasks/Details.cshtml", tasklist[id]);
+        }
+
+        [HttpGet]
+        //GET: Partial view of the task edit
+        public ActionResult GetEdit( int id)
+        {
+            var tasklist = _context.Tasks.ToList();
+            return PartialView("~/Views/Tasks/Edit.cshtml", tasklist[id]);
+        }
+
+        [HttpGet]
+        //GET: Partial view of task delete
+        public ActionResult GetDelete(int id)
+        {
+            var tasklist = _context.Tasks.ToList();
+            return PartialView("~/Views/Tasks/Delete.cshtml", tasklist[id]);
+        }
+
+        [HttpGet]
+        //GET: Partial view of create task
+        public ActionResult GetCreate()
+        {
+            return PartialView("~/Views/Tasks/Create.cshtml", new TaskItSite.Models.Task());
         }
 
         // GET: Tasks/Details/5
