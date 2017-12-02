@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\angular-sanitize.js" />
     <Content Remove="wwwroot\js\jquery-1.11.3.js" />
     <Content Remove="wwwroot\js\locale-all.js" />
   </ItemGroup>

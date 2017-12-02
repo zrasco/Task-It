@@ -5,12 +5,12 @@
 var calendarDemoApp = angular.module('TaskItApp', ['ui.calendar', 'ui.bootstrap']);
 
 //controller to pull information from the database
-calendarDemoApp.controller('CalendarCtrl', ['$scope', '$http', 'uiCalendarConfig', function ($scope, $http, uiCalendarConfig) {
+calendarDemoApp.controller('CalendarCtrl', ['$scope', '$http', 'uiCalendarConfig', function ($scope, $http, uiCalendarConfig, $sce, $sanitize) {
     //journal page default view
     $scope.viewType = true;
     //journal page delete view
     $scope.DelView = false;
-
+    
     //selected calendar
     $scope.SelectedEvent = null;
     var isFirstTime = true;
@@ -34,7 +34,8 @@ calendarDemoApp.controller('CalendarCtrl', ['$scope', '$http', 'uiCalendarConfig
             description: value.description,
             start: new Date(value.createdDate),
             end: new Date(value.dueDate),
-            allDay: true
+            allDay: true,
+            id: value.id
         });
     });
 
@@ -50,19 +51,15 @@ calendarDemoApp.controller('CalendarCtrl', ['$scope', '$http', 'uiCalendarConfig
                 center: '',
                 right: 'today prev,next'
             },
+
             //scope events
-            eventClick: function (event) {
-                $scope.SelectedEvent = event;
-            },
-            eventClick: $scope.alertOnEventClick
+            eventClick: function (date, event) {
+                console.log(date.id + ' was clicked');
+            }
         }
     };
 
-    /*Alert on click*/
-    $scope.alertOnEventClick = function (date, jsEvent, view) {
-        console.log(date.title + 'was clicked');
-    };
-
     /*push data to calendar*/
-    $scope.eventSources = [$scope.events];
+    $scope.eventSources = [$scope.events]; 
 }])
+

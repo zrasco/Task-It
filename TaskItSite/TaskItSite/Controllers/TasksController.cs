@@ -45,12 +45,14 @@ namespace TaskItSite.Controllers
                 return View(usertask);
         }
 
-        //GET: Tasks as JSON objects
-        public JsonResult GetTasks()
+        
+        [HttpGet]
+        //POST: Partial view of the task at position id
+        public ActionResult GetDetails(  )
         {
             //uses previously made get
-            var tasks = this.Index();
-            return new JsonResult( tasks );
+            var tasklist = _context.Tasks.ToList();
+            return PartialView("~/Views/Tasks/Details.cshtml", tasklist[0]);
         }
 
         // GET: Tasks/Details/5

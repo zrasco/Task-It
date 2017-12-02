@@ -7,6 +7,7 @@
 <head>
   <link href="~/css/fullcalendar.css" rel="stylesheet" />
   <!-- calendar dependencies -->
+  <script src="~/js/angular-sanitize.js"></script>
   <script type="text/javascript" src="~/js/moment.js"></script>
   <script type="text/javascript" src="~/js/fullcalendar.js"></script>
   <script type="text/javascript" src="~/js/gcal.js"></script>
@@ -18,7 +19,7 @@
 <body>
     <h2 align="center">Task Manager</h2>
 
-    <div ng-app="TaskItApp" ng-controller="CalendarCtrl">
+    <div ng-app="TaskItApp" ng-controller="CalendarCtrl as CalendarCtrl">
         <button ng-click="viewType = !viewType" class="btn">
             Switch View
         </button>
@@ -74,23 +75,27 @@
                                 </div>
 
                             }
+                       
                         }
                     </div>
 
                     <div id="calendar" ui-calendar="uiConfig.calendar" ng-model="eventSources" ng-show="viewType"> </div>
                 </div>
                 <div class="col-xs">
-                    <div id="createPage">
-                        @await Html.PartialAsync("~/Views/Tasks/Create.cshtml", new TaskItSite.Models.Task())
-                    </div>
-                    <div id="editPage">
-                        @await Html.PartialAsync("~/Views/Tasks/Edit.cshtml", new TaskItSite.Models.Task())
-                    <button ng-click="DelView = !DelView" class="btn"> Delete Event </button>
-                        <div id="deletePage" ng-show="DelView">
-                            @await Html.PartialAsync("~/Views/Tasks/Delete.cshtml", new TaskItSite.Models.Task())
-                        </div>
-                    </div>
-                    
+               @*     <div id="createPage">
+        @await Html.PartialAsync("~/Views/Tasks/Create.cshtml", new TaskItSite.Models.Task())
+    </div>*@
+                    <button id="qTest" data-url="@Url.Action("GetDetails", "../Controllers/TasksController")">QueryTest</button>
+                    <div id="partialCreate"></div>
+                    @*
+    <div id="editPage">
+        @await Html.PartialAsync("~/Views/Tasks/Edit.cshtml", Model.ElementAt(0))
+    <button ng-click="DelView = !DelView" class="btn"> Delete Event </button>
+        <div id="deletePage" ng-show="DelView">
+            @await Html.PartialAsync("~/Views/Tasks/Delete.cshtml", new TaskItSite.Models.Task())
+        </div>
+    </div>
+                    *@
                     </div>
                 </div>
         </div>
@@ -150,6 +155,22 @@
     <script>
          //Load events from server
          var personalRawData = @Html.Raw(Json.Serialize(Model));
+    </script>
+
+    <script>
+         $('#qTest').click(function (evt) {
+             evt.preventDefault();
+             evt.stopPropagation();
+             
+             var $detailDiv = $('#partialCreate'),
+                 url = $(this).data('url');
+ 
+             $.get(url, function (data) {
+                 $detailDiv.replaceWith(data);
+             }).fail(function (error) {
+                 console.log(error)
+                 });
+         })
     </script>
 
     </body>
