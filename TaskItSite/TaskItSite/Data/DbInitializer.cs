@@ -109,12 +109,15 @@ namespace TaskItSite.Data
             // Create achievements here
             var globalAchievementList = new GlobalAchievement[]
             {
-                new GlobalAchievement {AchievementCategoryID = 1, Name = "Subscribed to 1 person!", Description = "Earned after subscribing to 1 person." },
-                new GlobalAchievement {AchievementCategoryID = 1, Name = "Subscribed to 5 people!", Description = "Earned after subscribing to 5 people." },
+                new GlobalAchievement {AchievementCategoryID = 1, Name = "Created 1 task!", Description = "Earned after creating 1 task." },
+                new GlobalAchievement {AchievementCategoryID = 2, Name = "Subscribed to 1 person!", Description = "Earned after subscribing to 1 person." },
+                new GlobalAchievement {AchievementCategoryID = 3, Name = "Cloned 1 task!", Description = "Earned after cloning 1 task." },
+                new GlobalAchievement {AchievementCategoryID = 4, Name = "Created a private task!", Description = "Earned after creating 1 private task." },
+                new GlobalAchievement {AchievementCategoryID = 5, Name = "Subscribed to 5 people!", Description = "Earned after subscribing to 5 people." },
+                new GlobalAchievement {AchievementCategoryID = 6, Name = "Added 2 factor authentication!", Description = "Earned after setting up two factor authentication." },
+                new GlobalAchievement {AchievementCategoryID = 1, Name = "Created 5 tasks!", Description = "Earned after creating 5 tasks." },
                 new GlobalAchievement {AchievementCategoryID = 1, Name = "Subscribed to 10 people!", Description = "Earned after subscribing to 10 people." },
                 new GlobalAchievement {AchievementCategoryID = 1, Name = "Subscribed to 20 people!", Description = "Earned after subscribing to 20 people." },
-                new GlobalAchievement {AchievementCategoryID = 2, Name = "Created 1 task!", Description = "Earned after creating 1 task." },
-                new GlobalAchievement {AchievementCategoryID = 2, Name = "Created 5 tasks!", Description = "Earned after creating 5 tasks." },
                 new GlobalAchievement {AchievementCategoryID = 2, Name = "Created 10 tasks!", Description = "Earned after creating 10 tasks." },
                 new GlobalAchievement {AchievementCategoryID = 2, Name = "Created 20 tasks!", Description = "Earned after creating 20 tasks." },
                 new GlobalAchievement {AchievementCategoryID = 2, Name = "Completed 1 task!", Description = "Earned after completing 1 task." },
