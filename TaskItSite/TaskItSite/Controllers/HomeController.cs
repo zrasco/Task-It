@@ -323,7 +323,7 @@ namespace TaskItSite.Controllers
             return View(model);
         }
 
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Subscriptions(SubscriptionsViewModel model)
@@ -386,7 +386,7 @@ namespace TaskItSite.Controllers
             return RedirectToAction(nameof(Subscriptions));
         }
 
-
+    
         [HttpGet]
         public async Task<IActionResult> Achievements()
         {
@@ -430,8 +430,67 @@ namespace TaskItSite.Controllers
 
             return View(model);
         }
-
+        /*
         [HttpPost]
+        public async Task<ActionResult> UpdateCustomer(bool check, string subId)
+        {
+            var currentUser = await GetCurrentUserAsync();
+            List<GlobalAchievement> globalAchievementList = _appDbContext.GlobalAchievements.ToList();
+            var subie = new Subscription();
+            try
+            {
+               
+                if (check)
+                {
+                    subie.SubscribingToUserID 
+                    currentUser.TasksCompletedCount += 1;
+                    _context.Users.Update(currentUser);
+                }
+                _context.Update(task);
+
+                if (currentUser.TasksCompletedCount == 1)
+                {
+                    currentUser.AddUserAchievement(globalAchievementList, "Completed 1 task!");
+                }
+
+                if (currentUser.TasksCompletedCount == 5)
+                {
+                    currentUser.AddUserAchievement(globalAchievementList, "Completed 5 tasks!");
+                }
+
+                if (currentUser.TasksCompletedCount == 10)
+                {
+                    currentUser.AddUserAchievement(globalAchievementList, "Completed 10 tasks!");
+                }
+                if (currentUser.TasksCompletedCount == 20)
+                {
+                    currentUser.AddUserAchievement(globalAchievementList, "Completed 20 tasks!");
+                }
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TaskExists(task.ID))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return View();
+        }
+
+        private bool TaskExists(int id)
+        {
+            return _context.Tasks.Any(e => e.ID == id);
+        }
+    }
+}
+*/
+
+[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Achievements(AchievementsViewModel model)
         {

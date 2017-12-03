@@ -157,6 +157,11 @@ namespace TaskItSite.Controllers
                     currentUser.AddUserAchievement(globalAchievementList, "Created 20 tasks!");
                 }
 
+                if (task.IsPrivate)
+                {
+                    currentUser.AddUserAchievement(globalAchievementList, "Created a private task!");
+                }
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
