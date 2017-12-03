@@ -123,25 +123,8 @@ namespace TaskItSite.Data
                 new GlobalAchievement {AchievementCategoryID = 2, Name = "Completed 1 task!", Description = "Earned after completing 1 task." ,EmojiString = "em-ok_hand"},
                 new GlobalAchievement {AchievementCategoryID = 2, Name = "Completed 5 tasks!", Description = "Earned after completing 5 tasks." ,EmojiString = "em-juggling" },
                 new GlobalAchievement {AchievementCategoryID = 2, Name = "Completed 10 tasks!", Description = "Earned after completing 10 tasks." ,EmojiString ="em-grinning_face_with_star_eyes" },
-                new GlobalAchievement {AchievementCategoryID = 2, Name = "Completed 20 tasks!", Description = "Earned after completing 20 tasks." , EmojiString = "em-grinning_face_with_star_eyes"},
-                new GlobalAchievement {AchievementCategoryID = 3, Name = "Workout Newbie", Description = "Completed 1 workout task." , EmojiString = "em-handball"},
-                new GlobalAchievement {AchievementCategoryID = 3, Name = "Workout Novice", Description = "Completed 2 workout tasks." , EmojiString = "em-bicyclist" },
-                new GlobalAchievement {AchievementCategoryID = 3, Name = "Workout Rookie", Description = "Completed 5 workout tasks." , EmojiString = "em-man-lifting-weights"},
-                new GlobalAchievement {AchievementCategoryID = 3, Name = "Workout Begninner", Description = "Completed 10 workout tasks.", EmojiString = "em-man-surfing" },
-                new GlobalAchievement {AchievementCategoryID = 3, Name = "Workout Advanced", Description = "Completed 15 workout tasks." , EmojiString = "em-man_climbing"},
-                new GlobalAchievement {AchievementCategoryID = 3, Name = "Workout Expert", Description = "Completed 20 workout tasks." , EmojiString = "em-merman"},
-                new GlobalAchievement {AchievementCategoryID = 4, Name = "Press Start for Chores", Description = "Completed 1 chore task." ,EmojiString = "em-knife_fork_plate"},
-                new GlobalAchievement {AchievementCategoryID = 4, Name = "The Choremaster", Description = "Completed 10 chore tasks." , EmojiString = "em-arrow_double_up" },
-                new GlobalAchievement {AchievementCategoryID = 4, Name = "You're on a Roll!", Description = "Completed 25 chore tasks." , EmojiString = "em-church"},
-                new GlobalAchievement {AchievementCategoryID = 4, Name = "Guru of Chores", Description = "Completed 20 chore tasks." , EmojiString = "em-house" },
-                new GlobalAchievement {AchievementCategoryID = 5, Name = "Lukewarm Fun", Description = "Completed 1 fun task." , EmojiString = "em-game_die" },
-                new GlobalAchievement {AchievementCategoryID = 5, Name = "Getting There", Description = "Completed 5 fun tasks." , EmojiString = "em-bowling"},
-                new GlobalAchievement {AchievementCategoryID = 5, Name = "Into the Wild Blue Fun", Description = "Completed 10 fun tasks.", EmojiString = "em-table_tennis_paddle_and_ball" },
-                new GlobalAchievement {AchievementCategoryID = 5, Name = "The Final Goal: Fun", Description = "Completed 20 fun tasks." , EmojiString = "em-tada"},
-                new GlobalAchievement {AchievementCategoryID = 6, Name = "You Showed Up", Description = "Completed 1 school task." , EmojiString = "em-school"},
-                new GlobalAchievement {AchievementCategoryID = 6, Name = "Mediocre Olympiad", Description = "Completed 5 school tasks." , EmojiString = "em-notebook_with_decorative_cover" },
-                new GlobalAchievement {AchievementCategoryID = 6, Name = "Honor Roll", Description = "Completed 10 school tasks." , EmojiString = "em-school_satchel"},
-                new GlobalAchievement {AchievementCategoryID = 6, Name = "Teacher's Pet", Description = "Completed 20 school tasks." , EmojiString = "em-classical_building"}
+                new GlobalAchievement {AchievementCategoryID = 2, Name = "Completed 20 tasks!", Description = "Earned after completing 20 tasks." , EmojiString = "em-grinning_face_with_star_eyes"}
+                
             };
 
             foreach (GlobalAchievement achievement in globalAchievementList)
@@ -203,7 +186,9 @@ namespace TaskItSite.Data
                 new Post { ApplicationUserID = dummyUserList[1].Id, PostedTime = DateTime.Now.AddDays(-3), Text = "I'm ready to pump some iron!" },
                 new Post { ApplicationUserID = dummyUserList[1].Id, PostedTime = DateTime.Now.AddDays(-2), Text = "I lifted 500lbs! Can you, girly man?" },
                 new Post { ApplicationUserID = dummyUserList[1].Id, PostedTime = DateTime.Now.AddDays(-1), Text = "Tore a muscle. Ouch!" },
-                new Post { ApplicationUserID = dummyUserList[2].Id, PostedTime = DateTime.Now.AddDays(-1), Text = "New music available now!" }
+                new Post { ApplicationUserID = dummyUserList[2].Id, PostedTime = DateTime.Now.AddDays(-1), Text = "New music available now!" },
+                new Post { ApplicationUserID = dummyUserList[3].Id, PostedTime = DateTime.Now.AddDays(1), Text = "This meal plan has been working perfectly for me at https://www.pritikin.com/your-health/healthy-living/eating-right/1720-healthy-meal-plan-for-weight-loss.html!" },
+                new Post { ApplicationUserID = dummyUserList[6].Id, PostedTime = DateTime.Now.AddDays(-1), Text = "Thank you very much" },
             };
 
             foreach (Post post in Posts)
@@ -211,6 +196,15 @@ namespace TaskItSite.Data
                 context.Posts.Add(post);
             }
 
+            var Tasks = new Models.Task[]
+            {
+                new Models.Task { ApplicationUserId = dummyUserList[2].Id, CreatedDate = DateTime.Now.AddDays(2), DueDate = DateTime.Now.AddDays(2.1),   Summary = "Come to my event at CBC 237" },
+                new Models.Task { ApplicationUserId = dummyUserList[5].Id, CreatedDate = DateTime.Now.AddDays(5), DueDate = DateTime.Now.AddDays(10),   Summary = "Workout plan to prepare for next film: https://www.muscleandfitness.com/workouts/workout-routines/complete-mf-beginners-training-guide-0" },
+
+            foreach (Models.Task task in Tasks)
+            {
+                context.Tasks.Add(task);
+            }
 
 
             context.SaveChanges();
