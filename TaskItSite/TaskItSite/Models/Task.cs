@@ -17,7 +17,7 @@ namespace TaskItSite.Models
         public string Summary { get; set; }
         public string Description { get; set; }
         public bool IsPin { get; set; }
-        public string UserID { get; set; }
+        public string ApplicationUserId { get; set; }
         public bool IsActive { get; set; }
         public bool IsPrivate { get; set; }
     }

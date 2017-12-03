@@ -175,12 +175,12 @@ namespace TaskItSite.Controllers
                     {
                         FeedItem taskFI = new FeedItem(baseFI);
 
-                        if (task.DueDate > DateTime.Now.AddDays(-7))
+                        if (task.CreatedDate > DateTime.Now.AddDays(-7))
                         {
                             // Add this to feed
-                            taskFI.Occured = (DateTime)task.DueDate;
+                            taskFI.Occured = (DateTime)task.CreatedDate;
                             taskFI.ItemType = FeedItemType.Task;
-                            taskFI.Text = "Task became due: " + task.Summary;
+                            taskFI.Text = "Task created: " + task.Summary;
 
                             model.FeedItems.Add(taskFI);
                         }
