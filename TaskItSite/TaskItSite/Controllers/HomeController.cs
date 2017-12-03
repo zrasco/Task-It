@@ -181,7 +181,7 @@ namespace TaskItSite.Controllers
                             taskFI.Occured = (DateTime)task.CreatedDate;
                             taskFI.ItemType = FeedItemType.Task;
                             taskFI.Text = "Task created: " + task.Summary;
-
+                            taskFI.Taskid = task.ID;
                             model.FeedItems.Add(taskFI);
                         }
 
@@ -495,7 +495,22 @@ namespace TaskItSite.Controllers
 }
 */
 
-[HttpPost]
+        public async Task<ActionResult> ClonedAchieve(int id)
+        {
+            List<GlobalAchievement> globalAchievementList = _appDbContext.GlobalAchievements.ToList();
+            var currentUser = await GetCurrentUserAsync();
+
+
+            
+           // currentUser.AddUserAchievement(globalAchievementList, "Cloned 1 task!");
+            
+                await _appDbContext.SaveChangesAsync();
+            
+            
+            return RedirectToAction(nameof(Feed));
+        }
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Achievements(AchievementsViewModel model)
         {
