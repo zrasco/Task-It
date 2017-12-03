@@ -312,15 +312,17 @@ namespace TaskItSite.Controllers
                         break;
                     }
                 }
-
-                model.SubscriptionWrapperList.Add(
-                    new SubscriptionWrapper
+                if (user.Id != someUser.Id)
+                {
+                    model.SubscriptionWrapperList.Add(
+                        new SubscriptionWrapper
                         {
                             SubscribedUser = someUser,
                             SubscribedUserID = someUser.Id,
                             IsSubscribed = isSubcribed
                         }
-                    );
+                        );
+                }
             }
 
             return View(model);
