@@ -92,7 +92,9 @@ function editEvent(id) {
         $detailDiv.replaceWith(data);
     }).fail(function (error) {
         console.log(error)
-    });
+        });
+
+    $detailDiv.load();
 }
 
 //jQuery event for detailing the event
