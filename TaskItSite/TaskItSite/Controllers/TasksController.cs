@@ -36,7 +36,7 @@ namespace TaskItSite.Controllers
 
             foreach (var item in tasklist)
             {
-                if(item.UserID == currentUser.Id && !item.IsActive)
+                if(item.ApplicationUserId == currentUser.Id && !item.IsActive)
                 {
                     usertask.Add(item);
 
@@ -47,12 +47,35 @@ namespace TaskItSite.Controllers
 
         
         [HttpGet]
-        //POST: Partial view of the task at position id
-        public ActionResult GetDetails(  )
+        //Get: Partial view of the task at position id
+        public ActionResult GetDetails( int id  )
         {
             //uses previously made get
             var tasklist = _context.Tasks.ToList();
-            return PartialView("~/Views/Tasks/Details.cshtml", tasklist[0]);
+            return PartialView("~/Views/Tasks/Details.cshtml", tasklist[id]);
+        }
+
+        [HttpGet]
+        //GET: Partial view of the task edit
+        public ActionResult GetEdit( int id)
+        {
+            var tasklist = _context.Tasks.ToList();
+            return PartialView("~/Views/Tasks/Edit.cshtml", tasklist[id]);
+        }
+
+        [HttpGet]
+        //GET: Partial view of task delete
+        public ActionResult GetDelete(int id)
+        {
+            var tasklist = _context.Tasks.ToList();
+            return PartialView("~/Views/Tasks/Delete.cshtml", tasklist[id]);
+        }
+
+        [HttpGet]
+        //GET: Partial view of create task
+        public ActionResult GetCreate()
+        {
+            return PartialView("~/Views/Tasks/Create.cshtml", new TaskItSite.Models.Task());
         }
 
         // GET: Tasks/Details/5
@@ -108,7 +131,7 @@ namespace TaskItSite.Controllers
 
             foreach (var item in tasklist)
             {
-                if (item.UserID == currentUser.Id && item.IsActive)
+                if (item.ApplicationUserId == currentUser.Id && item.IsActive)
                 {
                     usertask.Add(item);
 
@@ -130,7 +153,7 @@ namespace TaskItSite.Controllers
             if (ModelState.IsValid)
             {
                 task.CreatedDate = DateTime.Now;
-                task.UserID = currentUser.Id;
+                task.ApplicationUserId = currentUser.Id;
                 task.IsActive = false;
                 currentUser.TasksCreatedCount += 1;
                 _context.Users.Update(currentUser);
@@ -201,7 +224,7 @@ namespace TaskItSite.Controllers
             {
                 try
                 {
-                    task.UserID = currentUser.Id;
+                    task.ApplicationUserId = currentUser.Id;
                     task.CreatedDate = DateTime.Now;
                     task.IsActive = false;
                     _context.Update(task);

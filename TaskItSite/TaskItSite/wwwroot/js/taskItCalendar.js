@@ -55,6 +55,7 @@ calendarDemoApp.controller('CalendarCtrl', ['$scope', '$http', 'uiCalendarConfig
             //scope events
             eventClick: function (date, event) {
                 console.log(date.id + ' was clicked');
+                editEvent( date.id );
             }
         }
     };
@@ -63,3 +64,61 @@ calendarDemoApp.controller('CalendarCtrl', ['$scope', '$http', 'uiCalendarConfig
     $scope.eventSources = [$scope.events]; 
 }])
 
+//jQuery event for creating an event
+//called only on button is clicked while 
+//calendar is in view 
+function createEvent () {
+    console.log("createEvent called")
+    var $detailDiv = $('#calPage'),
+        url = "/Tasks/GetCreate";
+
+    $.get(url, function (data) {
+        $detailDiv.replaceWith(data);
+    }).fail(function (error) {
+        console.log(error)
+    });
+}
+
+//jQuery event for editting the event
+//used for personal events exclusively
+function editEvent(id) {
+    id--;
+    console.log("editEvent called " + id)
+    var $detailDiv = $('#calPage'),
+        url = "/Tasks/GetEdit/" + id,
+        data = { id: id };
+
+    $.get(url, function (data) {
+        $detailDiv.replaceWith(data);
+    }).fail(function (error) {
+        console.log(error)
+    });
+}
+
+//jQuery event for detailing the event
+//used  for non-personal event 
+function detailEvent(id) {
+    console.log("detailEvent called")
+    var $detailDiv = $('#calPage'),
+        url = "/Tasks/GetDetails",
+        data = { id: id };
+
+    $.get(url, data, function (data) {
+        $detailDiv.replaceWith(data);
+    }).fail(function (error) {
+        console.log(error)
+    });
+}
+
+//jQuery call for deleting the event
+function deleteEvent(id) {
+    console.log("deleteEvent called")
+    var $detailDiv = $('#calPage'),
+        url = "/Tasks/GetDelete";
+
+    $.get(url, function (data) {
+        $detailDiv.replaceWith(data);
+    }).fail(function (error) {
+        console.log(error)
+    });
+}

@@ -144,6 +144,7 @@ namespace TaskItSite.Controllers
                         {
                             // Add this to feed
                             postFI.Occured = post.PostedTime;
+                            postFI.ItemType = FeedItemType.Post;
                             postFI.Text = "Post: " + post.Text;
 
                             model.FeedItems.Add(postFI);
@@ -161,6 +162,7 @@ namespace TaskItSite.Controllers
                         {
                             // Add this to feed
                             acFI.Occured = (DateTime)ua.AchievedTime;
+                            acFI.ItemType = FeedItemType.Achievement;
                             acFI.Text = "Achieved: " + ua.GlobalAchievement.Name;
 
                             model.FeedItems.Add(acFI);
@@ -173,11 +175,12 @@ namespace TaskItSite.Controllers
                     {
                         FeedItem taskFI = new FeedItem(baseFI);
 
-                        if (task.DueDate > DateTime.Now.AddDays(-7))
+                        if (task.CreatedDate > DateTime.Now.AddDays(-7))
                         {
                             // Add this to feed
-                            taskFI.Occured = (DateTime)task.DueDate;
-                            taskFI.Text = "Task became due: " + task.Summary;
+                            taskFI.Occured = (DateTime)task.CreatedDate;
+                            taskFI.ItemType = FeedItemType.Task;
+                            taskFI.Text = "Task created: " + task.Summary;
 
                             model.FeedItems.Add(taskFI);
                         }
@@ -426,7 +429,9 @@ namespace TaskItSite.Controllers
 
                 model.AchievementWrapperList.Add(newW);
             }
-                
+
+
+            model.AchievementWrapperList = model.AchievementWrapperList.OrderByDescending(x => x.IsAchieved).ToList();
 
             return View(model);
         }

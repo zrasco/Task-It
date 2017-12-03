@@ -4,38 +4,46 @@
     ViewData["Title"] = "Achievements";
 }
 <head> <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet"> </head>
-<h2 align="center">Achievements</h2>
+<h2 align="center">My Achievements</h2>
 
 <form method="post">
-    <table style="width:100%;">
+    <table style="width:100%;" >
         <tr>
             <td>
-                <p>Achievements for @Model.CurrentUser.FullName :</p>
+                
                 @{
                     for (var i = 0; i < Model.AchievementWrapperList.Count; i++)
                     {
-                        <div class="form-group">
+                    <div class="form-group">
 
                             <div class="col-xs-12 hoverDiv" style="height: 60px">
+                                <div class="col-xs-11">
 
 
-                                @Html.CheckBoxFor(x => x.AchievementWrapperList[i].IsAchieved)
-                                <span>
-                                    <b>@Model.AchievementWrapperList[i].Achievement.Name</b>
-                                    @Model.AchievementWrapperList[i].Achievement.Description
-                                </span>
+                                    @Html.CheckBoxFor(x => x.AchievementWrapperList[i].IsAchieved)
+                                    <span>
+                                        <div class="col-xs-8 achievementName">
+                                            <p align="left">
+                                           <strong> @Model.AchievementWrapperList[i].Achievement.Name </strong>
+                                            @Model.AchievementWrapperList[i].Achievement.Description
+                                            </p>
+                                        
+                                        </div>
+                                    </span>
 
 
-                                <!-- // Hidden properties stay into the HTTP POST action later.
-                All achievement attributes must be explicitly listed here -->
-                                @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.GlobalAchievementID)
-                                @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.Name)
-                                @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.AchievementCategoryID)
-                                @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.Description)
-                                <i class="em @Model.AchievementWrapperList[i].Achievement.EmojiString"></i>
-
+                                    <!-- // Hidden properties stay into the HTTP POST action later.
+        All achievement attributes must be explicitly listed here -->
+                                    @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.GlobalAchievementID)
+                                    @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.Name)
+                                    @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.AchievementCategoryID)
+                                    @Html.HiddenFor(x => x.AchievementWrapperList[i].Achievement.Description)
+                                    <div class="col-xs-2">
+                                        <i class="em @Model.AchievementWrapperList[i].Achievement.EmojiString" ></i>
+                                   </div>
                                 </div>
                             </div>
+                       </div>
                     }
                 }
             </td>
@@ -43,8 +51,10 @@
         <tr>
             <td>
                 @Html.Partial("~/Views/Manage/_StatusMessage.cshtml", Model.StatusMessage)
-                <button type="submit" class="btn btn-default">Save</button>
-            </td>
+                <div class="col-xs-2">
+                    <button type="submit" class="btn btn-default">Save</button>
+
+</td>
         </tr>
     </table>
 </form>
