@@ -36,7 +36,7 @@ namespace TaskItSite.Controllers
 
             foreach (var item in tasklist)
             {
-                if(item.UserID == currentUser.Id && !item.IsActive)
+                if(item.ApplicationUserId == currentUser.Id && !item.IsActive)
                 {
                     usertask.Add(item);
 
@@ -131,7 +131,7 @@ namespace TaskItSite.Controllers
 
             foreach (var item in tasklist)
             {
-                if (item.UserID == currentUser.Id && item.IsActive)
+                if (item.ApplicationUserId == currentUser.Id && item.IsActive)
                 {
                     usertask.Add(item);
 
@@ -153,7 +153,7 @@ namespace TaskItSite.Controllers
             if (ModelState.IsValid)
             {
                 task.CreatedDate = DateTime.Now;
-                task.UserID = currentUser.Id;
+                task.ApplicationUserId = currentUser.Id;
                 task.IsActive = false;
                 currentUser.TasksCreatedCount += 1;
                 _context.Users.Update(currentUser);
@@ -219,7 +219,7 @@ namespace TaskItSite.Controllers
             {
                 try
                 {
-                    task.UserID = currentUser.Id;
+                    task.ApplicationUserId = currentUser.Id;
                     task.CreatedDate = DateTime.Now;
                     task.IsActive = false;
                     _context.Update(task);
