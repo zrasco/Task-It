@@ -24,6 +24,9 @@ calendarDemoApp.controller('CalendarCtrl', ['$scope', '$http', 'uiCalendarConfig
     //Load events from server
     $scope.tasks = personalRawData;
 
+    //Edit flag
+    $scope.editFlag = false;
+
     //go through each event and set calendar location for each
     $scope.events.slice(0, $scope.tasks.length);
 
@@ -59,7 +62,8 @@ calendarDemoApp.controller('CalendarCtrl', ['$scope', '$http', 'uiCalendarConfig
             //scope events
             eventClick: function (date, event) {
                 console.log(date.id + ' was clicked');
-                editEvent( date.id );
+                editEvent(date.id);
+
             }
         }
     };
