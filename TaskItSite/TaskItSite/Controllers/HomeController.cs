@@ -420,13 +420,16 @@ namespace TaskItSite.Controllers
                 };
 
                 // Find matching achievement
-                UserAchievement targetAchievement = model.CurrentUser.Achivements.Where(x => x.GlobalAchievementID == a.GlobalAchievementID).SingleOrDefault();
-
-                if (targetAchievement != null)
-                    newW.IsAchieved = true;
-                else
-                    newW.IsAchieved = false;
-
+                try
+                {
+                    UserAchievement targetAchievement = model.CurrentUser.Achivements.First(x => x.GlobalAchievementID == a.GlobalAchievementID);
+                    // Where(x => x.GlobalAchievementID == a.GlobalAchievementID).SingleOrDefault();
+                    if (targetAchievement != null)
+                        newW.IsAchieved = true;
+                    else
+                        newW.IsAchieved = false;
+                }
+                catch { }
                 model.AchievementWrapperList.Add(newW);
             }
 
@@ -495,14 +498,19 @@ namespace TaskItSite.Controllers
 }
 */
 
-        public async Task<ActionResult> ClonedAchieve(int id)
+        public async Task<ActionResult> ClonedTask(int id)
         {
             List<GlobalAchievement> globalAchievementList = _appDbContext.GlobalAchievements.ToList();
             var currentUser = await GetCurrentUserAsync();
 
-
+            var task = _appDbContext.Tasks.First(x => x.ID == id);
+            var tassk = new Models.Task();
+            tassk.ApplicationUserId = currentUser.Id;
+            tassk.Summary = task.Summary;
+            tassk.Description = task.Description;
+            _appDbContext.Tasks.Add(tassk);
             
-           // currentUser.AddUserAchievement(globalAchievementList, "Cloned 1 task!");
+            currentUser.AddUserAchievement(globalAchievementList, "Cloned 1 task!");
             
                 await _appDbContext.SaveChangesAsync();
             

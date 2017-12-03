@@ -4,7 +4,7 @@
 @{
     ViewData["Title"] = "Feed";
 }
-<div ng-app="FeedModule" ng-contoller="FeedCtrl">
+@*div ng-app="FeedModule" ng-contoller="FeedCtrl">*@
     <h2>Feed for @Model.CurrentUser.FullName</h2>
     @{
         for (var i = 0; i < Model.FeedItems.Count; i++)
@@ -37,13 +37,14 @@
                     }
             }
 
-            <p><u>Feed item #@(i + 1)</u></p>
-            <p><img src="@feedItem.ImageData" width="20" height="20" /> @Html.Label(feedItem.FromUser.FullName) on @feedItem.Occured</p>
-            <pre style="background-color: @bgcolor"> @feedItem.Text
-        @if (feedItem.Taskid != null)
-        {<button id="add_butt" ng-click="ngClonedAchieve(@feedItem.Taskid)" >{{ butonStatus }}</button>}</pre>
-        }
-    }
+
+            <p></p>
+            <pre style="background-color: @bgcolor">
+<img src="@feedItem.ImageData" width="20" height="20" /> @Html.Label(feedItem.FromUser.FullName) on @feedItem.Occured
+@feedItem.Text
+@if (feedItem.Taskid != null) {<button id="add_butt" onclick="ClonedAchieve(@feedItem.Taskid)">Add</button>}</pre>
+            } }
+
 
     <form method="post">
         <div class="form-group" style="margin-top:100px">
@@ -53,39 +54,15 @@
             <button type="submit" class="btn btn-default">Submit post!</button>
         </div>
     </form>
-</div>
+@*</div>*@
 
 <script>
-    angular.module('FeedModule', ['$scope'])
-        .controller(['$scope', function ($scope) {
-            $scope.butonStatus = "Add"
-            if(/*MODEL CALL*/) {
-                $scope.butonStatus = "Add"
-                
-            } else {
-                $scope.butonStatus = "Remove"
-            }
     
-            $scope.ngClonedAchieve = function (id) {
-                if ($scope.butonStatus === "Add"){
-                $.ajax({
-                url: '@Url.Action("ClonedAchieve", "Home")',
-                data: {id: id},
-                }).done(function () {     
-                    $scope.butonStatus = "Added"
-                        });
-                } else {
-                    //remove ajax call 
-
-                }
-            }
-        }]);
 
     function ClonedAchieve(elem) {
 
-
             $.ajax({
-                url: '@Url.Action("ClonedAchieve", "Home")',
+                url: '@Url.Action("ClonedTask", "Home")',
             data: { id: elem },
         }).done(function () {
             document.getElementById("add_butt").innerHTML = "Added";
