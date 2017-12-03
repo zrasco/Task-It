@@ -18,6 +18,7 @@ namespace TaskItSite.Models.MainViewModels
             Text = baseFI.Text;
             Occured = baseFI.Occured;
             ItemType = baseFI.ItemType;
+            Taskid = baseFI.Taskid;
         }
 
         public ApplicationUser FromUser { get; set; }
@@ -25,6 +26,7 @@ namespace TaskItSite.Models.MainViewModels
         public string ImageData { get; set; }
         public DateTime Occured { get; set; }
         public FeedItemType ItemType { get; set; }
+        public int? Taskid { get; set; }
     }
     public class FeedViewModel
     {

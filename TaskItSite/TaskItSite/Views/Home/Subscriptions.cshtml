@@ -32,7 +32,10 @@
                                 </div>
                                 <div class="col-xs-1">
                                     <div>
-                                        @Html.CheckBoxFor(x => x.SubscriptionWrapperList[i].IsSubscribed, new { @class = "checkbox box" } )
+                                        @Html.CheckBoxFor(x => x.SubscriptionWrapperList[i].IsSubscribed, new { @class = "checkbox box" 
+                                       @*,onclick = "UpdateCustomer(this)",
+                                       data_subid = Model.SubscriptionWrapperList[i].SubscribedUserID*@
+                                   } )
                                     </div>
                                 </div>
                             </div>
@@ -50,3 +53,20 @@
     </table>
 </form>
 
+<script>
+        function UpdateCustomer(elem) {
+
+            var isDone = $(elem).is(':checked');
+            var sid = $(elem).data('subid');
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("UpdateSubscriber", "Home")',
+                data: { check: isDone, subId: sid },
+                success: function (res) {
+                console.log(res);
+                }
+             });
+
+        }
+</script>
