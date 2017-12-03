@@ -9,6 +9,7 @@
     @{
         for (var i = 0; i < Model.FeedItems.Count; i++)
         {
+            var q = i;
             string bgcolor = "Khaki";
             FeedItem feedItem = Model.FeedItems[i];
 
@@ -42,7 +43,7 @@
             <pre style="background-color: @bgcolor">
 <img src="@feedItem.ImageData" width="20" height="20" /> @Html.Label(feedItem.FromUser.FullName) on @feedItem.Occured
 @feedItem.Text
-@if (feedItem.Taskid != null) {<button id="add_butt" onclick="ClonedAchieve(@feedItem.Taskid)">Add</button>}</pre>
+@if (feedItem.Taskid != null) {<button id="add_butt-@q" onclick="ClonedAchieve(@feedItem.Taskid,@q)">Add</button>}</pre>
             } }
 
 
@@ -59,14 +60,14 @@
 <script>
     
 
-    function ClonedAchieve(elem) {
+    function ClonedAchieve(elem,q) {
 
             $.ajax({
                 url: '@Url.Action("ClonedTask", "Home")',
             data: { id: elem },
         }).done(function () {
-            document.getElementById("add_butt").innerHTML = "Added";
-            document.getElementById("add_butt").disabled = true;
+            document.getElementById("add_butt-"+q).innerHTML = "Added";
+            document.getElementById("add_butt-"+q).disabled = true;
         });
 
     }
