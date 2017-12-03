@@ -190,8 +190,8 @@ namespace TaskItSite.Controllers
             }
 
             // Sort feed items by descending date. Quick, dirty, and effective (makes an extra copy in memory)
-            model.FeedItems = model.FeedItems.OrderBy(x => x.Occured).ToList();
-
+            // model = model.FeedItems.OrderBy(x => x.Occured).ToList();
+            model.FeedItems = model.FeedItems.OrderByDescending(x => x.Occured).ToList();
             return View(model);
         }
 
