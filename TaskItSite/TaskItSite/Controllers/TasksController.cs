@@ -52,7 +52,7 @@ namespace TaskItSite.Controllers
         {
             //uses previously made get
             var tasklist = _context.Tasks.ToList();
-            return PartialView("~/Views/Tasks/Details.cshtml", tasklist[id]);
+            return PartialView("~/Views/Tasks/Details.cshtml", tasklist.First(i => i.ID == id));
         }
 
         [HttpGet]
@@ -60,7 +60,7 @@ namespace TaskItSite.Controllers
         public ActionResult GetEdit( int id)
         {
             var tasklist = _context.Tasks.ToList();
-            return PartialView("~/Views/Tasks/Edit.cshtml", tasklist[id]);
+            return PartialView("~/Views/Tasks/Edit.cshtml", tasklist.First(i => i.ID == id));
         }
 
         [HttpGet]
@@ -68,7 +68,7 @@ namespace TaskItSite.Controllers
         public ActionResult GetDelete(int id)
         {
             var tasklist = _context.Tasks.ToList();
-            return PartialView("~/Views/Tasks/Delete.cshtml", tasklist[id]);
+            return PartialView("~/Views/Tasks/Delete.cshtml", tasklist.First(i => i.ID == id));
         }
 
         [HttpGet]

@@ -29,14 +29,18 @@ calendarDemoApp.controller('CalendarCtrl', ['$scope', '$http', 'uiCalendarConfig
 
     //push personal events onto the actual calendar
     angular.forEach($scope.tasks, function (value) {
-        $scope.events.push({
+        var event = {
             title: value.summary,
             description: value.description,
             start: new Date(value.createdDate),
             end: new Date(value.dueDate),
             allDay: true,
-            id: value.id
-        });
+            id: value.id,
+            isPrivate: value.isPrivate
+        };
+        if (event.isPrivate) event.className = 'privateEvent';
+
+        $scope.events.push(event);
     });
 
     //configure calendar
@@ -82,19 +86,16 @@ function createEvent () {
 //jQuery event for editting the event
 //used for personal events exclusively
 function editEvent(id) {
-    id--;
     console.log("editEvent called " + id)
     var $detailDiv = $('#calPage'),
-        url = "/Tasks/GetEdit/" + id,
-        data = { id: id };
+        url = "/Tasks/GetEdit/" + id;
 
     $.get(url, function (data) {
         $detailDiv.replaceWith(data);
     }).fail(function (error) {
         console.log(error)
         });
-
-    $detailDiv.load();
+    
 }
 
 //jQuery event for detailing the event
