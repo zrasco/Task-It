@@ -199,7 +199,8 @@ namespace TaskItSite.Data
             var Tasks = new Models.Task[]
             {
                 new Models.Task { ApplicationUserId = dummyUserList[2].Id, CreatedDate = DateTime.Now.AddDays(2), DueDate = DateTime.Now.AddDays(2.1),   Summary = "Come to my event at CBC 237" },
-                new Models.Task { ApplicationUserId = dummyUserList[5].Id, CreatedDate = DateTime.Now.AddDays(5), DueDate = DateTime.Now.AddDays(10),   Summary = "Workout plan to prepare for next film: https://www.muscleandfitness.com/workouts/workout-routines/complete-mf-beginners-training-guide-0" },
+                new Models.Task { ApplicationUserId = dummyUserList[5].Id, CreatedDate = DateTime.Now.AddDays(5), DueDate = DateTime.Now.AddDays(10),   Summary = "Workout plan to prepare for next film: https://www.muscleandfitness.com/workouts/workout-routines/complete-mf-beginners-training-guide-0" }
+            };
 
             foreach (Models.Task task in Tasks)
             {
