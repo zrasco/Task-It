@@ -14,6 +14,10 @@
 
   <!-- Actual calendar stuff -->
   <script type="text/javascript" src="~/js/calendar.js"></script>
+  <script>
+      //Load events from server
+      var personalRawData = @Html.Raw(Json.Serialize(Model));
+  </script>
 </head>
 
 <body>
@@ -81,16 +85,16 @@
                         }
                     </div>
 
-                    <div id="calendar" ui-calendar="uiConfig.calendar" ng-model="eventSources" ng-show="viewType"> </div>
-                    <button>Create Task</button> 
+                    <div id="calendar" ui-calendar="uiConfig.calendar" ng-model="eventSources" ng-show="viewType"> </div> 
 
                 </div>
                 <div class="col-xs">
                     <div id="calPage"></div>
-                    </div>
                 </div>
-        </div>
+             </div>
+        </div>    
     </div>
+    <button id="createTask" class="btn">Create Task</button>
 
     <script>
         function UpdateCustomer(elem) {
@@ -143,11 +147,32 @@
             }
     </script>
 
-    <script>
-         //Load events from server
-            var personalRawData = @Html.Raw(Json.Serialize(Model));
-    </script>
 
+    <script>
+            $("#createTask").click(function () {
+                var $detailDiv = $('#calPage'),
+                    url = "/Tasks/GetCreate";
+
+                $.get(url, function (data) {
+                    $detailDiv.replaceWith(data);
+                }).fail(function (error) {
+                    console.log(error)
+                });               
+            }
+            );
+
+            $("#deleteButton").click(function ( id ) {
+                var $detailDiv = $('#calPage'),
+                    url = "/Tasks/GetCreate/" + id;
+
+                $.get(url, function (data) {
+                    $detailDiv.replaceWith(data);
+                }).fail(function (error) {
+                    console.log(error)
+                });                
+            }
+            );
+    </script>
     </body>
 
   <footer>

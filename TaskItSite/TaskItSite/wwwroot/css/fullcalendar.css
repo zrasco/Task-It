@@ -1493,6 +1493,24 @@ be a descendant of the grid when it is being dragged.
 	background-color: #eee;
 }
 
+/*calendar Class colors*/
+.privateEvent,
+.privateEvent div,
+.privateEvent span {
+    background-color: #923877;
+    border-color: #923877;
+    color: white;
+}
+
+.subscribedEvent,
+.subscribedEvent div,
+.subscribedEvent span {
+    background-color: #923877;
+    border-color: #923877;
+    color: white;
+}
+
+
 /*Basil's CSS*/
 button.accordion {
     background-color: #eee;
