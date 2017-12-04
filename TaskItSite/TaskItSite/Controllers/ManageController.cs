@@ -542,7 +542,9 @@ namespace TaskItSite.Controllers
             await _userManager.SetTwoFactorEnabledAsync(user, true);
             _logger.LogInformation("User with ID {UserId} has enabled 2FA with an authenticator app.", user.Id);
 
+
             List<GlobalAchievement> globalAchievementList = _appDbContext.GlobalAchievements.ToList();
+            _appDbContext.Entry(user).Collection(x => x.Achivements).Load();
             user.AddUserAchievement(globalAchievementList, "Added 2 factor authentication!");
             var setResult = await _userManager.UpdateAsync(user);
             return RedirectToAction(nameof(GenerateRecoveryCodes));

@@ -75,7 +75,7 @@ namespace TaskItSite.Models
         {
             // Assumes global achievements are added already
             GlobalAchievement ga = globalAchievementlList.Where(x => x.Name == achievementName).SingleOrDefault();
-            UserAchievement ua = this.Achivements.Where(x => x.GlobalAchievementID == ga.GlobalAchievementID).SingleOrDefault();
+            UserAchievement ua = this.Achivements.Where(x => x.GlobalAchievementID == ga.GlobalAchievementID).FirstOrDefault();
 
             if (ua == null)
             {

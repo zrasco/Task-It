@@ -19,6 +19,8 @@ namespace TaskItSite.Models
         public bool IsPin { get; set; }
         public string ApplicationUserId { get; set; }
         public bool IsActive { get; set; }
+
+        [Display(Name = "Private task")]
         public bool IsPrivate { get; set; }
     }
 }

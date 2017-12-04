@@ -29,15 +29,11 @@
                                     </div>
                                     @Html.HiddenFor(x => x.SubscriptionWrapperList[i].SubscribedUser)
                                     @Html.HiddenFor(x => x.SubscriptionWrapperList[i].SubscribedUserID)
-                                </div>
-                                <div class="col-xs-1">
-                                    <div>
-                                        @Html.CheckBoxFor(x => x.SubscriptionWrapperList[i].IsSubscribed, new { @class = "checkbox box" 
-                                       @*,onclick = "UpdateCustomer(this)",
-                                       data_subid = Model.SubscriptionWrapperList[i].SubscribedUserID*@
-                                   } )
+                                    <div class="col-xs-1">
+                                        @Html.CheckBoxFor(x => x.SubscriptionWrapperList[i].IsSubscribed)
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     }

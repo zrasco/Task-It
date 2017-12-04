@@ -145,7 +145,7 @@ namespace TaskItSite.Controllers
                             // Add this to feed
                             postFI.Occured = post.PostedTime;
                             postFI.ItemType = FeedItemType.Post;
-                            postFI.Text = "Post: " + post.Text;
+                            postFI.Text = post.Text;
                             postFI.Postid = post.PostID;
 
                             model.FeedItems.Add(postFI);
@@ -164,7 +164,7 @@ namespace TaskItSite.Controllers
                             // Add this to feed
                             acFI.Occured = (DateTime)ua.AchievedTime;
                             acFI.ItemType = FeedItemType.Achievement;
-                            acFI.Text = "Achieved: " + ua.GlobalAchievement.Name;
+                            acFI.Text = ua.GlobalAchievement.Name;
 
                             model.FeedItems.Add(acFI);
                         }
@@ -181,7 +181,7 @@ namespace TaskItSite.Controllers
                             // Add this to feed
                             taskFI.Occured = (DateTime)task.CreatedDate;
                             taskFI.ItemType = FeedItemType.Task;
-                            taskFI.Text = "Task created: " + task.Summary;
+                            taskFI.Text = task.Summary;
                             taskFI.Taskid = task.ID;
                             model.FeedItems.Add(taskFI);
                         }
@@ -533,18 +533,25 @@ namespace TaskItSite.Controllers
         {
             List<GlobalAchievement> globalAchievementList = _appDbContext.GlobalAchievements.ToList();
             var currentUser = await GetCurrentUserAsync();
+            
 
             var task = _appDbContext.Tasks.First(x => x.ID == id);
-            var tassk = new Models.Task();
-            tassk.ApplicationUserId = currentUser.Id;
-            tassk.Summary = task.Summary;
-            tassk.Description = task.Description;
+            var taskUser = _appDbContext.Users.Where(x => x.Id == task.ApplicationUserId).SingleOrDefault();
+            var tassk = new Models.Task
+            {
+                ApplicationUserId = currentUser.Id,
+                Summary = "(Cloned from " + taskUser.FullName + ") " + task.Summary,
+                Description = task.Description,
+                CreatedDate = task.CreatedDate,
+                DueDate = task.DueDate,
+                IsActive = task.IsActive
+            };
             _appDbContext.Tasks.Add(tassk);
-            
+
+            _appDbContext.Entry(currentUser).Collection(x => x.Achivements).Load();
             currentUser.AddUserAchievement(globalAchievementList, "Cloned 1 task!");
             
-                await _appDbContext.SaveChangesAsync();
-            
+            await _appDbContext.SaveChangesAsync();
             
             return RedirectToAction(nameof(Feed));
         }

@@ -24,22 +24,26 @@
         {
             var q = i;
             string bgcolor = "Khaki";
+            string feedTypeText = "";
             FeedItem feedItem = Model.FeedItems[i];
 
             switch (feedItem.ItemType)
             {
                 case FeedItemType.Achievement:
                     {
+                        feedTypeText = "earned an achievement";
                         bgcolor = "Aquamarine";
                         break;
                     }
                 case FeedItemType.Task:
                     {
+                        feedTypeText = "created a task";
                         bgcolor = "AntiqueWhite";
                         break;
                     }
                 case FeedItemType.Post:
                     {
+                        feedTypeText = "posted";
                         bgcolor = "BurlyWood";
                         break;
                     }
@@ -54,28 +58,43 @@
 
             <p></p>
 
-            <div style="background-color: @bgcolor;white-space: pre-wrap; padding:5px; padding-left:8px"><img src="@feedItem.ImageData" width="20" height="20" /> @Html.Label(feedItem.FromUser.FullName) on @feedItem.Occured   <a style="font-size:80%" asp-controller="Home" asp-action="SubDelete" asp-route-subscribee="@feedItem.FromUser.Id">Unsubscribe</a>
+            if (Model.CurrentUser == feedItem.FromUser) {                <div style="background-color: @bgcolor;white-space: pre-wrap; padding:5px; padding-left:8px"> <img src="@feedItem.ImageData" width="20" height="20" /> @Html.Label(feedItem.FromUser.FullName) @feedTypeText on @feedItem.Occured
 @feedItem.Text
- @if (feedItem.Taskid != null)
+@if (feedItem.Taskid != null)
 {<button id="add_butt-@q" onclick="ClonedAchieve(@feedItem.Taskid,@q)">Add</button>}
-@if (feedItem.ItemType == FeedItemType.Post && feedItem.FromUser.Id == Model.CurrentUser.Id){<a asp-action="PostDelete" asp-route-id="@feedItem.Postid">Delete</a>}</div>
+@if (feedItem.ItemType == FeedItemType.Post && feedItem.FromUser.Id == Model.CurrentUser.Id)
+{<a asp-action="PostDelete" asp-route-id="@feedItem.Postid">Delete</a>}
+</div>
+            }
+            else
+            {
+                <div style="background-color: @bgcolor;white-space: pre-wrap; padding:5px; padding-left:8px"><img src="@feedItem.ImageData" width="20" height="20" /> @Html.Label(feedItem.FromUser.FullName) @feedTypeText on @feedItem.Occured   <a style="font-size:80%" asp-controller="Home" asp-action="SubDelete" asp-route-subscribee="@feedItem.FromUser.Id">Unsubscribe</a>
+@feedItem.Text
+@if (feedItem.Taskid != null)
+{<button id="add_butt-@q" onclick="ClonedAchieve(@feedItem.Taskid,@q)">Add</button>}
+@if (feedItem.ItemType == FeedItemType.Post && feedItem.FromUser.Id == Model.CurrentUser.Id)
+{<a asp-action="PostDelete" asp-route-id="@feedItem.Postid">Delete</a>}
+</div>
+            }
+
         } }
 
 
-  
+
 @*</div>*@
 
 <script>
-    
-
     function ClonedAchieve(elem,q) {
-
+        document.getElementById("add_butt-" + q).innerHTML = "Adding...";
+        document.getElementById("add_butt-" + q).disabled = true;
+        document.getElementById("add_butt-" + q).style.color = "gray";
             $.ajax({
                 url: '@Url.Action("ClonedTask", "Home")',
             data: { id: elem },
         }).done(function () {
             document.getElementById("add_butt-"+q).innerHTML = "Added";
-            document.getElementById("add_butt-"+q).disabled = true;
+            
+            location.reload()
         });
 
     }

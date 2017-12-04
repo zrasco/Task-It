@@ -160,7 +160,9 @@ namespace TaskItSite.Controllers
                 _context.Add(task);
                 await _context.SaveChangesAsync();
 
-                if(currentUser.TasksCreatedCount == 1)
+                _context.Entry(currentUser).Collection(x => x.Achivements).Load();
+
+                if (currentUser.TasksCreatedCount == 1)
                 {
                     currentUser.AddUserAchievement(globalAchievementList, "Created 1 task!");
                 }
@@ -292,7 +294,9 @@ namespace TaskItSite.Controllers
                 }
                 _context.Update(task);
 
-                if(currentUser.TasksCompletedCount == 1)
+                _context.Entry(currentUser).Collection(x => x.Achivements).Load();
+
+                if (currentUser.TasksCompletedCount == 1)
                 {
                     currentUser.AddUserAchievement(globalAchievementList, "Completed 1 task!");
                 }
