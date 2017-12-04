@@ -273,15 +273,15 @@ namespace TaskItSite.Data
                 new Models.Task { ApplicationUserId = dummyUserList[5].Id, CreatedDate = DateTime.Now.AddDays(-2), DueDate = DateTime.Now.AddDays(1),   Summary = "Workout plan to prepare for next film: https://www.muscleandfitness.com/workouts/workout-routines/complete-mf-beginners-training-guide-0" },
                 new Models.Task { ApplicationUserId = dummyUserList[7].Id, CreatedDate = DateTime.Now.AddDays(-4), DueDate = DateTime.Now.AddDays(1),   Summary = "Filming just finished for Avengers: Infinity War, watch the trailer here https://www.youtube.com/watch?v=6ZfuNTqbHE8" },
                 new Models.Task { ApplicationUserId = dummyUserList[8].Id, CreatedDate = DateTime.Now.AddDays(-6), DueDate = DateTime.Now.AddDays(3),   Summary = "Read The Hammer: an American Hero By Harold D. Edmunds by Due Date" },
-                new Models.Task { ApplicationUserId = dummyUserList[11].Id, CreatedDate = DateTime.Now.AddDays(-3), DueDate = DateTime.Now.AddDays(1),   Summary = "Cruch time: Finish New Single" },
+                new Models.Task { ApplicationUserId = dummyUserList[11].Id, CreatedDate = DateTime.Now.AddDays(-3), DueDate = DateTime.Now.AddDays(1),   Summary = "Crunch time: Finish New Single" },
                 new Models.Task { ApplicationUserId = dummyUserList[10].Id, CreatedDate = DateTime.Now.AddDays(-2), DueDate = DateTime.Now.AddDays(10),   Summary = "City wide outlet checks this month, Contact your local electrician or call (702) 455-7311 for more details" },
                 new Models.Task { ApplicationUserId = dummyUserList[12].Id, CreatedDate = DateTime.Now.AddDays(-2), DueDate = DateTime.Now.AddDays(1),   Summary = "Weekend special to see Criss Angel Mindfreak at the Luxor Hotel & Casino" },
                 new Models.Task { ApplicationUserId = dummyUserList[14].Id, CreatedDate = DateTime.Now.AddDays(-3), DueDate = DateTime.Now.AddDays(1),   Summary = "We've got special deals at Jardin Cannabis Dispensary, come check it out" }
-
             };
 
             foreach (Models.Task task in Tasks)
             {
+                task.StartDate = task.CreatedDate;
                 context.Tasks.Add(task);
             }
 

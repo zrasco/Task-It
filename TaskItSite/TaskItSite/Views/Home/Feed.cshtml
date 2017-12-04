@@ -68,7 +68,7 @@
             }
             else
             {
-                <div style="background-color: @bgcolor;white-space: pre-wrap; padding:5px; padding-left:8px"><img src="@feedItem.ImageData" width="20" height="20" /> @Html.Label(feedItem.FromUser.FullName) @feedTypeText on @feedItem.Occured   <a style="font-size:80%" asp-controller="Home" asp-action="SubDelete" asp-route-subscribee="@feedItem.FromUser.Id">Unsubscribe</a>
+                <div style="background-color: @bgcolor;white-space: pre-wrap; padding:5px; padding-left:8px"><img src="@feedItem.ImageData" width="20" height="20" /> @Html.Label(feedItem.FromUser.FullName) @feedTypeText on @feedItem.Occured   <a style="font-size:80%" asp-controller="Home" asp-action="SubDelete" asp-route-subscribee="@feedItem.FromUser.Id">Unsubscribe from @feedItem.FromUser.FullName</a>
 @feedItem.Text
 @if (feedItem.Taskid != null)
 {<button id="add_butt-@q" onclick="ClonedAchieve(@feedItem.Taskid,@q)">Add</button>}

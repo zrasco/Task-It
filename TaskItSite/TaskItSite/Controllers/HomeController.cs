@@ -413,10 +413,10 @@ namespace TaskItSite.Controllers
 
             if (!setResult.Succeeded)
             {
-                throw new ApplicationException($"Unexpected error occurred setting achievements for user with ID '{user.Id}'.");
+                throw new ApplicationException($"Unexpected error occurred setting subscriptions for user with ID '{user.Id}'.");
             }
 
-            StatusMessage = "Your settings have been updated";
+            StatusMessage = "Your subscriptions have been updated";
             return RedirectToAction(nameof(Subscriptions));
         }
 
@@ -543,6 +543,7 @@ namespace TaskItSite.Controllers
                 Summary = "(Cloned from " + taskUser.FullName + ") " + task.Summary,
                 Description = task.Description,
                 CreatedDate = task.CreatedDate,
+                StartDate = task.StartDate,
                 DueDate = task.DueDate,
                 IsActive = task.IsActive
             };

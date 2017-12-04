@@ -35,7 +35,7 @@ calendarDemoApp.controller('CalendarCtrl', ['$scope', '$http', 'uiCalendarConfig
         var event = {
             title: value.summary,
             description: value.description,
-            start: new Date(value.createdDate),
+            start: new Date(value.startDate),
             end: new Date(value.dueDate),
             allDay: true,
             id: value.id,

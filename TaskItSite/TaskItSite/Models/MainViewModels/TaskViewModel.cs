@@ -9,7 +9,7 @@ namespace TaskItSite.Models.MainViewModels
     public class TaskWrapper
     {
         public Task Task { get; set; }
-        public bool isTask {get; set;}
+        public bool isTask { get; set; }
     }
     public class TaskViewModel
     {

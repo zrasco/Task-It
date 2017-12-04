@@ -51,31 +51,39 @@ namespace TaskItSite.Controllers
         public ActionResult GetDetails( int id  )
         {
             //uses previously made get
-            var tasklist = _context.Tasks.ToList();
-            return PartialView("~/Views/Tasks/Details.cshtml", tasklist.First(i => i.ID == id));
+            return PartialView("~/Views/Tasks/Details.cshtml", _context.Tasks.First(i => i.ID == id));
         }
 
         [HttpGet]
         //GET: Partial view of the task edit
         public ActionResult GetEdit( int id)
         {
-            var tasklist = _context.Tasks.ToList();
-            return PartialView("~/Views/Tasks/Edit.cshtml", tasklist.First(i => i.ID == id));
+            return PartialView("~/Views/Tasks/Edit.cshtml", _context.Tasks.First(i => i.ID == id));
         }
 
         [HttpGet]
         //GET: Partial view of task delete
         public ActionResult GetDelete(int id)
         {
-            var tasklist = _context.Tasks.ToList();
-            return PartialView("~/Views/Tasks/Delete.cshtml", tasklist.First(i => i.ID == id));
+            return PartialView("~/Views/Tasks/Delete.cshtml", _context.Tasks.First(i => i.ID == id));
         }
 
         [HttpGet]
         //GET: Partial view of create task
-        public ActionResult GetCreate()
+        public async Task<IActionResult> GetCreate()
         {
-            return PartialView("~/Views/Tasks/Create.cshtml", new TaskItSite.Models.Task());
+            var currentUser = await GetCurrentUserAsync();
+
+            Models.Task newTask = new Models.Task
+            {
+                CreatedDate = DateTime.Now,
+                StartDate = DateTime.Now,
+                DueDate = DateTime.Now.AddDays(1),
+                ApplicationUserId = currentUser.Id,
+                IsActive = true
+            };
+
+            return PartialView("~/Views/Tasks/Create.cshtml", newTask);
         }
 
         // GET: Tasks/Details/5
@@ -99,6 +107,7 @@ namespace TaskItSite.Controllers
         // GET: Tasks/Create
         public IActionResult Create()
         {
+
             return View();
         }
 
@@ -145,7 +154,7 @@ namespace TaskItSite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,CreatedDate,DueDate,Summary,Description,IsPin,UserID,IsPrivate")] Models.Task task)
+        public async Task<IActionResult> Create([Bind("ID,CreatedDate,StartDate,DueDate,Summary,Description,UserID,IsPrivate")] Models.Task task)
         {
             var currentUser = await GetCurrentUserAsync();
             List<GlobalAchievement> globalAchievementList = _context.GlobalAchievements.ToList();
@@ -214,7 +223,7 @@ namespace TaskItSite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,CreatedDate,DueDate,Summary,Description,IsPin,IsPrivate")] Models.Task task)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,CreatedDate,StartDate,DueDate,Summary,Description,IsPin,IsPrivate")] Models.Task task)
         {
             if (id != task.ID)
             {

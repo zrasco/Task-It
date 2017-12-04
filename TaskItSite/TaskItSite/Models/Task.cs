@@ -12,12 +12,17 @@ namespace TaskItSite.Models
         public Task() { }
 
         public int ID { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public System.DateTime DueDate { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime DueDate { get; set; }
+
+        [Required]
         public string Summary { get; set; }
+
         public string Description { get; set; }
-        public bool IsPin { get; set; }
         public string ApplicationUserId { get; set; }
+
+        [Display(Name = "Active task")]
         public bool IsActive { get; set; }
 
         [Display(Name = "Private task")]

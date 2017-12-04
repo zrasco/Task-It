@@ -626,7 +626,7 @@ namespace TaskItSite.Controllers
         {
             return string.Format(
                 AuthenicatorUriFormat,
-                _urlEncoder.Encode("TaskItSite"),
+                _urlEncoder.Encode("Task-It!"),
                 _urlEncoder.Encode(email),
                 unformattedKey);
         }

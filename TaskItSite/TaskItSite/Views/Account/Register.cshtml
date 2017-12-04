@@ -1,4 +1,5 @@
 ﻿@model RegisterViewModel
+@inject SignInManager<ApplicationUser> SignInManager
 @{
     ViewData["Title"] = "Register";
 }
@@ -33,6 +34,53 @@
             </div>
             <button type="submit" class="btn btn-default">Register</button>
         </form>
+    </div>
+    <div class="col-md-6 col-md-offset-2">
+        <section>
+            <h4>Or, register with your social media account!</h4>
+            <hr />
+            @{
+                var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                if (loginProviders.Count == 0)
+                {
+                    <div>
+                        <p>
+                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
+                            for details on setting up this ASP.NET application to support logging in via external services.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <form asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                        <div>
+                            <p>
+                                @foreach (var provider in loginProviders)
+                                {
+                                    // zrasco - Tried doing this with a generic but the URI has relative pathname issues with using ~ in a variable. Putting if/else if just to get it done.
+                                    if (provider.Name == "Google")
+                                    {
+                                        <button type="submit" class="btn btn-default" style="padding:0; border: none; background: none" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><img src="~/images/btn_signin_google.png" /></button>
+                                    }
+                                    else if (provider.Name == "Facebook")
+                                    {
+                                        <button type="submit" class="btn btn-default" style="padding:0; border: none; background: none" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><img src="~/images/btn_signin_facebook.png" /></button>
+                                    }
+                                    else if (provider.Name == "Twitter")
+                                    {
+                                        <button type="submit" class="btn btn-default" style="padding:0; border: none; background: none" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><img src="~/images/btn_signin_twitter.png" /></button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" class="btn btn-default" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
+                                    }
+                                }
+                            </p>
+                        </div>
+                    </form>
+                }
+            }
+        </section>
     </div>
 </div>
 
