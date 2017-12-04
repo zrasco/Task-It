@@ -5,7 +5,20 @@
     ViewData["Title"] = "Feed";
 }
 @*div ng-app="FeedModule" ng-contoller="FeedCtrl">*@
+
+
+
     <h2>Feed for @Model.CurrentUser.FullName</h2>
+
+<form method="post">
+    <div class="form-group" style="margin-top:10px">
+        <label asp-for="MyPostText" class="control-label"></label>
+        <input asp-for="MyPostText" class="form-control" />
+        @Html.Partial("~/Views/Manage/_StatusMessage.cshtml", Model.StatusMessage)
+        <button type="submit" class="btn btn-default">Submit post!</button>
+    </div>
+</form>
+
     @{
         for (var i = 0; i < Model.FeedItems.Count; i++)
         {
@@ -40,21 +53,16 @@
 
 
             <p></p>
-            <pre style="background-color: @bgcolor">
-<img src="@feedItem.ImageData" width="20" height="20" /> @Html.Label(feedItem.FromUser.FullName) on @feedItem.Occured
+
+            <div style="background-color: @bgcolor;white-space: pre-wrap; padding:5px; padding-left:8px"><img src="@feedItem.ImageData" width="20" height="20" /> @Html.Label(feedItem.FromUser.FullName) on @feedItem.Occured   <a style="font-size:80%" asp-controller="Home" asp-action="SubDelete" asp-route-subscribee="@feedItem.FromUser.Id">Unsubscribe</a>
 @feedItem.Text
-@if (feedItem.Taskid != null) {<button id="add_butt-@q" onclick="ClonedAchieve(@feedItem.Taskid,@q)">Add</button>}</pre>
-            } }
+ @if (feedItem.Taskid != null)
+{<button id="add_butt-@q" onclick="ClonedAchieve(@feedItem.Taskid,@q)">Add</button>}
+@if (feedItem.ItemType == FeedItemType.Post && feedItem.FromUser.Id == Model.CurrentUser.Id){<a asp-action="PostDelete" asp-route-id="@feedItem.Postid">Delete</a>}</div>
+        } }
 
 
-    <form method="post">
-        <div class="form-group" style="margin-top:100px">
-            <label asp-for="MyPostText" class="control-label"></label>
-            <input asp-for="MyPostText" class="form-control" />
-            @Html.Partial("~/Views/Manage/_StatusMessage.cshtml", Model.StatusMessage)
-            <button type="submit" class="btn btn-default">Submit post!</button>
-        </div>
-    </form>
+  
 @*</div>*@
 
 <script>

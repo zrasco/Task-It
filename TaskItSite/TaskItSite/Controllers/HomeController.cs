@@ -77,7 +77,7 @@ namespace TaskItSite.Controllers
         }
 
         [Authorize]
-        [HttpGet]
+        
         public async Task<IActionResult> Feed()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -146,6 +146,7 @@ namespace TaskItSite.Controllers
                             postFI.Occured = post.PostedTime;
                             postFI.ItemType = FeedItemType.Post;
                             postFI.Text = "Post: " + post.Text;
+                            postFI.Postid = post.PostID;
 
                             model.FeedItems.Add(postFI);
 
@@ -175,7 +176,7 @@ namespace TaskItSite.Controllers
                     {
                         FeedItem taskFI = new FeedItem(baseFI);
 
-                        if (task.CreatedDate > DateTime.Now.AddDays(-7))
+                        if (task.CreatedDate > DateTime.Now.AddDays(-7) && task.IsPrivate == false)
                         {
                             // Add this to feed
                             taskFI.Occured = (DateTime)task.CreatedDate;
@@ -276,6 +277,34 @@ namespace TaskItSite.Controllers
 
             return View(model);
         }
+
+      
+        public async Task<ActionResult> SubDelete(string subscribee)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            Subscription targetSubscription = _appDbContext.Subscriptions.Where(x => x.SubscribingToUserID == subscribee && x.SubscribingUserID == user.Id).SingleOrDefault();
+            
+                _appDbContext.Subscriptions.Remove(targetSubscription);
+                await _appDbContext.SaveChangesAsync();
+            
+
+            return RedirectToAction("Feed");
+        }
+
+        public async Task<ActionResult> PostDelete(int? id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            Post targetPost = _appDbContext.Posts.Where(x => x.PostID == id).SingleOrDefault();
+
+            _appDbContext.Posts.Remove(targetPost);
+            await _appDbContext.SaveChangesAsync();
+
+
+            return RedirectToAction("Feed");
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> Subscriptions()

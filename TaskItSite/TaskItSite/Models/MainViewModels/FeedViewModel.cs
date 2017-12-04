@@ -27,6 +27,7 @@ namespace TaskItSite.Models.MainViewModels
         public DateTime Occured { get; set; }
         public FeedItemType ItemType { get; set; }
         public int? Taskid { get; set; }
+        public int? Postid { get; set; }
     }
     public class FeedViewModel
     {
