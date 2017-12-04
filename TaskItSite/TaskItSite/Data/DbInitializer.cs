@@ -217,7 +217,7 @@ namespace TaskItSite.Data
 
                 new Post { ApplicationUserID = dummyUserList[4].Id, PostedTime = DateTime.Now.AddDays(-3), Text = "Thinking of Batman Forever....ugh!" },
                 new Post { ApplicationUserID = dummyUserList[4].Id, PostedTime = DateTime.Now.AddDays(-2), Text = "My tequila company is doing great!" },
-                new Post { ApplicationUserID = dummyUserList[4].Id, PostedTime = DateTime.Now.AddDays(-1), Text = "I need some food!!" },
+                new Post { ApplicationUserID = dummyUserList[4].Id, PostedTime = DateTime.Now.AddDays(-5), Text = "My favorite winter Margarita . 1oz reposado, 1oz mezcal, 1oz lime juice, 0.75oz simple syrup, 1 egg white" },
 
                 new Post { ApplicationUserID = dummyUserList[5].Id, PostedTime = DateTime.Now.AddDays(-3), Text = "I love being the Fresh Prince of Bel-Air!" },
                 new Post { ApplicationUserID = dummyUserList[5].Id, PostedTime = DateTime.Now.AddDays(-2), Text = "I loved that movie where I was in the end of the world. What was it called?" },
@@ -237,7 +237,7 @@ namespace TaskItSite.Data
 
                 new Post { ApplicationUserID = dummyUserList[9].Id, PostedTime = DateTime.Now.AddDays(-3), Text = "Look under your chairs! Just kidding, haha" },
                 new Post { ApplicationUserID = dummyUserList[9].Id, PostedTime = DateTime.Now.AddDays(-2), Text = "Loving my new mansion!" },
-                new Post { ApplicationUserID = dummyUserList[9].Id, PostedTime = DateTime.Now.AddDays(-1), Text = "I lost 50lbs today" },
+                new Post { ApplicationUserID = dummyUserList[9].Id, PostedTime = DateTime.Now.AddDays(-6), Text = "Thanks again Jaon Barthel for helping me write Oprah: An Autobiography!" },
 
                 new Post { ApplicationUserID = dummyUserList[10].Id, PostedTime = DateTime.Now.AddDays(-3), Text = "Put out a 5-alarm fire over at Mandalay bay today" },
                 new Post { ApplicationUserID = dummyUserList[10].Id, PostedTime = DateTime.Now.AddDays(-2), Text = "We'll be at the grocery store buying food today, ladies!" },
@@ -269,8 +269,15 @@ namespace TaskItSite.Data
 
             var Tasks = new Models.Task[]
             {
-                new Models.Task { ApplicationUserId = dummyUserList[2].Id, CreatedDate = DateTime.Now.AddDays(2), DueDate = DateTime.Now.AddDays(2.1),   Summary = "Come to my event at CBC 237" },
-                new Models.Task { ApplicationUserId = dummyUserList[5].Id, CreatedDate = DateTime.Now.AddDays(5), DueDate = DateTime.Now.AddDays(10),   Summary = "Workout plan to prepare for next film: https://www.muscleandfitness.com/workouts/workout-routines/complete-mf-beginners-training-guide-0" }
+                new Models.Task { ApplicationUserId = dummyUserList[2].Id, CreatedDate = DateTime.Now.AddDays(-6), DueDate = DateTime.Now.AddDays(2),   Summary = "Come to my event at CBC 237" },
+                new Models.Task { ApplicationUserId = dummyUserList[5].Id, CreatedDate = DateTime.Now.AddDays(-2), DueDate = DateTime.Now.AddDays(1),   Summary = "Workout plan to prepare for next film: https://www.muscleandfitness.com/workouts/workout-routines/complete-mf-beginners-training-guide-0" },
+                new Models.Task { ApplicationUserId = dummyUserList[7].Id, CreatedDate = DateTime.Now.AddDays(-4), DueDate = DateTime.Now.AddDays(1),   Summary = "Filming just finished for Avengers: Infinity War, watch the trailer here https://www.youtube.com/watch?v=6ZfuNTqbHE8" },
+                new Models.Task { ApplicationUserId = dummyUserList[8].Id, CreatedDate = DateTime.Now.AddDays(-6), DueDate = DateTime.Now.AddDays(3),   Summary = "Read The Hammer: an American Hero By Harold D. Edmunds by Due Date" },
+                new Models.Task { ApplicationUserId = dummyUserList[11].Id, CreatedDate = DateTime.Now.AddDays(-3), DueDate = DateTime.Now.AddDays(1),   Summary = "Cruch time: Finish New Single" },
+                new Models.Task { ApplicationUserId = dummyUserList[10].Id, CreatedDate = DateTime.Now.AddDays(-2), DueDate = DateTime.Now.AddDays(10),   Summary = "City wide outlet checks this month, Contact your local electrician or call (702) 455-7311 for more details" },
+                new Models.Task { ApplicationUserId = dummyUserList[12].Id, CreatedDate = DateTime.Now.AddDays(-2), DueDate = DateTime.Now.AddDays(1),   Summary = "Weekend special to see Criss Angel Mindfreak at the Luxor Hotel & Casino" },
+                new Models.Task { ApplicationUserId = dummyUserList[14].Id, CreatedDate = DateTime.Now.AddDays(-3), DueDate = DateTime.Now.AddDays(1),   Summary = "We've got special deals at Jardin Cannabis Dispensary, come check it out" }
+
             };
 
             foreach (Models.Task task in Tasks)
