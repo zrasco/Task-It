@@ -542,7 +542,7 @@ namespace TaskItSite.Controllers
                 ApplicationUserId = currentUser.Id,
                 Summary = "(Cloned from " + taskUser.FullName + ") " + task.Summary,
                 Description = task.Description,
-                CreatedDate = task.CreatedDate,
+                CreatedDate = DateTime.Now,
                 StartDate = task.StartDate,
                 DueDate = task.DueDate,
                 IsActive = task.IsActive
