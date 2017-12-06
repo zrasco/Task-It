@@ -3,8 +3,125 @@
 @{
     ViewData["Title"] = "Subscriptions";
 }
-
+<style>
+    .checky {
+        width: 25px;
+        height: 25px;
+    }
+</style>
 <h2 align="center">Subscriptions</h2>
+<!--
+<input type="text" placeholder="Search.." id="name" name="name" style="
+    width: 90%;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    padding: 12px 10px 12px 10px;
+    "/>
+<button id="sbutt" type="submit">Search</button>
+    
+
+<form asp-action="Search" method="get">
+    <div class="form-actions no-color">
+        <p>
+            <input type="text" name="name"/>
+            <input type="submit" value="Search" class="btn btn-default" />
+        </p>
+    </div>
+</form>
+
+
+
+<div id="divEmp">
+   using (Ajax.BeginForm("CreateStudent", "GetStudents",
+                                          new AjaxOptions
+                                          {
+                                              HttpMethod = "Post",
+                                              UpdateTargetId = "dvCategoryResults"
+                                          }))
+</div>-->
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+@*{using (Ajax.BeginForm("EmployeeMaster", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divEmp" }))}
+using (Html.BeginForm("Search", "Home", FormMethod.Get))
+{
+    <div class="form-actions no-color">*@
+
+        <p>
+            <input type="text" placeholder="Search.." id="name" name="name" style="
+    width: 90%;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    padding: 12px 10px 12px 10px;
+    " />
+            <input id="searchButton" name="searchButton"type="submit" value="Search" class="btn btn-default" />
+        </p>
+
+<script>
+    $(function () {
+    $('#searchButton').click(function () {
+        $.ajax({
+            url: "@(Url.Action("Search"))",
+            type: "GET",
+            data: { name: $("#name").val() },
+            cache: false,
+            success: function (data) {
+                //Fill div with results
+                $("#sup").html(data);
+            },
+            error: function (xhr, status, error) {
+                alert(xhr.responseText);
+            }
+        });
+    });
+});
+    /*function proceed() {
+        var input = document.getElementById('name').value;
+         $.ajax({
+
+     type: "GET",
+     url: 'Url.Action("Search", "Home")',
+     data: { name: input },
+
+         success: function (data) {
+             // data is ur summary
+             $('#sup').html(data);
+         }
+         });
+         }
+    */
+</script>
+
+   @* </div>
+}
+*@
+
+<div id="sup"></div>
+
+<script>
+    var input = document.getElementById("name").value;
+    $("#sbutt").click(function () {
+       
+        var $detailDiv = $('#sup'),
+            url = "/Home/Search";
+
+        $.get(url, function (data) {
+            $detailDiv.replaceWith(data);
+        }).fail(function (error) {
+            console.log(error)
+        });
+    }
+    );
+</script>
 
 
 
@@ -35,7 +152,7 @@
                                     @Html.HiddenFor(x => x.SubscriptionWrapperList[i].SubscribedUser)
                                     @Html.HiddenFor(x => x.SubscriptionWrapperList[i].SubscribedUserID)
                                     <div class="col-xs-1">
-                                        @Html.CheckBoxFor(x => x.SubscriptionWrapperList[i].IsSubscribed)
+                                        @Html.CheckBoxFor(x => x.SubscriptionWrapperList[i].IsSubscribed, new { @class = "checky"})
                                     </div>
                                 </div>
 
@@ -47,21 +164,3 @@
         </tr>        
     </table>
 </form>
-
-<script>
-        function UpdateCustomer(elem) {
-
-            var isDone = $(elem).is(':checked');
-            var sid = $(elem).data('subid');
-
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("UpdateSubscriber", "Home")',
-                data: { check: isDone, subId: sid },
-                success: function (res) {
-                console.log(res);
-                }
-             });
-
-        }
-</script>

@@ -4,10 +4,17 @@
     ViewData["Title"] = "List";
 }
 
+
 <head>
+    <style>
+        .checky {
+            width: 25px;
+            height: 25px;
+        }
+    </style>
   <link href="~/css/fullcalendar.css" rel="stylesheet" />
   <!-- calendar dependencies -->
-  <script src="~/js/angular-sanitize.js"></script>
+  <script type="text/javascript" src="~/js/angular-sanitize.js"></script>
   <script type="text/javascript" src="~/js/moment.js"></script>
   <script type="text/javascript" src="~/js/fullcalendar.js"></script>
   <script type="text/javascript" src="~/js/gcal.js"></script>
@@ -80,18 +87,18 @@
                                 </div>
 
                             }
-                       
+
                         }
                     </div>
 
-                    <div id="calendar" ui-calendar="uiConfig.calendar" ng-model="eventSources" ng-show="viewType"> </div> 
+                    <div id="calendar" ui-calendar="uiConfig.calendar" ng-model="eventSources" ng-show="viewType"> </div>
 
                 </div>
                 <div class="col-xs">
                     <div id="calPage"></div>
                 </div>
              </div>
-        </div>    
+        </div>
     </div>
 
     <button id="createTask" class="btn">Create Task</button>
@@ -101,7 +108,7 @@
 
             var isDone = $(elem).is(':checked');
             var cid = $(elem).data('customerid');
-        
+
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("UpdateCustomer", "Tasks")',
@@ -157,7 +164,7 @@
                     $detailDiv.replaceWith(data);
                 }).fail(function (error) {
                     console.log(error)
-                });               
+                });
             }
             );
 
@@ -169,7 +176,7 @@
                     $detailDiv.replaceWith(data);
                 }).fail(function (error) {
                     console.log(error)
-                });                
+                });
             }
             );
     </script>

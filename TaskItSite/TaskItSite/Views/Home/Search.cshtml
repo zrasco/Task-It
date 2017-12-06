@@ -1,0 +1,70 @@
+﻿@using TaskItSite.Models.MainViewModels
+@model SubscriptionsViewModel
+<style>
+    .checky {
+        width: 25px;
+        height: 25px;
+    }
+</style>
+    <table style="width:100%;">
+        <tr>
+            <td>
+                <form method="post">
+                    <table style="width:100%;">
+                        <tr>
+                            <td>
+                                @Html.Partial("~/Views/Manage/_StatusMessage.cshtml", Model.StatusMessage)
+                                <button type="submit" class="btn btn-default">Update subscriptions</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @{
+                                    for (var i = 0; i < Model.SubscriptionWrapperList.Count; i++)
+                                    {
+                                        <div class="form-group ">
+                                            <div class="col-xs-12 hoverDiv" style="height: 55px">
+                                                <div class="col-xs-11">
+                                                    <div class="col-xs-2">
+                                                        <img class="img-circle imgSet" src="@Html.Raw(Model.SubscriptionWrapperList[i].SubscribedUser.ProfileImageURL)" />
+                                                    </div>
+                                                    <div class="col-xs-8 subscriberName">
+                                                        @Html.Label(Model.SubscriptionWrapperList[i].SubscribedUser.FullName)
+                                                    </div>
+                                                    @Html.HiddenFor(x => x.SubscriptionWrapperList[i].SubscribedUser)
+                                                    @Html.HiddenFor(x => x.SubscriptionWrapperList[i].SubscribedUserID)
+                                                    <div class="col-xs-1">
+                                                        @Html.CheckBoxFor(m => m.SubscriptionWrapperList[i].IsSubscribed, new
+                                                    {
+                                                       @class="checky"
+                                                      //  @onclick = "UpdateCustomer(this)",
+                                                       // subid = Model,
+                                                    })
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                </form>
+                </table>
+
+
+                <script>
+        function UpdateCustomer(elem) {
+
+            var isDone = $(elem).is(':checked');
+            var model = $(elem).data('subid');
+ $.ajax({
+     url: '@Url.Action("UpdateSubscriber", "Home")',
+     data: { check: isDone, model: model },
+        }).done(function () {
+            location.reload()
+        });
+
+        }
+                </script>
+

@@ -48,7 +48,9 @@ namespace TaskItSite
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
+                .UseStartup<Startup>().UseKestrel(options =>
+                {
+                    options.Limits.MinResponseDataRate = null;
+                }).Build();
     }
 }
