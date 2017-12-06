@@ -60,7 +60,7 @@ namespace TaskItSite.Models
                 case HomeScreen.Feed:
                     return "/Home/Feed";
                 case HomeScreen.Journal:
-                    return "/Home/Journal";
+                    return "/Tasks";
                 case HomeScreen.Subscriptions:
                     return "/Home/Subscriptions";
                 case HomeScreen.Achievements:
