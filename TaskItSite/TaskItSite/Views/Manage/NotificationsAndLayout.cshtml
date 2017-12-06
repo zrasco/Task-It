@@ -1,6 +1,6 @@
 ﻿@model NotificationsAndLayoutViewModel
 @{
-    ViewData["Title"] = "Notifications and Layout";
+    ViewData["Title"] = "Layout";
     ViewData.AddActivePage(ManageNavPages.NotificationsAndLayout);
 }
 
@@ -9,7 +9,7 @@
     <div class="col-md-6">
         <form method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
-            <h4>Notification settings</h4>
+            @*<h4>Notification settings</h4>
             
             <div class="form-group">
                 <div class="checkbox">
@@ -32,7 +32,7 @@
                         <input asp-for="@Model.TextOnMessage" id="emailOnFeedUpdate" /> @Html.DisplayNameFor(model => model.TextOnMessage)
                     </label>
                 </div>
-            </div>
+            </div>*@
             <h4>Layout settings</h4>
             <div class="form-group">
                 <label asp-for="@Model.HomeScreen"></label>

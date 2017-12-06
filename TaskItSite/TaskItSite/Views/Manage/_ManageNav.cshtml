@@ -6,7 +6,7 @@
 
 <ul class="nav nav-pills nav-stacked">
     <li class="@ManageNavPages.IndexNavClass(ViewContext)"><a asp-action="Index">Profile</a></li>
-    <li class="@ManageNavPages.NotificationsAndLayoutNavClass(ViewContext)"><a asp-action="NotificationsAndLayout">Notifications &amp; layout</a></li>
+    <li class="@ManageNavPages.NotificationsAndLayoutNavClass(ViewContext)"><a asp-action="NotificationsAndLayout">Layout</a></li>
     @if (hasExternalLogins)
     {
         <li class="@ManageNavPages.ExternalLoginsNavClass(ViewContext)"><a asp-action="ExternalLogins">External logins</a></li>
