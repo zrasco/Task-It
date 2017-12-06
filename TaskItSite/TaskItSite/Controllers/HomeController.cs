@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using TaskItSite.Data;
 using TaskItSite.Models.MainViewModels;
 using TaskItSite.Services;
+using Microsoft.AspNetCore.Hosting;
 
 namespace TaskItSite.Controllers
 { 
@@ -21,15 +22,18 @@ namespace TaskItSite.Controllers
         private readonly ApplicationDbContext _appDbContext = null;
         private readonly UserManager<ApplicationUser> _userManager = null;
         private readonly IImageCache _imageCache = null;
+        private readonly IHostingEnvironment _hostingEnvironment;
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         public HomeController(UserManager<ApplicationUser> userManager,
                                             ApplicationDbContext appDbContext,
-                                            IImageCache imageCache)
+                                            IImageCache imageCache,
+                                            IHostingEnvironment hostingEnvironment)
         {
             _userManager = userManager;
             _appDbContext = appDbContext;
             _imageCache = imageCache;
+            _hostingEnvironment = hostingEnvironment;
         }
         #endregion
           
@@ -78,7 +82,7 @@ namespace TaskItSite.Controllers
         }
 
         [Authorize]
-        
+        [DisableRequestSizeLimit]
         public async Task<IActionResult> Feed()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -122,13 +126,13 @@ namespace TaskItSite.Controllers
                         if (nextUser.ProfileImageURL == null)
                         // Use Task-It logo
                         {
-                            _imageCache.SetImage(nextUser.Id, "https://localhost:44395/images/logoattempt.png", true);
+                            _imageCache.SetImage(_hostingEnvironment, nextUser.Id, GetBaseUrl() + "/images/logoattempt.png", true);
                             baseFI.ImageData = _imageCache.GetImageEmbed(nextUser.Id);
                         }
                         else
                         // Use profile image. If it fails, will fall back to task-it logo
                         {
-                            _imageCache.SetImage(nextUser.Id, nextUser.ProfileImageURL,true);
+                            _imageCache.SetImage(_hostingEnvironment, nextUser.Id, nextUser.ProfileImageURL,true);
                             baseFI.ImageData = _imageCache.GetImageEmbed(nextUser.Id);
                         }
                     }
@@ -735,6 +739,17 @@ user.Subs.Add(toSub);
 
             StatusMessage = "Your settings have been updated";
             return RedirectToAction(nameof(Achievements));
+        }
+
+        public string GetBaseUrl()
+        {
+            var request = HttpContext.Request;
+
+            var host = request.Host.ToUriComponent();
+
+            var pathBase = request.PathBase.ToUriComponent();
+
+            return $"{request.Scheme}://{host}{pathBase}";
         }
     }
 }

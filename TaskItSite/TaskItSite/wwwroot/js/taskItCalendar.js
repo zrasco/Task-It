@@ -32,11 +32,14 @@ calendarDemoApp.controller('CalendarCtrl', ['$scope', '$http', 'uiCalendarConfig
 
     //push personal events onto the actual calendar
     angular.forEach($scope.tasks, function (value) {
+        var newEndDate = new Date(value.dueDate);
+        newEndDate.setDate(newEndDate.getDate() + 1);
+
         var event = {
             title: value.summary,
             description: value.description,
             start: new Date(value.startDate),
-            end: new Date(value.dueDate),
+            end: new Date(newEndDate),
             allDay: true,
             id: value.id,
             isPrivate: value.isPrivate

@@ -14,6 +14,8 @@ using TaskItSite.Services;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.DataProtection;
+using System.IO;
 
 namespace TaskItSite
 {
@@ -38,6 +40,10 @@ namespace TaskItSite
 
             // Set default login page
             services.ConfigureApplicationCookie(options => options.LoginPath = "/Account/Login");
+
+            services.AddDataProtection()
+                            .SetApplicationName("TaskItSite")
+                            .PersistKeysToFileSystem(new DirectoryInfo(@".\keys"));
 
             // Set up image cache
             services.AddSingleton<IImageCache>(new ImageCache());
