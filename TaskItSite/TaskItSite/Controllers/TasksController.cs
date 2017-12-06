@@ -42,7 +42,8 @@ namespace TaskItSite.Controllers
 
                 }
             }
-                return View(usertask);
+            usertask = usertask.OrderByDescending(x => x.DueDate).ToList();
+            return View(usertask);
         }
 
         

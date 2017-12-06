@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\js\angular-sanitize.js" />
-    <Content Remove="wwwroot\js\jquery-1.11.3.js" />
     <Content Remove="wwwroot\js\locale-all.js" />
   </ItemGroup>
 
@@ -23,6 +22,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="2.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Ajax" Version="3.2.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" PrivateAssets="All" />
   </ItemGroup>
 

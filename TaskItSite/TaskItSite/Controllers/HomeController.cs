@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TaskItSite.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
@@ -176,7 +177,7 @@ namespace TaskItSite.Controllers
                     {
                         FeedItem taskFI = new FeedItem(baseFI);
 
-                        if (task.CreatedDate > DateTime.Now.AddDays(-7) && task.IsPrivate == false)
+                        if (task.CreatedDate > DateTime.Now.AddDays(-7) && task.IsPrivate == false && task.ApplicationUserId != user.Id)
                         {
                             // Add this to feed
                             taskFI.Occured = (DateTime)task.CreatedDate;
@@ -420,7 +421,122 @@ namespace TaskItSite.Controllers
             return RedirectToAction(nameof(Subscriptions));
         }
 
-    
+       [HttpGet]
+        public async Task<ActionResult> Search(string name)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            _appDbContext.Entry(user).Collection(x => x.Subs).Load();
+
+            var model = new SubscriptionsViewModel
+            {
+                SubscriptionWrapperList = new List<SubscriptionWrapper>(),
+                CurrentUser = user,
+                StatusMessage = StatusMessage
+            };
+
+            // Fill in the subscription wrapper list with all users
+            foreach (ApplicationUser someUser in _appDbContext.Users)
+            {
+                bool isSubcribed = false;
+
+                foreach (Subscription cuSub in model.CurrentUser.Subs)
+                {
+                    if (cuSub.SubscribingToUserID == someUser.Id)
+                    {
+                        // Current user is subscribed to this user
+                        isSubcribed = true;
+                        break;
+                    }
+                }
+               string nameOne = someUser.FullName.ToUpper();
+               string nameTwo = name.ToUpper();
+
+                 if (nameOne.CompareTo(nameTwo)==0)
+                if (user.Id != someUser.Id)
+                {
+                    model.SubscriptionWrapperList.Add(
+                        new SubscriptionWrapper
+                        {
+                            SubscribedUser = someUser,
+                            SubscribedUserID = someUser.Id,
+                            IsSubscribed = isSubcribed
+                        }
+                        );
+                }
+            }
+
+            return PartialView("~/Views/Home/Search.cshtml", model);
+        }
+        /*
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Search(SubscriptionsViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            _appDbContext.Entry(user).Collection(x => x.Subs).Load();
+            _appDbContext.Entry(user).Collection(x => x.Achivements).Load();
+            List<GlobalAchievement> globalAchievementList = _appDbContext.GlobalAchievements.ToList();
+            int q = model.SubscriptionWrapperList.Count;
+            for (int i = 0; i < q; i++)
+            {
+                SubscriptionWrapper aw = model.SubscriptionWrapperList[i];
+                Subscription targetSubscription = user.Subs.Where(x => x.SubscribingToUserID == aw.SubscribedUserID).SingleOrDefault();
+
+                // Only update if there's a change
+                if (targetSubscription == null && aw.IsSubscribed == true)
+                {
+                    Subscription toSub = new Subscription
+                    {
+                        SubscribingUserID = user.Id,
+                        SubscribingToUserID = aw.SubscribedUserID
+
+                    };
+
+                    user.Subs.Add(toSub);
+                }
+                else if (targetSubscription != null && aw.IsSubscribed == false)
+                    user.Subs.Remove(user.Subs.Where(x => x.SubscribingToUserID == aw.SubscribedUserID).SingleOrDefault());
+
+            }
+            if (user.Subs.Count() >= 2)
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 1 person!");
+            if (user.Subs.Count() >= 5)
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 5 people!");
+            if (user.Subs.Count() >= 10)
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 10 people!");
+            if (user.Subs.Count() >= 20)
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 20 people!");
+
+
+            var setResult = await _userManager.UpdateAsync(user);
+
+            if (!setResult.Succeeded)
+            {
+                throw new ApplicationException($"Unexpected error occurred setting subscriptions for user with ID '{user.Id}'.");
+            }
+
+            StatusMessage = "Your subscriptions have been updated";
+            return RedirectToAction(nameof(Subscriptions));
+        }
+        */
+
         [HttpGet]
         public async Task<IActionResult> Achievements()
         {
@@ -469,65 +585,74 @@ namespace TaskItSite.Controllers
 
             return View(model);
         }
-        /*
+        
         [HttpPost]
-        public async Task<ActionResult> UpdateCustomer(bool check, string subId)
-        {
-            var currentUser = await GetCurrentUserAsync();
-            List<GlobalAchievement> globalAchievementList = _appDbContext.GlobalAchievements.ToList();
-            var subie = new Subscription();
-            try
+        public async Task<ActionResult> UpdateSubscriber(bool check, SubscriptionsViewModel model)
+        { if (!ModelState.IsValid)
             {
-               
-                if (check)
-                {
-                    subie.SubscribingToUserID 
-                    currentUser.TasksCompletedCount += 1;
-                    _context.Users.Update(currentUser);
-                }
-                _context.Update(task);
-
-                if (currentUser.TasksCompletedCount == 1)
-                {
-                    currentUser.AddUserAchievement(globalAchievementList, "Completed 1 task!");
-                }
-
-                if (currentUser.TasksCompletedCount == 5)
-                {
-                    currentUser.AddUserAchievement(globalAchievementList, "Completed 5 tasks!");
-                }
-
-                if (currentUser.TasksCompletedCount == 10)
-                {
-                    currentUser.AddUserAchievement(globalAchievementList, "Completed 10 tasks!");
-                }
-                if (currentUser.TasksCompletedCount == 20)
-                {
-                    currentUser.AddUserAchievement(globalAchievementList, "Completed 20 tasks!");
-                }
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TaskExists(task.ID))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return View();
+                return View(model);
         }
 
-        private bool TaskExists(int id)
-        {
-            return _context.Tasks.Any(e => e.ID == id);
-        }
-    }
+        var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 }
-*/
+
+_appDbContext.Entry(user).Collection(x => x.Subs).Load();
+_appDbContext.Entry(user).Collection(x => x.Achivements).Load();
+List<GlobalAchievement> globalAchievementList = _appDbContext.GlobalAchievements.ToList();
+
+            for (int i = 0; i<model.SubscriptionWrapperList.Count; i++)
+            {
+                SubscriptionWrapper aw = model.SubscriptionWrapperList[i];
+Subscription targetSubscription = user.Subs.Where(x => x.SubscribingToUserID == aw.SubscribedUserID).SingleOrDefault();
+
+                // Only update if there's a change
+                if (targetSubscription == null && check == true)
+                {
+                    Subscription toSub = new Subscription
+                    {
+                        SubscribingUserID = user.Id,
+                        SubscribingToUserID = aw.SubscribedUserID
+
+                    };
+
+user.Subs.Add(toSub);
+                }
+                else if (targetSubscription != null && check == false)
+                    user.Subs.Remove(user.Subs.Where(x => x.SubscribingToUserID == aw.SubscribedUserID).SingleOrDefault()); 
+
+            }
+            if (user.Subs.Count() >= 2)
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 1 person!");
+            if (user.Subs.Count() >= 5)
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 5 people!");
+            if (user.Subs.Count() >= 10)
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 10 people!");
+            if (user.Subs.Count() >= 20)
+                user.AddUserAchievement(globalAchievementList, "Subscribed to 20 people!");
+
+
+            var setResult = await _userManager.UpdateAsync(user);
+
+            if (!setResult.Succeeded)
+            {
+                throw new ApplicationException($"Unexpected error occurred setting subscriptions for user with ID '{user.Id}'.");
+            }
+
+            StatusMessage = "Your subscriptions have been updated";
+            return RedirectToAction(nameof(Subscriptions));
+        }
+        
+        private bool SubExists(string subid)
+        {
+            var currentUser=GetCurrentUserAsync();
+            return _appDbContext.Subscriptions.Any(e => e.SubscribingUserID == currentUser.Id.ToString() && e.SubscribingToUserID == subid);
+        }
+
+
 
         public async Task<ActionResult> ClonedTask(int id)
         {
