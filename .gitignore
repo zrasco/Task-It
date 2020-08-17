@@ -205,3 +205,6 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 /TaskItSite.rar
+
+# Secrets file
+appSecrets.json

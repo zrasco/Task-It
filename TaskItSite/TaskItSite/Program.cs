@@ -19,7 +19,13 @@ namespace TaskItSite
     {
         public static void Main(string[] args)
         {
-            var host = BuildWebHost(args);
+            var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appSecrets.json", optional: false, reloadOnChange: true);
+
+            IConfigurationRoot configuration = builder.Build();
+
+            var host = BuildWebHost(args, configuration);
 
             using (var scope = host.Services.CreateScope())
             {
@@ -46,11 +52,13 @@ namespace TaskItSite
             host.Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
+        public static IWebHost BuildWebHost(string[] args, IConfiguration config) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>().UseKestrel(options =>
                 {
                     options.Limits.MinResponseDataRate = null;
-                }).Build();
+                })
+                .UseConfiguration(config)
+                .Build();
     }
 }

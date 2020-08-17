@@ -50,8 +50,8 @@ namespace TaskItSite
 
             services.AddAuthentication().AddGoogle(googleOptions =>
             {
-                googleOptions.ClientId = "102863069774-6p2dtscloroulicdul32sg374qnm3hiq.apps.googleusercontent.com";
-                googleOptions.ClientSecret = "MY6Ta5Gdm331MVtLLGY-T-fQ";
+                googleOptions.ClientId = Configuration.GetConnectionString("GoogleClientId");
+                googleOptions.ClientSecret = Configuration.GetConnectionString("GoogleClientSecret");
                 googleOptions.Events = new OAuthEvents
                 {
                     OnCreatingTicket = context =>
@@ -67,14 +67,14 @@ namespace TaskItSite
 
             services.AddAuthentication().AddFacebook(facebookOptions =>
             {
-                facebookOptions.AppId = "511517489202644";
-                facebookOptions.AppSecret = "c06100662e20a40f054fd63aa5cec806";
+                facebookOptions.AppId = Configuration.GetConnectionString("FacebookAppId");
+                facebookOptions.AppSecret = Configuration.GetConnectionString("FacebookAppSecret");
             });
 
             services.AddAuthentication().AddTwitter(twitterOptions =>
             {
-                twitterOptions.ConsumerKey = "KEoFgPoKMF4t4VTbkXPGHQOHO";
-                twitterOptions.ConsumerSecret = "E6Wy3qvMGwLiNdNK6peYHAZOi5Z26uSaRFpvL3jhi5UokRR9i4";
+                twitterOptions.ConsumerKey = Configuration.GetConnectionString("TwitterConsumerKey");
+                twitterOptions.ConsumerSecret = Configuration.GetConnectionString("TwitterConsumerSecret");
             });
             
 
